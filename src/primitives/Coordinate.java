@@ -25,7 +25,9 @@ public final class Coordinate {
         // if it too close to zero make it zero
         this.coord = alignZero(coord);
     }
-
+    
+    
+    
     /*************** Admin *****************/
     @Override
     public boolean equals(Object obj) {
