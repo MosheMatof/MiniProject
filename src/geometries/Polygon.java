@@ -2,6 +2,7 @@ package geometries;
 
 import java.util.List;
 import primitives.*;
+
 import static primitives.Util.*;
 
 /**
@@ -84,5 +85,14 @@ public class Polygon implements Geometry {
 	@Override
 	public Vector getNormal() {
 		return plane.getNormal();
+	}
+	
+	@Override
+	public String toString() {
+		String result = "";
+		for(Point3D vertex : vertices) {
+			result += vertex.toString() + ", ";
+		}
+		return result;
 	}
 }

@@ -30,11 +30,11 @@ public final class Point3D {
 	 * returns a new Point3d that its the sum of 'this' + 'v'
 	 */
 	public Point3D add(Vector v) {
-		return null;
+		return new Point3D(x.coord + v.head.x.coord, y.coord + v.head.y.coord, z.coord + v.head.z.coord);
 	}
 	
 	public Vector subtract(Point3D v) {
-		return null;
+		return new Vector(new Point3D(x.coord - v.x.coord, y.coord - v.y.coord, z.coord - v.z.coord));
 	}
 	
 	/**
@@ -65,5 +65,9 @@ public final class Point3D {
 	Point3D other = (Point3D)obj;
 	return x.equals(other.x) && y.equals(other.y) && z.equals(other.z);
 	}
-
+	
+	@Override
+	public String toString() {
+		return "(" + x + ", " + y + ", " + z + ")";
+	}
 }

@@ -3,7 +3,7 @@ package primitives;
 
 public final class Vector {
 	//___________private fields__________________
-	final Point3D head;
+	Point3D head;
 	
 	//___________ctors___________________________
 	/*
@@ -32,6 +32,9 @@ public final class Vector {
 	}
 	
 	//____________methods________________________
+	public Point3D getHead() {
+		return head;
+	}
 	
 	/*
 	 * Returns a new vector that its the sum of 'this' and 'v'
@@ -105,8 +108,9 @@ public final class Vector {
 	/**
 	 * normalize this vector 
 	 */
-	public void normalize() {
+	public Vector normalize() {
 		this.head = normalized().head;
+		return this;
 	}
 	/**
 	 * 
@@ -123,5 +127,10 @@ public final class Vector {
 	if (!(obj instanceof Vector)) return false;
 	Vector other = (Vector)obj;
 	return head.equals(other.head);
+	}
+	
+	@Override
+	public String toString() {
+		return "-" + head.toString() + "->";
 	}
 }

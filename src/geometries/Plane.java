@@ -1,6 +1,5 @@
 package geometries;
 
-import java.lang.reflect.Constructor;
 
 import primitives.Point3D;
 import primitives.Vector;
@@ -33,6 +32,11 @@ public class Plane implements Geometry{
 	@Override
 	public Vector getNormal() {
 		return normal;
+	}
+	
+	@Override
+	public String toString() {
+		return "pivot: " + pivot.toString() + ", normal: " + normal;
 	}
 	 
 }

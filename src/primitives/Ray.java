@@ -37,4 +37,9 @@ public class Ray {
 	public Vector getDir() {
 		return dir;
 	}
+	
+	@Override
+	public String toString() {
+		return origin.toString() + " " + dir.toString();
+	}
 }
