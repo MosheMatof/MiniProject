@@ -1,12 +1,9 @@
 package primitives;
 
-import org.graalvm.compiler.core.common.type.ArithmeticOpTable.BinaryOp.Add;
-
-import sun.net.www.content.text.plain;
 
 public final class Vector {
 	//___________private fields__________________
-	private Point3D head;
+	final Point3D head;
 	
 	//___________ctors___________________________
 	/*
@@ -51,7 +48,7 @@ public final class Vector {
 	/*
 	 * Returns a new vector that its 'this' - 'v'
 	 */
-	public Vector subtruct(Vector v) {
+	public Vector subtract(Vector v) {
 		try {
 			return add(v.scale(-1));//v - u = v + -1*u
 		}
@@ -72,7 +69,7 @@ public final class Vector {
 	/*
 	 * returns the dot product of this and v
 	 */
-	public double dotProdact(Vector v) {
+	public double dotProduct(Vector v) {
 		return v.head.x.coord * this.head.x.coord + v.head.y.coord * this.head.y.coord + v.head.z.coord * this.head.z.coord;
 	}
 	
@@ -89,5 +86,42 @@ public final class Vector {
 		catch (IllegalArgumentException e) {//if the angel between this and v is PI*k then it will cause acriation of zero vector
 			throw new IllegalArgumentException("if the angel between this and v is PI*k then it will cause acriation of zero vector");
 		}
+	}
+	
+	/**
+	 * 
+	 * @return Squared length of the vector
+	 */
+	public double lengthSquared() {
+		return this.head.distanceSquerd(Point3D.ZERO);
+	}
+	/**
+	 * 
+	 * @return length of the vector
+	 */
+	public double length() {
+		return Math.sqrt(lengthSquared());
+	}
+	/**
+	 * normalize this vector 
+	 */
+	public void normalize() {
+		this.head = normalized().head;
+	}
+	/**
+	 * 
+	 * @return a new normalized vector
+	 */
+	public Vector normalized() {
+		return scale(1 / this.length());
+	}
+	
+	@Override
+	public boolean equals(Object obj) {
+	if (this == obj) return true;
+	if (obj == null) return false;
+	if (!(obj instanceof Vector)) return false;
+	Vector other = (Vector)obj;
+	return head.equals(other.head);
 	}
 }

@@ -33,7 +33,7 @@ public final class Point3D {
 		return null;
 	}
 	
-	public Vector subsruct(Point3D v) {
+	public Vector subtract(Point3D v) {
 		return null;
 	}
 	
@@ -56,4 +56,14 @@ public final class Point3D {
 	{
 		return Math.sqrt(distanceSquerd(p));
 	}
+	
+	@Override
+	public boolean equals(Object obj) {
+	if (this == obj) return true;
+	if (obj == null) return false;
+	if (!(obj instanceof Point3D)) return false;
+	Point3D other = (Point3D)obj;
+	return x.equals(other.x) && y.equals(other.y) && z.equals(other.z);
+	}
+
 }
