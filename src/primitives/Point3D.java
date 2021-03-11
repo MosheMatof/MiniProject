@@ -1,6 +1,8 @@
 package primitives;
 
-
+/**
+ * represents a point in a 3D space
+ */
 public final class Point3D {
 	
 	//static fields
@@ -26,8 +28,10 @@ public final class Point3D {
 	}
 	
 	//____________________methods_________________
-	/*
-	 * returns a new Point3d that its the sum of 'this' + 'v'
+	/**
+	 * 
+	 * @param v the vector 
+	 * @return a new Point3d that its the sum of 'this' + 'v'
 	 */
 	public Point3D add(Vector v) {
 		return new Point3D(x.coord + v.head.x.coord, y.coord + v.head.y.coord, z.coord + v.head.z.coord);

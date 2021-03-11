@@ -9,13 +9,17 @@ import primitives.Vector;
  */
 public class Plane implements Geometry{
 
-	final Point3D pivot;
-	final Vector normal;
+	private Point3D pivot;
+	private Vector normal;
 	
+	/**
+	 * 
+	 * @param pivot a point on the plane
+	 * @param normal the normal of the plane
+	 */
 	public Plane(Point3D pivot, Vector normal) {
 		this.pivot = pivot;
-		normal.normalize();
-		this.normal = normal;	
+		this.normal = normal.normalize();	
 	}
 	
 	public Plane(Point3D p1, Point3D p2, Point3D p3) {
@@ -29,14 +33,28 @@ public class Plane implements Geometry{
 		}	
 		this.pivot = p1;
 	}
+
 	@Override
+	public Vector getNormal(Point3D point) {
+		return normal;
+	}
+	/**
+	 * 
+	 * @return the normal of the plane
+	 */
 	public Vector getNormal() {
 		return normal;
 	}
-	
 	@Override
 	public String toString() {
 		return "pivot: " + pivot.toString() + ", normal: " + normal;
+	}
+	/**
+	 * 
+	 * @return a point on the plane
+	 */
+	public Point3D getPivot() {
+		return pivot;
 	}
 	 
 }

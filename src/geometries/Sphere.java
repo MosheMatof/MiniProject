@@ -9,16 +9,35 @@ import primitives.Vector;
  */
 public class Sphere implements Geometry{
 
-	Point3D center;
-	double radius;
+	protected Point3D center;
+	protected double radius;
 	
+	/**
+	 * 
+	 * @param center the center of the sphere
+	 * @param radius the radius of the sphere
+	 */
 	public Sphere(Point3D center, double radius) {
 		this.center = center;
 		this.radius = radius;
 	}
 	@Override
-	public Vector getNormal() {
+	public Vector getNormal(Point3D point) {
 		return null;
+	}
+	/**
+	 * 
+	 * @return the center of the sphere
+	 */
+	public Point3D getCenter() {
+		return center;
+	}
+	/**
+	 * 
+	 * @return the radius of the sphere
+	 */
+	public double getRadius() {
+		return radius;
 	}
 	
 }

@@ -13,13 +13,13 @@ public class Ray {
 	private Vector dir;
 	
 	/**
-	 * this.origin <- p0
-	 * this.dir <- dir
+	 * 
+	 * @param p0 the origin point
+	 * @param dir
 	 */
 	public Ray(Point3D p0, Vector dir) {
 		this.origin = p0;
-		dir.normalize();
-		this.dir = dir;
+		this.dir = dir.normalized();
 	}
 	
 	/*
@@ -29,11 +29,17 @@ public class Ray {
 		this.dir.head.z = new Coordinate(other.dir.head.z.coord);
 	}
 	*/
-	
+	/**
+	 * 
+	 * @return the origin point
+	 */
 	public Point3D getOrigin() {
 		return origin;
 	}
-	
+	/**
+	 * 
+	 * @return the direction vector
+	 */
 	public Vector getDir() {
 		return dir;
 	}
