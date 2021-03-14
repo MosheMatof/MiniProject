@@ -6,6 +6,9 @@ package primitives;
 public final class Point3D {
 	
 	//static fields
+	/**
+	 * Point3D(0, 0, 0)
+	 */
 	public static Point3D ZERO = new Point3D(0, 0, 0);
 	
 	//private fields
@@ -30,19 +33,27 @@ public final class Point3D {
 	//____________________methods_________________
 	/**
 	 * 
-	 * @param v the vector 
+	 * @param v the vector to add
 	 * @return a new Point3d that its the sum of 'this' + 'v'
 	 */
 	public Point3D add(Vector v) {
 		return new Point3D(x.coord + v.head.x.coord, y.coord + v.head.y.coord, z.coord + v.head.z.coord);
 	}
 	
-	public Vector subtract(Point3D v) {
-		return new Vector(new Point3D(x.coord - v.x.coord, y.coord - v.y.coord, z.coord - v.z.coord));
-	}
-	
 	/**
-	 * (this.x + p.x)^2 + (this.y + p.y)^2 + (this.z + p.z)^2
+	 * @param v the point to subtract
+	 * @return the vector from 'v' to 'this'
+	 */
+	public Vector subtract(Point3D v) {
+		try {
+			return new Vector(new Point3D(x.coord - v.x.coord, y.coord - v.y.coord, z.coord - v.z.coord));
+		} catch (IllegalArgumentException e) {
+			throw new IllegalArgumentException("the subtraction retuned zero vector");
+		}
+	}
+	/**
+	 * @param p the target point 
+	 * @return the squared distance from 'this' to 'p' 
 	 */
 	public double distanceSquerd(Point3D p) {
 		double x_dif, y_dif, z_dif;
@@ -54,7 +65,8 @@ public final class Point3D {
 	}
 	
 	/**
-	 * sqrt((this.x + p.x)^2 + (this.y + p.y)^2 + (this.z + p.z)^2)
+	 * @param p the target point 
+	 * @return the distance from 'this' to 'p' 
 	 */
 	public double distance(Point3D p)
 	{
