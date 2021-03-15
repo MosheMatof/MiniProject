@@ -1,5 +1,6 @@
 package geometries;
 
+import jdk.tools.jlink.internal.DirArchive;
 import primitives.Point3D;
 import primitives.Ray;
 import primitives.Vector;
@@ -24,7 +25,11 @@ public class Tube implements Geometry{
 
 	@Override
 	public Vector getNormal(Point3D point) {
-		return null;
+		Vector vector = point.subtract(axis.getOrigin());
+		double t = axis.getDir().dotProduct(vector);
+		Point3D o = axis.getOrigin().add(vector.scale(t));
+		
+		return point.subtract(o);	
 	}
 	
 	@Override
