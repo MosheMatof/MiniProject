@@ -12,7 +12,6 @@ import primitives.Point3D;
 import primitives.Vector;
 
 /**
- * @author erenb
  *
  */
 public class PlaneTest {
@@ -35,7 +34,8 @@ public class PlaneTest {
 		Point3D p2 = new Point3D(4, 5, 2); 
 		Point3D p3 = new Point3D(3, 6, 7); 
 
-		expected = (p1.subtract(p3).crossProduct(p1.subtract(p3))).normalize();//calculate the normalized normal of the plane
+		
+		expected = (p1.subtract(p3).crossProduct(p1.subtract(p2))).normalize();//calculate the normalized normal of the plane
 		Plane plane = new Plane(p1, p2, p3);
 		
 		assertEquals(expected, plane.getNormal(null));
