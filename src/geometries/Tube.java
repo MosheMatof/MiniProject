@@ -1,6 +1,5 @@
 package geometries;
 
-import jdk.tools.jlink.internal.DirArchive;
 import primitives.Point3D;
 import primitives.Ray;
 import primitives.Vector;
