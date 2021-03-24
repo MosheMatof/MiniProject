@@ -17,7 +17,7 @@ public class CylinderTest {
 		//point on the upper surface of the cylinder 
 		Ray ray = new Ray(new Point3D(1, 2, 3), new Vector(1, 2, 3));
 		Cylinder ciy = new Cylinder(ray, 5, 5);
-		Vector expected = new Vector(1, 2, 3).normalized();
+		Vector expected = new Vector(1, 2, 3).normalize();
 		
 		assertEquals("upper surface", expected, ciy.getNormal(new Point3D(2.918362587386101, 4.920333319728062, 6.649752569358125)));
 		

@@ -1,9 +1,7 @@
 package geometries;
 
-import primitives.Point3D;
-import primitives.Ray;
-import primitives.Vector;
-
+import primitives.*;
+import static primitives.Util.*;
 /**
  * represents a tube in the space
  */
@@ -24,11 +22,14 @@ public class Tube implements Geometry{
 
 	@Override
 	public Vector getNormal(Point3D point) {
-		Vector vector = point.subtract(axis.getOrigin());
-		double t = axis.getDir().dotProduct(vector);
-		Point3D o = axis.getOrigin().add(vector.scale(t));
-		
-		return point.subtract(o);	
+		Point3D p0 = axis.getOrigin();
+		Vector u = point.subtract(p0);
+		double t = axis.getDir().dotProduct(u);
+		if (isZero(t))
+			return point.subtract(p0).normalize();
+
+		Point3D o =p0.add(u.scale(t));
+		return point.subtract(o).normalize();	
 	}
 	
 	@Override
