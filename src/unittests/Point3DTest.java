@@ -67,7 +67,7 @@ public class Point3DTest {
 		Point3D p1 = new Point3D(0, -9, -10);
 		
 		double expected = 24.28992;
-		assertEquals(expected, p0.distanceSquerd(p1), 0.0001);	}
+		assertEquals(expected, p0.distance(p1), 0.0001);	}
 
 	/**
 	 * Test method for {@link primitives.Point3D#equals(java.lang.Object)}.

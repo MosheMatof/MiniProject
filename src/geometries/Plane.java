@@ -23,13 +23,12 @@ public class Plane implements Geometry{
 	}
 	
 	public Plane(Point3D p1, Point3D p2, Point3D p3) {
-		Vector v1 = p1.subtract(p2);
-		Vector v2 = p3.subtract(p2);
-		
 		try { 
+			Vector v1 = p1.subtract(p2);
+			Vector v2 = p3.subtract(p2);
 			this.normal = v1.crossProduct(v2).normalized();
 		} catch (IllegalArgumentException e) { // if the 3 point on the same line...
-			throw new IllegalArgumentException("the 3 points cannot be on the same line");
+			throw new IllegalArgumentException("the 3 points cannot be on the same line", e);
 		}	
 		this.pivot = p1;
 	}
