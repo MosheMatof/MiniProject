@@ -32,23 +32,24 @@ public final class Point3D {
 	
 	//____________________methods_________________
 	/**
-	 * 
+	 * Moves this point by a vector (performs operation this point + vector)
 	 * @param v the vector to add
-	 * @return a new Point3d that its the sum of 'this' + 'v'
+	 * @return a new Point3d that its the resulting point of the operation
 	 */
 	public Point3D add(Vector v) {
 		return new Point3D(x.coord + v.head.x.coord, y.coord + v.head.y.coord, z.coord + v.head.z.coord);
 	}
 	
 	/**
-	 * @param v the point to subtract
-	 * @return the vector from 'v' to 'this'
+	 * Subtracts another point from this point and this produces a vector from another point to this point
+	 * @param other the point to subtract
+	 * @return the vector from other point to this point
 	 */
-	public Vector subtract(Point3D v) {
+	public Vector subtract(Point3D other) {
 		try {
-			return new Vector(new Point3D(x.coord - v.x.coord, y.coord - v.y.coord, z.coord - v.z.coord));
+			return new Vector(new Point3D(x.coord - other.x.coord, y.coord - other.y.coord, z.coord - other.z.coord));
 		} catch (IllegalArgumentException e) {
-			throw new IllegalArgumentException("the subtraction retuned zero vector");
+			throw new IllegalArgumentException("the subtraction retuned zero vector", e);
 		}
 	}
 	/**
@@ -56,11 +57,11 @@ public final class Point3D {
 	 * @return the squared distance from 'this' to 'p' 
 	 */
 	public double distanceSquerd(Point3D p) {
-		double x_dif, y_dif, z_dif;
-		x_dif = x.coord - p.x.coord;
+		double xDif, y_dif, z_dif;
+		xDif = x.coord - p.x.coord;
 		y_dif = y.coord - p.y.coord;
 		z_dif = z.coord - p.z.coord;
-		double dist = x_dif * x_dif + y_dif * y_dif + z_dif * z_dif;
+		double dist = xDif * xDif + y_dif * y_dif + z_dif * z_dif;
 		return Util.alignZero(dist);
 	}
 	

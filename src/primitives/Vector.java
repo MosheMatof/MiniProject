@@ -63,7 +63,7 @@ public final class Vector {
 	 */
 	public Vector subtract(Vector v) {
 		try {
-			return add(v.scale(-1));//v - u = v + -1*u
+			return head.subtract(v.head);
 		}
 		catch (IllegalArgumentException e) {//if this operation causing a creation of zero vector
 			throw new IllegalArgumentException("if 'this' = 'v' then 'this' - 'v' will cause a criation of a zero vector");

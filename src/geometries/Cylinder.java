@@ -2,6 +2,7 @@ package geometries;
 
 import primitives.Point3D;
 import primitives.Ray;
+import primitives.Util;
 import primitives.Vector;
 
 /**
@@ -21,11 +22,24 @@ public class Cylinder extends Tube{
 	 */
 	public Cylinder(Ray axis, double radius, double height) {
 		super(axis, radius);
+		this.height = height;
 	}
 	
 	@Override
 	public Vector getNormal(Point3D point) {
-		return null;
+		Vector vector = point.subtract(axis.getOrigin());
+		double t = axis.getDir().dotProduct(vector);
+		if(Util.isZero(t))//if t == 0 then the point is on the lower surface of the cylinder
+		{
+			return axis.getDir().scale(-1);
+		}
+		if(Util.isZero(t - height))//if t == height then the point is on the lower surface of the cylinder
+		{
+			return axis.getDir();
+		}
+		Point3D o = axis.getOrigin().add(vector.scale(t));
+		
+		return point.subtract(o).normalize();	
 	}
 	
 	@Override

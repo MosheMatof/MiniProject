@@ -27,6 +27,13 @@ public class TubeTest {
 		Vector expected = new Vector(-18,-36,-74).normalized();
 		
 		assertEquals(expected, tube.getNormal(new Point3D(7,14,1)));
+		
+		ray = new Ray(new Point3D(0, 0, 0), new Vector(0,0,1));
+		tube = new Tube(ray, 5);
+		Point3D p = new Point3D(3, 4, 0);
+		expected = new Vector(3,4,0);
+		
+		assertEquals(expected, tube.getNormal(p));
 	}
 
 }
