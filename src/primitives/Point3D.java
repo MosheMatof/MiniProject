@@ -53,19 +53,21 @@ public final class Point3D {
 		}
 	}
 	/**
+	 * calculates the squared distance between 2 points
 	 * @param p the target point 
 	 * @return the squared distance from 'this' to 'p' 
 	 */
 	public double distanceSquerd(Point3D p) {
-		double xDif, y_dif, z_dif;
+		double xDif, yDif, zDif;
 		xDif = x.coord - p.x.coord;
-		y_dif = y.coord - p.y.coord;
-		z_dif = z.coord - p.z.coord;
-		double dist = xDif * xDif + y_dif * y_dif + z_dif * z_dif;
+		yDif = y.coord - p.y.coord;
+		zDif = z.coord - p.z.coord;
+		double dist = xDif * xDif + yDif * yDif + zDif * zDif;
 		return Util.alignZero(dist);
 	}
 	
 	/**
+	 * calculates the distance between 2 points
 	 * @param p the target point 
 	 * @return the distance from 'this' to 'p' 
 	 */

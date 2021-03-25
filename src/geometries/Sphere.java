@@ -4,8 +4,7 @@ import primitives.Point3D;
 import primitives.Vector;
 
 /**
- * represents 
- *
+ * represents sphere by point and radius
  */
 public class Sphere implements Geometry{
 
@@ -13,7 +12,7 @@ public class Sphere implements Geometry{
 	protected double radius;
 	
 	/**
-	 * 
+	 * Sphere constructor by point and radius
 	 * @param center the center of the sphere
 	 * @param radius the radius of the sphere
 	 */
@@ -26,14 +25,14 @@ public class Sphere implements Geometry{
 		return point.subtract(center).normalize();
 	}
 	/**
-	 * 
-	 * @return the center of the sphere
+	 * get the point in the center of the sphere
+	 * @return the center point of the sphere
 	 */
 	public Point3D getCenter() {
 		return center;
 	}
 	/**
-	 * 
+	 * get the radius length of the sphere
 	 * @return the radius of the sphere
 	 */
 	public double getRadius() {

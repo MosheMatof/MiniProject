@@ -5,7 +5,7 @@ package primitives;
 
 /**
  * 
- *represents a ray in the space
+ *represents a ray by point and vector
  */
 public class Ray {
 
@@ -13,7 +13,7 @@ public class Ray {
 	private Vector dir;
 	
 	/**
-	 * 
+	 * ray constructor by point and vector
 	 * @param p0 the origin point
 	 * @param dir
 	 */
@@ -30,14 +30,14 @@ public class Ray {
 	}
 	*/
 	/**
-	 * 
+	 * get the starting point of the ray
 	 * @return the origin point
 	 */
 	public Point3D getOrigin() {
 		return origin;
 	}
 	/**
-	 * 
+	 * get the direction vector of the ray
 	 * @return the direction vector
 	 */
 	public Vector getDir() {

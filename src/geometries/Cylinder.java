@@ -15,9 +15,9 @@ public class Cylinder extends Tube {
 	private double height;
 
 	/**
-	 * 
-	 * @param axis   the axis of the Cylinder
-	 * @param radius the radius of the Cylinder
+	 * Cylinder constructor 
+	 * @param axis a ray that represents the axis of the Cylinder
+	 * @param radius the radius length of the Cylinder
 	 * @param height the height of the Cylinder
 	 */
 	public Cylinder(Ray axis, double radius, double height) {
@@ -48,7 +48,6 @@ public class Cylinder extends Tube {
 	}
 
 	/**
-	 * 
 	 * @return the height of the Cylinder
 	 */
 	public double getHeight() {

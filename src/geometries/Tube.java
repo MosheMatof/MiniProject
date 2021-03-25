@@ -3,7 +3,7 @@ package geometries;
 import primitives.*;
 import static primitives.Util.*;
 /**
- * represents a tube in the space
+ * represents an infinite tube in a 3d space
  */
 public class Tube implements Geometry{
 
@@ -11,9 +11,9 @@ public class Tube implements Geometry{
 	protected double radius;
 	
 	/**
-	 * 
-	 * @param axis the axis of the Tube
-	 * @param radius the radius of the Tube
+	 * Tube constructor by ray and radius
+	 * @param axis a ray represents the direction of the tube
+	 * @param radius the radius length of the Tube
 	 */
 	public Tube(Ray axis, double radius) {
 		this.axis = axis;
@@ -28,7 +28,7 @@ public class Tube implements Geometry{
 		if (isZero(t))
 			return point.subtract(p0).normalize();
 
-		Point3D o =p0.add(u.scale(t));
+		Point3D o = p0.add(u.scale(t));
 		return point.subtract(o).normalize();	
 	}
 	
@@ -38,7 +38,7 @@ public class Tube implements Geometry{
 	}
 
 	/**
-	 * 
+	 * get the ray represents the direction of the tube
 	 * @return the axis of the Tube
 	 */
 	public Ray getAxis() {
@@ -46,7 +46,7 @@ public class Tube implements Geometry{
 	}
 
 	/**
-	 * 
+	 * get the radius length of the Tube
 	 * @return the Radius of the Tube
 	 */
 	public double getRadius() {

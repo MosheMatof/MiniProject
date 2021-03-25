@@ -1,7 +1,7 @@
 package primitives;
 
 /**
- * represents a vector in 3d space
+ * represents a vector in 3d space by 3d point
  *
  */
 public final class Vector {
@@ -10,7 +10,7 @@ public final class Vector {
 	
 	//___________ctors___________________________
 	/**
-	 * constructs a new vector with the coordinates (cx, cy, cz)
+	 * vector constructor by coordinates (cx, cy, cz)
 	 * @throws IllegalArgumentException - if cx = cy = cz = 0
 	 */
 	public Vector(Coordinate cx, Coordinate cy, Coordinate cz){
@@ -19,7 +19,7 @@ public final class Vector {
 			throw new IllegalArgumentException("the zero vector is not alow");
 	}
 	/**
-	 * constructs a new vector with the coordinates (dx, dy, dz)
+	 * vector constructor by double values (dx, dy, dz)
 	 * @throws IllegalArgumentException if dx = dy = dz = 0
 	 */
 	public Vector(double dx, double dy, double dz) {
@@ -28,8 +28,8 @@ public final class Vector {
 			throw new IllegalArgumentException("the zero vector is not alow");
 	}
 	/**
-	 * constructs a new vector with the coordinates of p
-	 * @throws IllegalArgumentException - if @ = {@link Point3D#ZERO}
+	 * vector constructor by 3d point
+	 * @throws IllegalArgumentException if point = {@link Point3D#ZERO}
 	 */
 	public Vector(Point3D p) {
 		if(p.equals(Point3D.ZERO))
@@ -38,11 +38,16 @@ public final class Vector {
 	}
 	
 	//____________methods________________________
+	/**
+	 * get the point represents the head of the vector
+	 * @return the head of the vector
+	 */
 	public Point3D getHead() {
 		return head;
 	}
 	
 	/**
+	 * performs an adding operation on vectors (this vector + v)
 	 * @param v the vector to add to this
 	 * @return a new vector that its the sum of 'this' and 'v'
 	 * @throws IllegalArgumentException if this addition will cause a zero vector
@@ -52,11 +57,12 @@ public final class Vector {
 			return new Vector(head.add(v));
 		}
 		catch (IllegalArgumentException e) {//if this operation causing a creation of zero vector
-			throw new IllegalArgumentException("if 'this' = -1 * 'v' then 'this' + 'v' will cause a criation of a zero vector");
+			throw new IllegalArgumentException("if 'this' = -1 * 'v' then 'this' + 'v' will cause a creation of a zero vector", e);
 		}
 	}
 	
 	/**
+	 * performs a subtracting operation on vectors (this vector - v)
 	 * @param v the vector to subtract from this vector
 	 * @return a new vector that its 'this' - 'v'
 	 * @throws IllegalArgumentException if this subtraction will cause a zero vector
@@ -71,6 +77,7 @@ public final class Vector {
 	}
 	
 	/**
+	 * Multiplying a vector by scalar (this vector * scalar)
 	 * @return a new vector equal to this multiply by 'scalar'
 	 */
 	public Vector scale(double scalar){
@@ -80,6 +87,7 @@ public final class Vector {
 	}
 	
 	/**
+	 * performs a dot product on vectors (this vector * v)
 	 * @return the dot product of this and v
 	 */
 	public double dotProduct(Vector v) {
@@ -87,7 +95,7 @@ public final class Vector {
 	}
 	
 	/**
-	 * do a cross product of this and v 
+	 * performs a cross product on vectors (this vector X v) 
 	 * @param v the vector at the right side of the cross 
 	 * @return the crossProduct of this and v
 	 * @throws IllegalArgumentException if the product of this cross product is the zero vector 
@@ -105,12 +113,14 @@ public final class Vector {
 	}
 	
 	/**
+	 * calculates the squared length of the vector
 	 * @return the Squared length of the vector
 	 */
 	public double lengthSquared() {
 		return this.head.distanceSquerd(Point3D.ZERO);
 	}
 	/**
+	 * calculates the length of the vector
 	 * @return the length of the vector
 	 */
 	public double length() {
@@ -121,10 +131,16 @@ public final class Vector {
 	 * @return this vector
 	 */
 	public Vector normalize() {
-		this.head = normalized().head;
+		double length = this.head.distance(Point3D.ZERO);
+		double px = head.x.coord/length;
+		double py = head.y.coord/length;
+		double pz = head.z.coord/length;
+		this.head = new Point3D(px, py, pz);
+		
 		return this;
 	}
 	/**
+	 * Generates a new normalized vector of this vector
 	 * @return a new normalized vector
 	 */
 	public Vector normalized() {

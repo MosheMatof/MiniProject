@@ -13,7 +13,7 @@ public class Plane implements Geometry{
 	private Vector normal;
 	
 	/**
-	 * 
+	 * Plane constructor by point and vector
 	 * @param pivot a point on the plane
 	 * @param normal the normal of the plane
 	 */
@@ -21,7 +21,12 @@ public class Plane implements Geometry{
 		this.pivot = pivot;
 		this.normal = normal.normalize();	
 	}
-	
+	/**
+	 * Plane constructor by 3 points
+	 * @param p1
+	 * @param p2
+	 * @param p3
+	 */
 	public Plane(Point3D p1, Point3D p2, Point3D p3) {
 		try { 
 			Vector v1 = p1.subtract(p2);
@@ -38,7 +43,7 @@ public class Plane implements Geometry{
 		return normal;
 	}
 	/**
-	 * 
+	 * get the normalize vector orthogonal to the plane direction
 	 * @return the normal of the plane
 	 */
 	public Vector getNormal() {
@@ -49,8 +54,8 @@ public class Plane implements Geometry{
 		return "pivot: " + pivot.toString() + ", normal: " + normal;
 	}
 	/**
-	 * 
-	 * @return a point on the plane
+	 * get the representing point of the plane
+	 * @return the point on the plane
 	 */
 	public Point3D getPivot() {
 		return pivot;
