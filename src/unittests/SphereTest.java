@@ -11,12 +11,8 @@ import java.util.PrimitiveIterator.OfDouble;
 
 import org.junit.Test;
 
-import com.sun.org.apache.bcel.internal.generic.IF_ACMPEQ;
-
 import geometries.Sphere;
-import primitives.Point3D;
-import primitives.Ray;
-import primitives.Vector;
+import primitives.*;
 
 /**
  *

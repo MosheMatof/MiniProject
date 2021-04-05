@@ -91,7 +91,7 @@ public final class Point3D {
 	}
 
 	public double getX() {
-		return x.double;
+		return x.coord;
 	}
 
 	public double getY() {
