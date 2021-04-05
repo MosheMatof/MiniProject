@@ -1,10 +1,13 @@
 package geometries;
 
 
+import java.util.List;
+
 import primitives.Point3D;
+import primitives.Ray;
 import primitives.Vector;
 
-/*
+/**
  * represents a plane in a space
  */
 public class Plane implements Geometry{
@@ -21,6 +24,7 @@ public class Plane implements Geometry{
 		this.pivot = pivot;
 		this.normal = normal.normalize();	
 	}
+	
 	/**
 	 * Plane constructor by 3 points
 	 * @param p1
@@ -42,6 +46,7 @@ public class Plane implements Geometry{
 	public Vector getNormal(Point3D point) {
 		return normal;
 	}
+	
 	/**
 	 * get the normalize vector orthogonal to the plane direction
 	 * @return the normal of the plane
@@ -49,16 +54,24 @@ public class Plane implements Geometry{
 	public Vector getNormal() {
 		return normal;
 	}
+	
 	@Override
 	public String toString() {
 		return "pivot: " + pivot.toString() + ", normal: " + normal;
 	}
+	
 	/**
 	 * get the representing point of the plane
 	 * @return the point on the plane
 	 */
 	public Point3D getPivot() {
 		return pivot;
+	}
+
+	@Override
+	public List<Point3D> findIntersections(Ray ray) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 	 
 }

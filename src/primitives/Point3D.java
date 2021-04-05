@@ -89,4 +89,16 @@ public final class Point3D {
 	public String toString() {
 		return "(" + x + ", " + y + ", " + z + ")";
 	}
+
+	public double getX() {
+		return x.double;
+	}
+
+	public double getY() {
+		return y.coord;
+	}
+
+	public double getZ() {
+		return z.coord;
+	}
 }

@@ -6,7 +6,7 @@ import primitives.Vector;
 /**
  * the interface provide the getNormal function for any geometries, used for reflection proposes.
  */
-interface Geometry {
+interface Geometry extends Intersectable {
 
 	/**
 	 * get the orthogonal vector in length 1 from a point on a geometry object
