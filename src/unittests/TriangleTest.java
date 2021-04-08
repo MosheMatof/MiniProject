@@ -7,8 +7,6 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
-import com.sun.org.apache.xerces.internal.util.EntityResolver2Wrapper;
-
 import java.util.List;
 
 import geometries.Triangle;
