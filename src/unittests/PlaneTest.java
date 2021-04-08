@@ -70,7 +70,7 @@ public class PlaneTest {
 		//Ray is orthogonal to the plane
 		//TC05: ray starts before the plane
 		Ray r5 = new Ray(new Point3D(2, 2, 2), new Vector(0,0,-1));
-		assertEquals("TC05: ray starts before the plane", pln.findIntersections(r5), new Point3D(2, 2, 0));
+		assertEquals("TC05: ray starts before the plane", pln.findIntersections(r5), List.of(new Point3D(2, 2, 0)));
 		
 		//TC06: ray starts in the plane (orthogonal)
 		Ray r6 = new Ray(new Point3D(-2, 1, 0), new Vector(0,0,-1));
@@ -78,7 +78,7 @@ public class PlaneTest {
 		
 		//TC07: ray starts after the plane
 		Ray r7 = new Ray(new Point3D(1,1,3), new Vector(0,0,1));
-		assertNull("TC07: ray starts after the plane", pln.findIntersections(r5));
+		assertNull("TC07: ray starts after the plane", pln.findIntersections(r7));
 		
 		
 		//TC08: Ray is neither orthogonal nor parallel to the plane and begins at the plane
