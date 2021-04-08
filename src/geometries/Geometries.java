@@ -41,9 +41,23 @@ public class Geometries implements Intersectable {
 		}
 	}
 	
+	 //finds all the intersections point of all the components with 'ray'
 	@Override
 	public List<Point3D> findIntersections(Ray ray) {
-		return null;
+		List<Point3D> intrsctPnts = null;
+		for (Intersectable component : components) {
+			List<Point3D> fi = component.findIntersections(ray);
+			if(fi == null) {
+				continue;
+			}
+			if(intrsctPnts == null) {
+				intrsctPnts = new LinkedList<Point3D>(fi);
+			}
+			else {
+				intrsctPnts.addAll(fi);
+			}
+		}
+		return intrsctPnts;
 	}
 
 }

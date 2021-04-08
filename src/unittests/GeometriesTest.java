@@ -46,7 +46,7 @@ public class GeometriesTest {
 		assertEquals("TC03: only one component intersecting: worng number of intersactions points", result.size(), 1);
 		
 		//TC04: all components are intersecting
-		Ray r4 = new Ray(new Point3D(0,5,1), new Vector(1,-10,1));
+		Ray r4 = new Ray(new Point3D(0,5,1), new Vector(1,-10,-1));
 		assertEquals("TC04: all components are intersecting: worng number of intersactions points", gmtrs.findIntersections(r4).size(),4);
 		
 		//EP:
