@@ -45,12 +45,12 @@ public class Sphere implements Geometry{
 	@Override
 	public List<Point3D> findIntersections(Ray ray) {
 		//if the origin point of the ray is in the center
-		if (ray.getOrigin().equals(this.center)) {
-			return List.of(ray.getOrigin().add(ray.getDir().scale(this.radius)));
+		if (ray.getOrigin().equals(center)) {
+			return List.of(ray.getPoint(radius));
 		}
 		
 		//vector from the origin point of the ray to the center  
-		Vector vectorToCenter = this.center.subtract(ray.getOrigin());
+		Vector vectorToCenter = center.subtract(ray.getOrigin());
 		
 		//the length from the origin point of the ray to the middle point between the intersection of the line of the ray 
 		double rayToMidSphre = vectorToCenter.dotProduct(ray.getDir());
@@ -59,19 +59,19 @@ public class Sphere implements Geometry{
 		double centerToRaySqr = vectorToCenter.lengthSquared() - rayToMidSphre*rayToMidSphre;
 		
 		//if the length between the center and the line of the ray is bigger
-		if (centerToRaySqr >= this.radius*this.radius) {
+		if (centerToRaySqr >= radius*radius) {
 			return null;
 		}
 		
 		//the half length between the intersection of the line of the ray
-		double halfLenBetweenPoints = Math.sqrt(this.radius*this.radius - centerToRaySqr);
+		double halfLenBetweenPoints = Math.sqrt(radius*radius - centerToRaySqr);
 		
 		// the distance between the origin of the ray and the first intersection point 
 		double t1 = rayToMidSphre - halfLenBetweenPoints;
 		Point3D p1 = null;
 		//if the distance is negative the intersection doesen't exist 
 		if (!Util.isZero(t1) && t1 > 0) {
-			p1 = ray.getOrigin().add(ray.getDir().scale(t1));
+			p1 = ray.getPoint(t1);
 			if (p1.equals(ray.getOrigin())) {
 				p1 = null;
 			}
@@ -81,7 +81,7 @@ public class Sphere implements Geometry{
 		Point3D p2 = null;
 		//if the distance is negative the intersection doesen't exist
 		if (!Util.isZero(t2) && t2 > 0) {
-			p2 = ray.getOrigin().add(ray.getDir().scale(t2));
+			p2 = ray.getPoint(t2);
 			if (p2.equals(ray.getOrigin())) {
 				p2 = null;
 			}

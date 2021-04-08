@@ -83,7 +83,7 @@ public class Plane implements Geometry{
 			double scalar = a / b;
 			
 			if (!Util.isZero(scalar) && scalar > 0) {
-				return List.of(ray.getOrigin().add(ray.getDir().scale(scalar)));
+				return List.of(ray.getPoint(scalar));
 			}
 		}
 		return null;

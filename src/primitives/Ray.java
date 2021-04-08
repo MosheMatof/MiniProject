@@ -43,6 +43,14 @@ public class Ray {
 	public Vector getDir() {
 		return dir;
 	}
+	/**
+	 * find a point on the ray by a given scalar(origin + scalar*dir) 
+	 * @param t a scalar to progress to 
+	 * @return a 3d point on the ray 
+	 */
+	public Point3D getPoint(double t) {
+		return origin.add(dir.scale(t));
+	}
 	
 	@Override
 	public String toString() {
