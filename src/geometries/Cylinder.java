@@ -27,6 +27,11 @@ public class Cylinder extends Tube {
 
 	@Override
 	public Vector getNormal(Point3D point) {
+		//if the point is the same point of the cylinder axis
+		if (point.equals(this.getAxis())) {
+			return axis.getDir().scale(-1);
+		}
+		
 		Vector vector = point.subtract(axis.getOrigin());
 		double t = axis.getDir().dotProduct(vector);
 		// if t == 0 then the point is on the lower surface of the cylinder
@@ -37,8 +42,8 @@ public class Cylinder extends Tube {
 		if (Util.isZero(t - height)) {
 			return axis.getDir();
 		}
+		//the point is on the sides of the cylinder
 		Point3D o = axis.getOrigin().add(vector.scale(t));
-
 		return point.subtract(o).normalize();
 	}
 
