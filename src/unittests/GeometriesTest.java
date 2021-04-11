@@ -26,7 +26,9 @@ public class GeometriesTest {
 	@Test
 	public void testFindIntersections() {
 		Geometries gmtrs = new Geometries();
-		//BVA:
+		
+		//___________________ Equivalence Partitions Tests__________________
+		
 		//TC01: empty Collection 
 		Ray r1 = new Ray(new Point3D(1, -1,-2), new Vector(5,4,3));
 		assertNull("TC01: empty Collection",gmtrs.findIntersections(r1));
@@ -49,7 +51,8 @@ public class GeometriesTest {
 		Ray r4 = new Ray(new Point3D(0,5,1), new Vector(1,-10,-1));
 		assertEquals("TC04: all components are intersecting: worng number of intersactions points", gmtrs.findIntersections(r4).size(),4);
 		
-		//EP:
+		//___________________ Boundary Values Tests __________________
+		
 		//TC05: some of the components are intersect
 		Ray r5 = new Ray(new Point3D(1,-5,-1), new Vector(1,5,-1));
 		assertEquals("TC05: some of the components are intersect", gmtrs.findIntersections(r5).size(),3);

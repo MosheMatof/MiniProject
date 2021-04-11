@@ -27,6 +27,7 @@ public final class Triangle extends Polygon{
 		return super.toString();
 	}
 	
+	/*
 	@Override
 	public List<Point3D> findIntersections(Ray ray) {
 		Vector v1 = this.vertices.get(0).subtract(ray.getOrigin());
@@ -48,4 +49,5 @@ public final class Triangle extends Polygon{
 		}
 		return null;
 	}
+	*/
 }
