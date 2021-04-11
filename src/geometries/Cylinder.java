@@ -28,7 +28,7 @@ public class Cylinder extends Tube {
 	@Override
 	public Vector getNormal(Point3D point) {
 		//if the point is the same point of the cylinder axis
-		if (point.equals(this.getAxis())) {
+		if (point.equals(this.getAxis().getOrigin())) {
 			return axis.getDir().scale(-1);
 		}
 		
