@@ -30,7 +30,7 @@ public class Tube implements Geometry{
 		if (isZero(t))
 			return point.subtract(p0).normalize();
 
-		Point3D o = p0.add(u.scale(t));
+		Point3D o = p0.add(axis.getDir().scale(t));
 		return point.subtract(o).normalize();	
 	}
 	

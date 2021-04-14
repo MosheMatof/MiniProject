@@ -44,5 +44,7 @@ public class CylinderTest {
 		assertEquals("TC05: point on the origin point of the ray of the cylinder", exp5, cyl.getNormal(p5));
 		
 	}
+	
+	
 
 }
