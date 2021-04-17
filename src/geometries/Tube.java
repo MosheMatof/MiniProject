@@ -3,6 +3,7 @@ package geometries;
 import primitives.*;
 import static primitives.Util.*;
 
+import java.awt.Point;
 import java.util.List;
 /**
  * represents an infinite tube in a 3d space
@@ -57,7 +58,32 @@ public class Tube implements Geometry{
 
 	@Override
 	public List<Point3D> findIntersections(Ray ray) {
-		// TODO Auto-generated method stub
+		try {
+			Vector v1 = ray.getDir().subtract(axis.getDir().scale(axis.getDir().dotProduct(ray.getDir())));
+			Vector dP = ray.getOrigin().subtract(axis.getOrigin());
+			Vector v2 = dP.subtract(v1).subtract(axis.getDir().scale(dP.dotProduct(axis.getDir())));
+			
+			double A = v1.lengthSquared();
+			double B = v1.dotProduct(v2) * 2;
+			double C = v2.lengthSquared() - radius*radius;
+			
+			double dis = B*B - 4*A*C;
+			if (dis <= 0) { 
+				return null;
+			}
+			double dissqr = Math.sqrt(dis);
+			double t1 = (B*-1 + dissqr)/2*A;
+			double t2 = (B*-1 - dissqr)/2*A;
+			
+			Point3D p1 = ray.getPoint(t1);
+			Point3D p2 = ray.getPoint(t2);
+			
+			//return a list of the intersection points
+			return List.of(p1,p2);
+			
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
 		return null;
 	}
 }

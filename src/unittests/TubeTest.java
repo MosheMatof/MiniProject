@@ -57,13 +57,14 @@ public class TubeTest {
 	public void testFindIntersections() {
 		Ray tubRay = new Ray(new Point3D(1, 0, 0), new Vector(0,0,1));
 		Tube tub = new Tube(tubRay, 1);
-		String wnop = ": worng number of points";
+		
 		
 		//___________________ Equivalence Partitions Tests__________________
 		//TC01: the ray intersects twice
 		Ray r1 = new Ray(new Point3D(4, 0, -1), new Vector(-4,1,4));
 		List<Point3D> result = tub.findIntersections(r1);
 		result = orderToComper(result);
+		
 		assertEquals("TC01: ray intersects twice", result, List.of(new Point3D(0.510958323589132, 0.872260419102717, 2.489041676410868), new Point3D(1.841982852881456, 0.539504286779636, 1.158017147118544)));
 		
 		//TC02: the ray intersects once
@@ -194,7 +195,7 @@ public class TubeTest {
 		//TC026: the ray starts on the surface of the tube:(goes inside the tube)
 		Ray r26 = new Ray(new Point3D (0.476513544049179, -0.852033996056524, 2) , new Vector(3.523486455950821,1.852033996056524,-3));
 		result = tub.findIntersections(r26);
-		assertEquals("TC026: the ray starts on the surface of the tube:(goes inside the tube)", result, List.of(new Point3D(1.998649121751307, -0.051960866287461, 0.704009000689027));
+		assertEquals("TC026: the ray starts on the surface of the tube:(goes inside the tube)", result, List.of(new Point3D(1.998649121751307, -0.051960866287461, 0.704009000689027)));
 		
 		//TC027: the ray starts on the surface of the tube:(goes inside the tube) - The ray starts in in parallel to the O point
 		Ray r27 = new Ray(new Point3D (1, 1, 0), new Vector(-3,-2,0.685069779457748));
