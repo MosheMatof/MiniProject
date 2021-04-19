@@ -76,7 +76,9 @@ public class Plane implements Geometry{
 			return null;
 		}
 		
+		//numerator
 		double a = this.getNormal().dotProduct(this.pivot.subtract(ray.getOrigin()));
+		//denominator
 		double b = this.getNormal().dotProduct(ray.getDir());
 		
 		if (!Util.isZero(b)) {

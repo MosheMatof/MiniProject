@@ -49,6 +49,9 @@ public class Ray {
 	 * @return a 3d point on the ray 
 	 */
 	public Point3D getPoint(double t) {
+		if (Util.isZero(t)) {
+			return origin;
+		}
 		return origin.add(dir.scale(t));
 	}
 	
