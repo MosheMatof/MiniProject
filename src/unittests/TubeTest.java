@@ -57,14 +57,14 @@ public class TubeTest {
 	public void testFindIntersections() {
 		Ray tubRay = new Ray(new Point3D(1, 0, 0), new Vector(0,0,1));
 		Tube tub = new Tube(tubRay, 1);
-		
+		List<Point3D> result;
 		
 		//___________________ Equivalence Partitions Tests__________________
 		//TC01: the ray intersects twice
 		Ray r1 = new Ray(new Point3D(4, 0, -1), new Vector(-4,1,4));
-		List<Point3D> result = tub.findIntersections(r1);
+		result = tub.findIntersections(r1);
 		result = orderToComper(result);
-		
+				
 		assertEquals("TC01: ray intersects twice", result, List.of(new Point3D(0.510958323589132, 0.872260419102717, 2.489041676410868), new Point3D(1.841982852881456, 0.539504286779636, 1.158017147118544)));
 		
 		//TC02: the ray intersects once
@@ -85,7 +85,7 @@ public class TubeTest {
 		//___________________ Boundary Values Tests __________________
 
 		
-		//TC05: intersects twice - The ray starts in in parallel to the O point
+		//TC05: intersects twice - The ray starts in parallel to the O point
 		Ray r5 = new Ray(new Point3D (3,0,0), new Vector(-3,0,3));
 		result = tub.findIntersections(r5);
 		result = orderToComper(result);

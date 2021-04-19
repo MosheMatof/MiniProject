@@ -61,7 +61,14 @@ public class Tube implements Geometry{
 		try {
 			Vector v1 = ray.getDir().subtract(axis.getDir().scale(axis.getDir().dotProduct(ray.getDir())));
 			Vector dP = ray.getOrigin().subtract(axis.getOrigin());
-			Vector v2 = dP.subtract(v1).subtract(axis.getDir().scale(dP.dotProduct(axis.getDir())));
+			double scale = dP.dotProduct(axis.getDir());
+			Vector v2;
+			if(Util.isZero(scale)) {
+				v2 = dP;
+			}
+			else {
+				v2 = dP.subtract(axis.getDir().scale(dP.dotProduct(axis.getDir())));
+			}
 			
 			double A = v1.lengthSquared();
 			double B = v1.dotProduct(v2) * 2;
@@ -71,15 +78,23 @@ public class Tube implements Geometry{
 			if (dis <= 0) { 
 				return null;
 			}
-			double dissqr = Math.sqrt(dis);
-			double t1 = (B*-1 + dissqr)/2*A;
-			double t2 = (B*-1 - dissqr)/2*A;
+			
+			double dissqrt = Math.sqrt(dis);
+			double t1 = (-B + dissqrt)/(2*A);
+			double t2 = (-B - dissqrt)/(2*A);
 			
 			Point3D p1 = ray.getPoint(t1);
 			Point3D p2 = ray.getPoint(t2);
+			if(t1 >= 0) {
+				if(t2 >= 0) {
+					return List.of(p1,p2);
+				}
+				return List.of(p1);
+			}
+			if(t2 >= 0) {
+				return List.of(p2);
+			}
 			
-			//return a list of the intersection points
-			return List.of(p1,p2);
 			
 		} catch (Exception e) {
 			// TODO: handle exception
