@@ -67,24 +67,20 @@ public class Sphere implements Geometry{
 		double halfLenBetweenPoints = Math.sqrt(radius*radius - centerToRaySqr);
 		
 		// the distance between the origin of the ray and the first intersection point 
-		double t1 = rayToMidSphre - halfLenBetweenPoints;
+		double t1 = Util.alignZero(rayToMidSphre - halfLenBetweenPoints);
 		Point3D p1 = null;
+		
 		//if the distance is negative the intersection doesen't exist 
-		if (!Util.isZero(t1) && t1 > 0) {
+		if (t1 > 0) {
 			p1 = ray.getPoint(t1);
-			if (p1.equals(ray.getOrigin())) {
-				p1 = null;
-			}
 		}
 		// the distance between the origin of the ray and the second intersection point
-		double t2 = rayToMidSphre + halfLenBetweenPoints;
+		double t2 = Util.alignZero(rayToMidSphre + halfLenBetweenPoints);
 		Point3D p2 = null;
+		
 		//if the distance is negative the intersection doesen't exist
-		if (!Util.isZero(t2) && t2 > 0) {
+		if (t2 > 0) {
 			p2 = ray.getPoint(t2);
-			if (p2.equals(ray.getOrigin())) {
-				p2 = null;
-			}
 		}
 		
 		//return a list of the intersection points
@@ -92,14 +88,13 @@ public class Sphere implements Geometry{
 			if (p2 != null) {
 				return List.of(p1,p2);
 			}
-			else {
+			else {			
 				return List.of(p1);
 			}
 		}
 		else if (p2 != null) {
 			return List.of(p2);
-		}
-		
+		}	
 		return null;
 	}
 	

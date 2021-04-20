@@ -91,19 +91,19 @@ public class Tube implements Geometry{
 			}
 			
 			// values of the Quadratic equation of t (At^ + Bt + C) - t is the location of the intersections point on the ray
-			double A = v1.lengthSquared();
-			double B = v1.dotProduct(v2) * 2;
-			double C = v2.lengthSquared() - radius*radius;
+			double a = v1.lengthSquared();
+			double b = v1.dotProduct(v2) * 2;
+			double c = v2.lengthSquared() - radius*radius;
 			
-			//if the discriminant <= 0 - no intersections points
-			double dis = B*B - 4*A*C;
+			//if the discriminant <= 0 - no intersections points (one solution considered as no intersections - the ray is tangents)
+			double dis = b*b - 4*a*c;
 			if (dis <= 0) { 
 				return null;
 			}
 			
 			double dissqrt = Math.sqrt(dis);
-			double t1 = Util.alignZero((-B + dissqrt)/(2*A));
-			double t2 = Util.alignZero((-B - dissqrt)/(2*A));
+			double t1 = Util.alignZero((-b + dissqrt)/(2*a));
+			double t2 = Util.alignZero((-b - dissqrt)/(2*a));
 			
 			Point3D p1 = ray.getPoint(t1);
 			Point3D p2 = ray.getPoint(t2);
@@ -121,7 +121,7 @@ public class Tube implements Geometry{
 			
 			
 		} catch (Exception e) {
-			// TODO: handle exception
+			return null;
 		}
 		return null;
 	}

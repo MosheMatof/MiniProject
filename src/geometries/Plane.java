@@ -77,14 +77,14 @@ public class Plane implements Geometry{
 		}
 		
 		//numerator
-		double a = this.getNormal().dotProduct(this.pivot.subtract(ray.getOrigin()));
+		double a = Util.alignZero(this.getNormal().dotProduct(this.pivot.subtract(ray.getOrigin())));
 		//denominator
-		double b = this.getNormal().dotProduct(ray.getDir());
+		double b = Util.alignZero(this.getNormal().dotProduct(ray.getDir()));
 		
-		if (!Util.isZero(b)) {
-			double scalar = a / b;
+		if (b != 0 && a != 0) {
+			double scalar = Util.alignZero(a / b);
 			
-			if (!Util.isZero(scalar) && scalar > 0) {
+			if (scalar > 0) {
 				return List.of(ray.getPoint(scalar));
 			}
 		}

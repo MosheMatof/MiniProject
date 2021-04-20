@@ -13,8 +13,7 @@ public class Geometries implements Intersectable {
 	private LinkedList<Intersectable> components = new LinkedList<Intersectable>();
 
 	/**
-	 * Default constructor: initialize the class's components list to be an empty
-	 * list
+	 * Default constructor: initialize the class's components list to be an empty list
 	 */
 	public Geometries() {
 	}
@@ -44,14 +43,13 @@ public class Geometries implements Intersectable {
 		List<Point3D> intrsctPnts = null;
 		for (Intersectable component : components) {
 			List<Point3D> fi = component.findIntersections(ray);
-			if (fi == null) {
-				continue;
-			}
-			if (intrsctPnts == null) {
-				intrsctPnts = new LinkedList<Point3D>(fi);
-			} else {
-				intrsctPnts.addAll(fi);
-			}
+			if (fi != null) {
+				if (intrsctPnts == null) {
+					intrsctPnts = new LinkedList<Point3D>(fi);
+				} else {
+					intrsctPnts.addAll(fi);
+				}
+			}		
 		}
 		return intrsctPnts;
 	}

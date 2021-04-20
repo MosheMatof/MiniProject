@@ -27,21 +27,22 @@ public final class Triangle extends Polygon{
 		return super.toString();
 	}
 	
-	/*
 	@Override
 	public List<Point3D> findIntersections(Ray ray) {
-		Vector v1 = this.vertices.get(0).subtract(ray.getOrigin());
-		Vector v2 = this.vertices.get(1).subtract(ray.getOrigin());
-		Vector v3 = this.vertices.get(2).subtract(ray.getOrigin());
+		Point3D origin = ray.getOrigin();
+		Vector v1 = this.vertices.get(0).subtract(origin);
+		Vector v2 = this.vertices.get(1).subtract(origin);
+		Vector v3 = this.vertices.get(2).subtract(origin);
 		
 		Vector n1 = v1.crossProduct(v2).normalize();
 		Vector n2 = v2.crossProduct(v3).normalize();
 		Vector n3 = v3.crossProduct(v1).normalize();
 		
 		//the values of all the normals * ray
-		double s1 = Util.alignZero(ray.getDir().dotProduct(n1));
-		double s2 = Util.alignZero(ray.getDir().dotProduct(n2));
-		double s3 = Util.alignZero(ray.getDir().dotProduct(n3));
+		Vector dir = ray.getDir();
+		double s1 = Util.alignZero(dir.dotProduct(n1));
+		double s2 = Util.alignZero(dir.dotProduct(n2));
+		double s3 = Util.alignZero(dir.dotProduct(n3));
 		
 		//if all the scalars have the same sign and non of theme is zero
 		if ((s1 > 0 && s2 > 0 && s3 > 0) || (s1 < 0 && s2 < 0 && s3 < 0)) {
@@ -49,5 +50,5 @@ public final class Triangle extends Polygon{
 		}
 		return null;
 	}
-	*/
+	
 }
