@@ -15,7 +15,7 @@ import geometries.Sphere;
 import primitives.*;
 
 /**
- *
+ *	Testing sphere Class
  */
 public class SphereTest {
 
