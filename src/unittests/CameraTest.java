@@ -52,7 +52,7 @@ public class CameraTest {
 		// TC13: 3X3 Center of Left Side (1,0)
 		assertEquals("Bad ray", new Ray(Point3D.ZERO, new Vector(-2, 0, 10)),
 				camera.setViewPlaneSize(6, 6).constructRayThroughPixel(3, 3, 0, 1));
-
+		
 	}
 
 }
