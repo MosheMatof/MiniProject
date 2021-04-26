@@ -60,15 +60,28 @@ public class Camera {
 		return this;
 	}
 	/**
-	 * 
-	 * @param nX
-	 * @param nY
-	 * @param j
-	 * @param i
-	 * @return
+	 * computes the ray that start from the camera and go trough the i,j pixel in the view plane
+	 * @param nX number of pixels in the right-left axis 
+	 * @param nY number of pixels in the up-down axis
+	 * @param j the column of the desired pixel
+	 * @param i the row of the desired pixel
+	 * @return a ray from the camera that pass trough the desired pixel 
 	 */
 	public Ray constructRayThroughPixel(int nX, int nY, int j, int i){
-		return null;
+		double ry = height/nY;
+		double rx = width/nX;
+		Point3D pc = p0.add(vTo.scale(dis));
+		double yi = ((nY-1)/2 - i)*ry;
+		double xj = (j - (nX-1)/2) * rx;
+		Point3D p = pc;
+		if(yi != 0) {
+			p = p.add(vUp.scale(yi));
+		}
+		if(xj != 0) {
+			p = p.add(vRight.scale(xj));
+		}
+		Vector dir = p.subtract(p0);
+		return new Ray(p0, dir);
 	}
 	
 	public Point3D getP0() {
