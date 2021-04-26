@@ -132,11 +132,12 @@ public final class Vector {
 	 */
 	public Vector normalize() {
 		double length = this.head.distance(Point3D.ZERO);
-		double px = head.x.coord/length;
-		double py = head.y.coord/length;
-		double pz = head.z.coord/length;
-		this.head = new Point3D(px, py, pz);
-		
+		if (length != 1) {
+			double px = head.x.coord/length;
+			double py = head.y.coord/length;
+			double pz = head.z.coord/length;
+			this.head = new Point3D(px, py, pz);
+		}		
 		return this;
 	}
 	/**

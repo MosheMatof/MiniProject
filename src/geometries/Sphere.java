@@ -88,9 +88,6 @@ public class Sphere implements Geometry{
 			if (p2 != null) {
 				return List.of(p1,p2);
 			}
-			else {			
-				return List.of(p1);
-			}
 		}
 		else if (p2 != null) {
 			return List.of(p2);
