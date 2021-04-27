@@ -70,15 +70,25 @@ public class Tube implements Geometry{
 			}
 			else {
 				v1 = ray.getDir().subtract(axis.getDir().scale(scalar1));	
-			}			
+			}
+			Vector dP;
 			//if the ray start at the O point
 			if (ray.getOrigin().equals(axis.getOrigin())) {
 				double A = v1.length();
 				double t = radius/A;
 				return List.of(ray.getPoint(t));
 			}
+			//if the ray start at the axis of the tube
+			else {
+				dP = ray.getOrigin().subtract(axis.getOrigin());
+				Vector nDp = dP.normalized();
+				if (nDp.equals(axis.getDir()) || nDp.equals(axis.getDir().scale(-1))) {
+					double A = v1.length();
+					double t = radius/A;
+					return List.of(ray.getPoint(t));
+				}		
+			}
 			
-			Vector dP = ray.getOrigin().subtract(axis.getOrigin());
 			double scalar2 = dP.dotProduct(axis.getDir());
 			Vector v2;
 			
