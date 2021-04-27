@@ -59,4 +59,13 @@ public class Ray {
 	public String toString() {
 		return origin.toString() + " " + dir.toString();
 	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) return true;
+		if (obj == null) return false;
+		if (!(obj instanceof Ray)) return false;
+		Ray other = (Ray)obj;
+		return origin.equals(other.origin) && dir.equals(other.dir);
+	}
 }
