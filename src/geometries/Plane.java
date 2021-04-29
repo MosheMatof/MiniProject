@@ -28,9 +28,9 @@ public class Plane implements Geometry{
 	
 	/**
 	 * Plane constructor by 3 points
-	 * @param p1
-	 * @param p2
-	 * @param p3
+	 * @param p1 1st point
+	 * @param p2 2nd point
+	 * @param p3 3rd point
 	 */
 	public Plane(Point3D p1, Point3D p2, Point3D p3) {
 		try { 

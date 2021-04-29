@@ -57,7 +57,7 @@ public final class Point3D {
 	 * @param p the target point 
 	 * @return the squared distance from 'this' to 'p' 
 	 */
-	public double distanceSquerd(Point3D p) {
+	public double distanceSquared(Point3D p) {
 		double xDif, yDif, zDif;
 		xDif = x.coord - p.x.coord;
 		yDif = y.coord - p.y.coord;
@@ -73,7 +73,7 @@ public final class Point3D {
 	 */
 	public double distance(Point3D p)
 	{
-		return Math.sqrt(distanceSquerd(p));
+		return Math.sqrt(distanceSquared(p));
 	}
 	
 	@Override

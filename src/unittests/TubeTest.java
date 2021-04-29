@@ -42,6 +42,8 @@ public class TubeTest {
 	//this function is to help the function testFindIntersections() to order list of tow points before comparing the list
 	/**
 	 * orders a list of points in ascending order according to the x and y coordinates of the points 
+	 * @param l list of points
+	 * @return ordered list of points
 	 */
 	List<Point3D> orderToComper(List<Point3D> l){
 		if(l.get(0).getX() > l.get(1).getX()) {

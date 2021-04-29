@@ -16,21 +16,6 @@ import primitives.*;
 public class VectorTest {
 
 	/**
-	 * Test method for {@link primitives.Vector#Vector(primitives.Coordinate, primitives.Coordinate, primitives.Coordinate)}.
-	 */
-	@Test
-	public void testVectorCoordinateCoordinateCoordinate() {
-		//_________________ZERO vector___________________
-		 
-		try {
-			new Vector(new Coordinate(0), new Coordinate(0), new Coordinate(0));
-			fail("alow to create zero vector");
-		} catch (IllegalArgumentException e) {
-			//good
-		}
-	}
-
-	/**
 	 * Test method for {@link primitives.Vector#Vector(double, double, double)}.
 	 */
 	@Test

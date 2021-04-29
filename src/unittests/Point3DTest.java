@@ -42,7 +42,7 @@ public class Point3DTest {
 	}
 
 	/**
-	 * Test method for {@link primitives.Point3D#distanceSquerd(primitives.Point3D)}.
+	 * Test method for {@link primitives.Point3D#distanceSquared(primitives.Point3D)}.
 	 */
 	@Test
 	public void testDistanceSquerd() {
@@ -52,7 +52,7 @@ public class Point3DTest {
 		Point3D p1 = new Point3D(0, -9, -10);
 		
 		double expected = 590;
-		assertEquals(expected, p0.distanceSquerd(p1), 0.0001);
+		assertEquals(expected, p0.distanceSquared(p1), 0.0001);
 	}
 	
 

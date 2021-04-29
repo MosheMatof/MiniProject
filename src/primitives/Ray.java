@@ -15,7 +15,7 @@ public class Ray {
 	/**
 	 * ray constructor by point and vector
 	 * @param p0 the origin point
-	 * @param dir
+	 * @param dir ray direction
 	 */
 	public Ray(Point3D p0, Vector dir) {
 		this.origin = p0;
