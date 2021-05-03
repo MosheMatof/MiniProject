@@ -20,10 +20,16 @@ public class ImageWriteTest {
 	@Test
 	public void WriteImageTest() {
 		ImageWriter imgWriter = new ImageWriter("image writer try", 800, 500);
-		// create picture
-		// ... imgWriter.writePixel(x-index, y-index, pixel-color);
-		imgWriter.writePixel(200, 200, new Color(255,0,0));
-		imgWriter.writePixel(400, 400, new Color(255,255,255));
+		for (int i = 0; i < 500; i++) {
+			for (int j = 0; j < 800; j++) {
+				if (i%50 == 0 || j%50 == 0 ) {
+					imgWriter.writePixel(j, i, new Color(255,0,0));				
+				}
+				else {
+					imgWriter.writePixel(j, i, new Color(0,255,0));				
+				}
+			}
+		}
 		imgWriter.writeToImage();
 	}
 
