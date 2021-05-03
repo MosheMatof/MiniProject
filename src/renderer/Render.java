@@ -5,30 +5,42 @@ import primitives.Color;
 import scene.Scene;
 
 public class Render {
+	ImageWriter imageWriter;
+	Scene scene;
+	Camera camera;
+	RayTracerBase basicRayTracer;
+	
+	
 
 	public Render setImageWriter(ImageWriter imageWriter) {
-		// TODO Auto-generated method stub
-		return null;
+		this.imageWriter = imageWriter;
+		return this;
 	}
 
 	public Render setScene(Scene scene) {
-		// TODO Auto-generated method stub
-		return null;
+		this.scene = scene;
+		return this;
 	}
 
 	public Render setCamera(Camera camera) {
-		// TODO Auto-generated method stub
-		return null;
+		this.camera = camera;
+		return this;
 	}
 
-	public Render setRayTracer(RayTracerBase basicRayTracer) {
-		// TODO Auto-generated method stub
-		return null;
+	public Render setBasicRayTracer(RayTracerBase basicRayTracer) {
+		this.basicRayTracer = basicRayTracer;
+		return this;
 	}
 
 	public void renderImage() {
-		// TODO Auto-generated method stub
-		
+		int nX = imageWriter.getNx();
+		int nY = imageWriter.getNy();
+		for (int i = 0; i < imageWriter.getNx(); i++) {
+			for (int j = 0; j < imageWriter.getNy(); j++) {
+				Color color = basicRayTracer.traceRay(camera.constructRayThroughPixel(nX, nY, j, i));
+				imageWriter.writePixel(j, i, color);
+			}
+		}
 	}
 
 	public void printGrid(int i, Color color) {

@@ -3,6 +3,10 @@
  */
 package primitives;
 
+import java.awt.Point;
+import java.util.Iterator;
+import java.util.List;
+
 /**
  * 
  *represents a ray by point and vector
@@ -53,6 +57,28 @@ public class Ray {
 			return origin;
 		}
 		return origin.add(dir.scale(t));
+	}
+	
+	/**
+	 * finds from a list of points the closest point to the origin of this ray 
+	 * @param points the list of points to choose from
+	 * @return the closest point to the origin of this ray
+	 */
+	public Point3D findClosestPoint(List<Point3D> points) {
+		if(points == null || points.size() == 0)  // if the list is empty or null
+			return null;
+		Point3D closestPoint = points.get(0);
+		double smallestDist = origin.distanceSquared(closestPoint);
+		
+		// find the closest point
+		for (Point3D point : points) {
+			double pointDist = origin.distanceSquared(point);
+			if(pointDist < smallestDist) {
+				smallestDist = pointDist;
+				closestPoint = point;
+			}
+		}
+		return closestPoint;
 	}
 	
 	@Override
