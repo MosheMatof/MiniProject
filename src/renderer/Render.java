@@ -44,10 +44,11 @@ public class Render {
 
 		int nX = imageWriter.getNx();
 		int nY = imageWriter.getNy();
-		for (int i = 0; i < imageWriter.getNx(); i++) {
-			for (int j = 0; j < imageWriter.getNy(); j++) {
+		for (int i = 0; i < imageWriter.getNy(); i++) {
+			for (int j = 0; j < imageWriter.getNx(); j++) {
 				Color color = basicRayTracer.traceRay(camera.constructRayThroughPixel(nX, nY, j, i));
 				imageWriter.writePixel(j, i, color);
+				writeToImage();
 			}
 		}
 	}
@@ -55,8 +56,8 @@ public class Render {
 	public void printGrid(int interval, Color color) {
 		int nX = imageWriter.getNx();
 		int nY = imageWriter.getNy();
-		for (int i = 0; i < nX; i++) {
-			for (int j = 0; j < nY; j++) {
+		for (int i = 0; i < nY; i++) {
+			for (int j = 0; j < nX; j++) {
 				if (i % interval == 0 || j % interval == 0) {
 					imageWriter.writePixel(j, i, new Color(255, 0, 0));
 				}
@@ -65,8 +66,9 @@ public class Render {
 	}
 
 	public void writeToImage() {
-		// TODO Auto-generated method stub
-
+		if (imageWriter == null ) 
+			throw new MissingResourceException("imageWriter is null ","ImageWriter","");
+		imageWriter.writeToImage();
 	}
 
 }

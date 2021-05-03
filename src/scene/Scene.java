@@ -22,6 +22,7 @@ public class Scene {
 	 */
 	public Scene(String name) {
 		this.name = name;
+		geometries = new Geometries();
 	}
 	/**
 	 * set the ambient light of the scene
