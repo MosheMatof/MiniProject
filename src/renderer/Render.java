@@ -7,19 +7,18 @@ import primitives.Color;
 import scene.Scene;
 
 /**
- * 
- *
+ * Rendering the image from the scene
  */
 public class Render {
 	ImageWriter imageWriter;
 	Scene scene;
 	Camera camera;
-	RayTracerBase basicRayTracer;
+	RayTracerBase rayTracer;
 
 	/**
-	 * 
-	 * @param imageWriter
-	 * @return
+	 * set the imageWriter of the render
+	 * @param imageWriter the imageWriter for the render
+	 * @return instance of this scene
 	 */
 	public Render setImageWriter(ImageWriter imageWriter) {
 		this.imageWriter = imageWriter;
@@ -27,9 +26,9 @@ public class Render {
 	}
 
 	/**
-	 * 
-	 * @param scene
-	 * @return
+	 * set the scene of the render
+	 * @param scene the scene for the render
+	 * @return instance of this scene
 	 */
 	public Render setScene(Scene scene) {
 		this.scene = scene;
@@ -37,9 +36,9 @@ public class Render {
 	}
 
 	/**
-	 * 
-	 * @param camera
-	 * @return
+	 * set the camera of the render
+	 * @param camera the camera for the render
+	 * @return instance of this scene
 	 */
 	public Render setCamera(Camera camera) {
 		this.camera = camera;
@@ -47,23 +46,23 @@ public class Render {
 	}
 
 	/**
-	 * 
-	 * @param basicRayTracer
-	 * @return
+	 * set the rayTracer of the render
+	 * @param rayTracer the rayTracer for the render
+	 * @return instance of this scene
 	 */
-	public Render setRayTracer(RayTracerBase basicRayTracer) {
-		this.basicRayTracer = basicRayTracer;
+	public Render setRayTracer(RayTracerBase rayTracer) {
+		this.rayTracer = rayTracer;
 		return this;
 	}
 
 	/**
-	 * 
+	 * Rendering the image by imageWriter according to the rayTracer and camera 
 	 */
 	public void renderImage() {
 		if (imageWriter == null)
 			throw new MissingResourceException("imageWriter is null ", "Render", "imageWriter");
-		if (basicRayTracer == null)
-			throw new MissingResourceException("basicRayTracer is null ", "Render", "basicRayTracer");
+		if (rayTracer == null)
+			throw new MissingResourceException("rayTracer is null ", "Render", "rayTracer");
 		if (camera == null)
 			throw new MissingResourceException("camera is null ", "Render", "camera");
 		if (scene == null)
@@ -73,16 +72,16 @@ public class Render {
 		int nY = imageWriter.getNy();
 		for (int i = 0; i < imageWriter.getNy(); i++) {
 			for (int j = 0; j < imageWriter.getNx(); j++) {
-				Color color = basicRayTracer.traceRay(camera.constructRayThroughPixel(nX, nY, j, i));
+				Color color = rayTracer.traceRay(camera.constructRayThroughPixel(nX, nY, j, i));
 				imageWriter.writePixel(j, i, color);
 			}
 		}
 	}
 
 	/**
-	 * 
-	 * @param interval
-	 * @param color
+	 * prints a grid on the image. the spaces between the lines is the size of the "interval"
+	 * @param interval the space size between the lines
+	 * @param color the color of the grid
 	 */
 	public void printGrid(int interval, Color color) {
 		int nX = imageWriter.getNx();
@@ -102,11 +101,11 @@ public class Render {
 	}
 
 	/**
-	 * 
+	 * Generates the image
 	 */
 	public void writeToImage() {
 		if (imageWriter == null)
-			throw new MissingResourceException("imageWriter is null ", "ImageWriter", "");
+			throw new MissingResourceException("imageWriter is null ", "Render", "imageWriter");
 		imageWriter.writeToImage();
 	}
 

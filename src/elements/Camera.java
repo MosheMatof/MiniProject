@@ -26,7 +26,7 @@ public class Camera {
 	 * @param vUp the direction vector from the top of the camera
 	 * @param vTo the direction vector of the camera
 	 */
-	public Camera(Point3D p0, Vector vTo, Vector vUp) {
+	public Camera(Point3D p0, Vector vUp, Vector vTo) {
 		super();
 		this.p0 = p0;
 		this.vUp = vUp.normalize();
@@ -80,9 +80,9 @@ public class Camera {
 		double rx = width / nX; // the width of each pixel
 
 		Point3D pCenter = p0.add(vTo.scale(dis)); // the center of the view plane
-		double yi = ((nY - 1) / 2 - i) * ry; // the distance from the center of the view plane to the middle of the
+		double yi = ((nY - 1) / 2d - i) * ry; // the distance from the center of the view plane to the middle of the
 												// pixel in the y axis
-		double xj = (j - (nX - 1) / 2) * rx; // the distance from the center of the view plane to the middle of the
+		double xj = (j - (nX - 1) / 2d) * rx; // the distance from the center of the view plane to the middle of the
 												// pixel in the y axis
 		Point3D pIJ = pCenter;
 		if (yi != 0) { // to prevent a creation of a zero vector

@@ -16,13 +16,24 @@ public final class Point3D {
 	final Coordinate y;
 	final Coordinate z;
 	
+	/**
+	 * Point3D constructor by double values
+	 * @param dx the X value
+	 * @param dy the Y value
+	 * @param dz the Z value
+	 */
 	public Point3D(double dx, double dy, double dz)
 	{
 		x = new Coordinate(dx);
 		y = new Coordinate(dy);
 		z = new Coordinate(dz);
 	}
-	
+	/**
+	 * Point3D constructor by {@link Coordinate}} values
+	 * @param cx the X coordinate value
+	 * @param cy the Y coordinate value
+	 * @param cz the Z coordinate value
+	 */                 
 	public Point3D(Coordinate cx, Coordinate cy, Coordinate cz)
 	{
 		x = new Coordinate(cx.coord);
@@ -89,15 +100,25 @@ public final class Point3D {
 	public String toString() {
 		return "(" + x + ", " + y + ", " + z + ")";
 	}
-
+	/**
+	 * get the X double value
+	 * @return the X double value
+	 */
 	public double getX() {
 		return x.coord;
 	}
-
+	/**
+	 * get the Y double value
+	 * @return the Y double value
+	 */
 	public double getY() {
 		return y.coord;
 	}
 
+	/**
+	 * get the Z double value
+	 * @return the Z double value
+	 */
 	public double getZ() {
 		return z.coord;
 	}

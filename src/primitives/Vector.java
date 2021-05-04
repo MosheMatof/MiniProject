@@ -13,9 +13,9 @@ public final class Vector {
 	/**
 	 * vector constructor by double values (dx, dy, dz)
 	 * 
-	 * @param dx
-	 * @param dy
-	 * @param dz
+	 * @param dx the X value
+	 * @param dy the Y value
+	 * @param dz the Z value
 	 * @throws IllegalArgumentException if dx = dy = dz = 0
 	 */
 	public Vector(double dx, double dy, double dz) {
@@ -27,7 +27,7 @@ public final class Vector {
 	/**
 	 * vector constructor by 3d point
 	 * 
-	 * @param p
+	 * @param p the point to represent the vector
 	 * @throws IllegalArgumentException if point = {@link Point3D#ZERO}
 	 */
 	public Vector(Point3D p) {

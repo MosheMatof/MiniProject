@@ -14,7 +14,7 @@ import primitives.Ray;
 public interface Intersectable {
 	
 	/**
-	 * compute the intersection points between him self and the ray
+	 * computes the intersection points between this object and the ray
 	 * @param ray the intersect ray
 	 * @return list of the intersection points
 	 */

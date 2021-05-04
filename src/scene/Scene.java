@@ -35,7 +35,7 @@ public class Scene {
 	}
 	/**
 	 * set the background of the scene
-	 * @param color the color of the background
+	 * @param background the color of the background
 	 * @return this scene
 	 */
 	public Scene setBackground(Color background) {
