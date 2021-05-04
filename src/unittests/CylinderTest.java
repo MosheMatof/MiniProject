@@ -11,7 +11,9 @@ import geometries.Tube;
 import primitives.Point3D;
 import primitives.Ray;
 import primitives.Vector;
-
+/**
+ * test class for {@link Cylinder} 
+ */
 public class CylinderTest {
 
 	@Test

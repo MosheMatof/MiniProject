@@ -9,17 +9,20 @@ import org.junit.Test;
 
 import java.util.List;
 
+import geometries.Plane;
 import geometries.Triangle;
 import primitives.Point3D;
 import primitives.Ray;
 import primitives.Vector;
 
 /**
- *
+ * test class for {@link Triangle} 
  */
 public class TriangleTest {
 
-	
+	/**
+	 * Test method for {@link geometries.Triangle#findIntersections(primitives.Ray)}
+	 */
 	@Test
 	public void testFindIntersections() {
 		Triangle trngl = new Triangle(new Point3D(1, 1, 1) , new Point3D(-2, -2, 1), new Point3D(-1, 1, -1));

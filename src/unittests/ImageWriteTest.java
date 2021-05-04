@@ -9,13 +9,12 @@ import renderer.ImageWriter;
 
 /**
  * 
- * @author erenb
- *
+ * test class for {@link renderer.ImageWriter}}
  */
 public class ImageWriteTest {
 
 	/**
-	 * 
+	 * exercising the use of the {@link renderer.ImageWriter#writePixel(int, int, Color)}}
 	 */
 	@Test
 	public void WriteImageTest() {

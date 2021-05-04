@@ -7,11 +7,10 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
-
+import geometries.Plane;
 import primitives.*;
 /**
- * @author erenb
- *
+ * test class for {@link Vector} 
  */
 public class VectorTest {
 

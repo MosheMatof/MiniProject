@@ -8,13 +8,15 @@ import static org.junit.Assert.*;
 import org.junit.Test;
 
 import java.util.List;
+
+import geometries.Plane;
 import geometries.Tube;
 import primitives.Point3D;
 import primitives.Ray;
 import primitives.Vector;
 
 /**
- *
+ * test class for {@link Tube} 
  */
 public class TubeTest {
 

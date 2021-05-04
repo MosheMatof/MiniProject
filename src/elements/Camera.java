@@ -23,10 +23,10 @@ public class Camera {
 	 * camera constructor
 	 * 
 	 * @param p0  the location point of the camera
-	 * @param vUp the up direction of the camera
-	 * @param vTo the up direction of the camera
+	 * @param vUp the direction vector from the top of the camera
+	 * @param vTo the direction vector of the camera
 	 */
-	public Camera(Point3D p0, Vector vUp, Vector vTo) {
+	public Camera(Point3D p0, Vector vTo, Vector vUp) {
 		super();
 		this.p0 = p0;
 		this.vUp = vUp.normalize();
@@ -43,7 +43,7 @@ public class Camera {
 	/**
 	 * setting the view plane size of the camera
 	 * 
-	 * @param width  the width of the view plane
+	 * @param width the width of the view plane
 	 * @param height the height of the view plane
 	 * @return this camera
 	 */
@@ -79,45 +79,74 @@ public class Camera {
 		double ry = height / nY; // the height of each pixel
 		double rx = width / nX; // the width of each pixel
 
-		Point3D p = p0.add(vTo.scale(dis)); // the center of the view plane
-		double yi = ((nY - 1) / 2d - i) * ry; // the distance from the center of the view plane to the middle of the
+		Point3D pCenter = p0.add(vTo.scale(dis)); // the center of the view plane
+		double yi = ((nY - 1) / 2 - i) * ry; // the distance from the center of the view plane to the middle of the
 												// pixel in the y axis
-		double xj = (j - (nX - 1) / 2d) * rx; // the distance from the center of the view plane to the middle of the
+		double xj = (j - (nX - 1) / 2) * rx; // the distance from the center of the view plane to the middle of the
 												// pixel in the y axis
+		Point3D pIJ = pCenter;
 		if (yi != 0) { // to prevent a creation of a zero vector
-			p = p.add(vUp.scale(yi));
+			pIJ = pIJ.add(vUp.scale(yi));
 		}
 		if (xj != 0) { // to prevent a creation of a zero vector
-			p = p.add(vRight.scale(xj));
+			pIJ = pIJ.add(vRight.scale(xj));
 		}
-		Vector dir = p.subtract(p0); // calculate the direction vector of the ray
+		Vector dir = pIJ.subtract(p0); // calculate the direction vector of the ray
 		return new Ray(p0, dir); // create and return the ray
 	}
 
+	/**
+	 * get the location of the camera
+	 * @return the location of the camera
+	 */
 	public Point3D getP0() {
 		return p0;
 	}
 
+	/**
+	 * get the direction vector from the top of the camera
+	 * @return the direction vector from the top of the camera
+	 */
 	public Vector getvUp() {
 		return vUp;
 	}
 
+	/**
+	 * get the direction vector of the camera
+	 * @return the direction vector of the camera
+	 */
 	public Vector getvTo() {
 		return vTo;
 	}
 
+	/**
+	 * get the direction vector from the Right side of the camera
+	 * @return the direction vector from the Right side of the camera
+	 */
 	public Vector getvRight() {
 		return vRight;
 	}
 
+	/**
+	 * get the width of the view plane
+	 * @return the width of the view plane
+	 */
 	public double getWidth() {
 		return width;
 	}
 
+	/** 
+	 * get the height of the view plane
+	 * @return the height of the view plane
+	 */
 	public double getHeight() {
 		return height;
 	}
 
+	/**
+	 * get the view plane distance from the camera
+	 * @return the view plane distance from the camera
+	 */
 	public double getDis() {
 		return dis;
 	}

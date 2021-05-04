@@ -7,11 +7,12 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
+import geometries.Plane;
 import primitives.Point3D;
 import primitives.Vector;
 
 /**
- *test for Point3D class
+ * test class for {@link Point3D} 
  */
 public class Point3DTest {
 

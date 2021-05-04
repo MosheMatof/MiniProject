@@ -11,11 +11,12 @@ import java.util.PrimitiveIterator.OfDouble;
 
 import org.junit.Test;
 
+import geometries.Plane;
 import geometries.Sphere;
 import primitives.*;
 
 /**
- *	Testing sphere Class
+ *	test class for {@link Sphere} 
  */
 public class SphereTest {
 

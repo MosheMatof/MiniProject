@@ -9,13 +9,14 @@ import org.junit.Test;
 
 import java.util.List;
 
+import geometries.Cylinder;
 import geometries.Plane;
 import primitives.Point3D;
 import primitives.Ray;
 import primitives.Vector;
 
 /**
- *
+ * test class for {@link Plane} 
  */
 public class PlaneTest {
 

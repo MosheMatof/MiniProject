@@ -9,10 +9,19 @@ import org.junit.Test;
 import elements.Camera;
 import geometries.*;
 import primitives.*;
-
+/**
+ * Integration test of Camera and Geometries
+ */
 public class CameraGeometreisIntegrationTest {
 
-	public int findNumOfIntersections(Camera cam, Intersectable geo) {
+	/**
+	 * calculates the number of intersections points between
+	 * the rays from the camera(view plane) and an intersectable object
+	 * @param cam the camera
+	 * @param geo an intersectable object
+	 * @return the number of intersections points
+	 */
+	private int findNumOfIntersections(Camera cam, Intersectable geo) {
 		int numOfIntersaction = 0;
 		for(int i = 0; i < 3; i++) {
 			for(int j = 0; j < 3; j++) {
@@ -23,7 +32,9 @@ public class CameraGeometreisIntegrationTest {
 		}
 		return numOfIntersaction;
 	}
-	
+	/**
+	 * Integration test of Camera and {@link geometries.Sphere#findIntersections(Ray)}
+	 */
 	@Test
 	public void SphereIntegrationTest() {
 		Camera cam1 = new Camera(new Point3D(0,0,0), new Vector(0,1,0), new Vector(0,0,-1));
@@ -52,7 +63,9 @@ public class CameraGeometreisIntegrationTest {
 		Sphere spr5 = new Sphere(new Point3D(0, 0, 1), 0.5);
 		assertEquals("TC05: (0 intersection)" , findNumOfIntersections(cam1, spr5), 0);
 	}
-	
+	/**
+	 * Integration test of Camera and {@link geometries.Plane#findIntersections(Ray)}
+	 */
 	@Test
 	public void PlaneIntegrationTest() {
 		Camera cam1 = new Camera(new Point3D(0,0,0), new Vector(0,1,0), new Vector(0,0,-1));
@@ -71,7 +84,9 @@ public class CameraGeometreisIntegrationTest {
 		Plane p3 = new Plane(new Point3D(0, 0, -5), new Vector(0,-1.5,-1));
 		assertEquals("TC02: the plane is in front of the view plane (9 intersections)", findNumOfIntersections(cam1, p3), 6);
 	}
-	
+	/**
+	 * Integration test of Camera and {@link geometries.Triangle#findIntersections(primitives.Ray)}
+	 */
 	@Test 
 	public void TriangleIntegrationTest() {
 		Camera cam1 = new Camera(new Point3D(0,0,0), new Vector(0,1,0), new Vector(0,0,-1));
@@ -84,7 +99,7 @@ public class CameraGeometreisIntegrationTest {
 		
 		//TC02: triangle in front of the camera parallel to the view plane (2 intersection)
 		Triangle trgl2 = new Triangle(new Point3D(0, 20, -2), new Point3D(1, -1,-2), new Point3D(-1,-1,-2));
-		assertEquals("TC02: triangle in front of the camera parallel to the view plane (2 intersection)", findNumOfIntersections(cam1, trgl1), 1);
+		assertEquals("TC02: triangle in front of the camera parallel to the view plane (2 intersection)", findNumOfIntersections(cam1, trgl2), 2);
 		
 	}
 
