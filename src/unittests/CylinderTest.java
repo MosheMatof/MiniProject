@@ -97,13 +97,13 @@ public class CylinderTest {
 				List.of(new Point3D(0, 0, 3), new Point3D(2, 0, 1)));
 
 		// TC03: intersects twice - The ray crosses the body and the cap
-		Ray r6 = new Ray(new Point3D(4, 0.553394889542981, -1.260913400857578),
-				new Vector(-3, -0.553394889542981, 1.260913400857578));
+		Ray r6 = new Ray(new Point3D(1.589735223254593, -8.187906987570473, 0),
+				new Vector (-0.326768606810759,8.28282097928758,10));
 		result = cylinder.findIntersections(r6);
 		result = orderToComper(result);
 		assertEquals("TC03: intersects twice - The ray crosses the body and the cap", result,
-				List.of(new Point3D(0.016591420754664, -0.181404427362364, 0.413331018696252),
-						new Point3D(1.983408579245337, 0.181404427362364, -0.413331018696252)));
+				List.of(new Point3D(1.262966616443833, 0.094913991717107, 10),
+				new Point3D(1.304291643237488, -0.952578918439761, 8.735342810406891)));
 		/*
 		 * //TC04: intersects once - The ray starts inside the cylinder and parallel
 		 * cylinder Ray r7 = new Ray(new Point3D (2,1,0), new Vector(-1,0,1)); result =
