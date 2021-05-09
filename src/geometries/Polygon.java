@@ -3,8 +3,8 @@ package geometries;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.stream.Stream;
 
+import geometries.Intersectable.GeoPoint;
 import primitives.*;
 
 import static primitives.Util.*;
@@ -15,7 +15,7 @@ import static primitives.Util.*;
  * 
  * @author Dan
  */
-public class Polygon implements Geometry {
+public class Polygon extends Geometry {
 	/**
 	 * List of polygon's vertices
 	 */
@@ -136,5 +136,13 @@ public class Polygon implements Geometry {
 			return interPoint;
 		}
 		return null;
+	}
+
+	@Override
+	public List<GeoPoint> findGeoIntersections(Ray ray) {
+		List<Point3D> l = this.findIntersections(ray);
+		if(l == null)
+			return null;
+		return List.of(new GeoPoint(this,  l.get(0)));
 	}
 }
