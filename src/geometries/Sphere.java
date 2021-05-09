@@ -2,13 +2,14 @@ package geometries;
 
 import java.util.List;
 
+import geometries.Intersectable.GeoPoint;
 import primitives.*;
 import static primitives.Util.*;
 
 /**
  * represents sphere by point and radius
  */
-public class Sphere implements Geometry {
+public class Sphere extends Geometry {
 
 	private Point3D center;
 	private double radius;
@@ -87,6 +88,20 @@ public class Sphere implements Geometry {
 		double t1 = alignZero(tm - th);
 
 		return t1 <= 0 ? List.of(p2) : List.of(ray.getPoint(t1), p2);
+	}
+
+	@Override
+	public List<GeoPoint> findGeoIntersections(Ray ray) {
+		List<Point3D> l = this.findIntersections(ray);
+		//if there is none intersection point
+		if(l == null)
+			return null;
+		//if there is only one intersection point
+		if(l.size() == 1)
+			return List.of(new GeoPoint(this,  l.get(0)));
+		//if there is two intersection point
+		return List.of(new GeoPoint(this,  l.get(0)), new GeoPoint(this, l.get(1)));
+		
 	}
 
 }

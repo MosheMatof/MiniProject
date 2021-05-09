@@ -7,7 +7,7 @@ import java.util.List;
 /**
  * represents an infinite tube in a 3d space
  */
-public class Tube implements Geometry{
+public class Tube extends Geometry{
 
 	protected Ray axis;
 	protected double radius;

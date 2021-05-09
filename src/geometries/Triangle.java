@@ -2,6 +2,7 @@ package geometries;
 
 import java.util.List;
 
+import geometries.Intersectable.GeoPoint;
 import primitives.*;
 import static primitives.Util.*;
 
@@ -51,6 +52,14 @@ public final class Triangle extends Polygon {
 			return null;
 
 		return intersections;
+	}
+	
+	@Override
+	public List<GeoPoint> findGeoIntersections(Ray ray) {
+		List<Point3D> l = this.findIntersections(ray);
+		if(l == null)
+			return null;
+		return List.of(new GeoPoint(this,  l.get(0)));
 	}
 
 }
