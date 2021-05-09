@@ -12,7 +12,7 @@ import primitives.*;
 /**
  * Integration test of Camera and Geometries
  */
-public class CameraGeometreisIntegrationTest {
+public class CameraGeometriesIntegrationTest {
 
 	/**
 	 * calculates the number of intersections points between

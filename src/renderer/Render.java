@@ -70,8 +70,8 @@ public class Render {
 
 		int nX = imageWriter.getNx();
 		int nY = imageWriter.getNy();
-		for (int i = 0; i < imageWriter.getNy(); i++) {
-			for (int j = 0; j < imageWriter.getNx(); j++) {
+		for (int i = 0; i < nY; i++) {
+			for (int j = 0; j < nX; j++) {
 				Color color = rayTracer.traceRay(camera.constructRayThroughPixel(nX, nY, j, i));
 				imageWriter.writePixel(j, i, color);
 			}
@@ -89,13 +89,13 @@ public class Render {
 		// paint the vertical lines
 		for (int i = 0; i < nY; i += interval) {
 			for (int j = 0; j < nX; j++) {
-				imageWriter.writePixel(i, j, new Color(255, 0, 0));
+				imageWriter.writePixel(i, j, color);
 			}
 		}
 		// paint the horizontal lines
 		for (int j = 0; j < nY; j += interval) {
 			for (int i = 0; i < nX; i++) {
-				imageWriter.writePixel(i, j, new Color(255, 0, 0));
+				imageWriter.writePixel(i, j, color);
 			}
 		}
 	}

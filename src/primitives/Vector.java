@@ -33,7 +33,7 @@ public final class Vector {
 	public Vector(Point3D p) {
 		if (p.equals(Point3D.ZERO))
 			throw new IllegalArgumentException("the zero vector is not alow");
-		head = new Point3D(p.x, p.y, p.z);
+		head = p;
 	}
 
 	// ____________methods________________________
@@ -129,12 +129,10 @@ public final class Vector {
 	 */
 	public Vector normalize() {
 		double length = length();
-		if (length != 1) {
-			double px = head.x.coord / length;
-			double py = head.y.coord / length;
-			double pz = head.z.coord / length;
-			this.head = new Point3D(px, py, pz);
-		}
+		double px = head.x.coord / length;
+		double py = head.y.coord / length;
+		double pz = head.z.coord / length;
+		this.head = new Point3D(px, py, pz);
 		return this;
 	}
 
