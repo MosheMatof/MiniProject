@@ -12,7 +12,11 @@ import primitives.*;
 /**
  * Integration test of Camera and Geometries
  */
+<<<<<<< HEAD
+public class CameraGeometriesIntegrationTest {
+=======
 public class CameraGeometreisIntegrationTest {
+>>>>>>> branch 'master' of https://github.com/MosheMatof/MiniProject.git
 
 	/**
 	 * calculates the number of intersections points between

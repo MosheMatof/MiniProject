@@ -3,7 +3,6 @@ package geometries;
 import primitives.*;
 import static primitives.Util.*;
 
-import java.awt.Point;
 import java.util.List;
 /**
  * represents an infinite tube in a 3d space
@@ -112,24 +111,22 @@ public class Tube implements Geometry{
 			}
 			
 			double dissqrt = Math.sqrt(dis);
-			double t1 = Util.alignZero((-b + dissqrt)/(2*a));
+			double t1 = Util.alignZero((-b + dissqrt)/(2*a)); 
 			double t2 = Util.alignZero((-b - dissqrt)/(2*a));
-			
-			Point3D p1 = ray.getPoint(t1);
-			Point3D p2 = ray.getPoint(t2);
-			
+
 			//takes only positive solutions of t
 			if(t1 > 0) {
+				Point3D p1 = ray.getPoint(t1);
 				if(t2 > 0) {
+					Point3D p2 = ray.getPoint(t2);
 					return List.of(p1,p2);
 				}
 				return List.of(p1);
 			}
 			if(t2 > 0) {
+				Point3D p2 = ray.getPoint(t2);
 				return List.of(p2);
 			}
-			
-			
 		} catch (Exception e) {
 			return null;
 		}

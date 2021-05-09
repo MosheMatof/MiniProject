@@ -13,6 +13,7 @@ public class BasicRayTracer extends RayTracerBase {
 
 	/**
 	 * constructs a new BasicRayTracer with scene = 'scene'
+	 * 
 	 * @param scene the scene of the BasicRayTracer
 	 */
 	public BasicRayTracer(Scene scene) {
@@ -27,21 +28,18 @@ public class BasicRayTracer extends RayTracerBase {
 		List<Point3D> points = scene.geometries.findIntersections(ray);
 		if (points == null) {
 			return scene.background;
-		}
-		else {
+		} else {
 			return calcColor(ray.findClosestPoint(points));
 		}
 	}
 
 	/**
 	 * calculates the color for a given point
+	 * 
 	 * @param point the point to find the color for
 	 * @return the color of this point
 	 */
 	private Color calcColor(Point3D point) {
 		return scene.ambientLight.getIntensity();
 	}
-	
-	
-
 }

@@ -4,111 +4,106 @@ package primitives;
  * represents a point in a 3D space
  */
 public final class Point3D {
-	
-	//static fields
+
+	// static fields
 	/**
 	 * Point3D(0, 0, 0)
 	 */
 	public static Point3D ZERO = new Point3D(0, 0, 0);
-	
-	//private fields
+
+	// private fields
 	final Coordinate x;
 	final Coordinate y;
 	final Coordinate z;
-	
+
 	/**
 	 * Point3D constructor by double values
+	 * 
 	 * @param dx the X value
 	 * @param dy the Y value
 	 * @param dz the Z value
 	 */
-	public Point3D(double dx, double dy, double dz)
-	{
+	public Point3D(double dx, double dy, double dz) {
 		x = new Coordinate(dx);
 		y = new Coordinate(dy);
 		z = new Coordinate(dz);
 	}
-	/**
-	 * Point3D constructor by {@link Coordinate}} values
-	 * @param cx the X coordinate value
-	 * @param cy the Y coordinate value
-	 * @param cz the Z coordinate value
-	 */                 
-	public Point3D(Coordinate cx, Coordinate cy, Coordinate cz)
-	{
-		x = new Coordinate(cx.coord);
-		y = new Coordinate(cy.coord);
-		z = new Coordinate(cz.coord);
-	}
-	
-	//____________________methods_________________
+
+	// ____________________methods_________________
 	/**
 	 * Moves this point by a vector (performs operation this point + vector)
+	 * 
 	 * @param v the vector to add
 	 * @return a new Point3d that its the resulting point of the operation
 	 */
 	public Point3D add(Vector v) {
 		return new Point3D(x.coord + v.head.x.coord, y.coord + v.head.y.coord, z.coord + v.head.z.coord);
 	}
-	
+
 	/**
-	 * Subtracts another point from this point and this produces a vector from another point to this point
+	 * Subtracts another point from this point and this produces a vector from
+	 * another point to this point
+	 * 
 	 * @param other the point to subtract
 	 * @return the vector from other point to this point
 	 */
 	public Vector subtract(Point3D other) {
-		try {
-			return new Vector(new Point3D(x.coord - other.x.coord, y.coord - other.y.coord, z.coord - other.z.coord));
-		} catch (IllegalArgumentException e) {
-			throw new IllegalArgumentException("the subtraction retuned zero vector", e);
-		}
+		return new Vector(new Point3D(x.coord - other.x.coord, y.coord - other.y.coord, z.coord - other.z.coord));
 	}
+
 	/**
 	 * calculates the squared distance between 2 points
-	 * @param p the target point 
-	 * @return the squared distance from 'this' to 'p' 
+	 * 
+	 * @param p the target point
+	 * @return the squared distance from 'this' to 'p'
 	 */
 	public double distanceSquared(Point3D p) {
 		double xDif, yDif, zDif;
 		xDif = x.coord - p.x.coord;
 		yDif = y.coord - p.y.coord;
 		zDif = z.coord - p.z.coord;
-		double dist = xDif * xDif + yDif * yDif + zDif * zDif;
-		return Util.alignZero(dist);
+		return xDif * xDif + yDif * yDif + zDif * zDif;
 	}
-	
+
 	/**
 	 * calculates the distance between 2 points
-	 * @param p the target point 
-	 * @return the distance from 'this' to 'p' 
+	 * 
+	 * @param p the target point
+	 * @return the distance from 'this' to 'p'
 	 */
-	public double distance(Point3D p)
-	{
+	public double distance(Point3D p) {
 		return Math.sqrt(distanceSquared(p));
 	}
-	
+
 	@Override
 	public boolean equals(Object obj) {
-	if (this == obj) return true;
-	if (obj == null) return false;
-	if (!(obj instanceof Point3D)) return false;
-	Point3D other = (Point3D)obj;
-	return x.equals(other.x) && y.equals(other.y) && z.equals(other.z);
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (!(obj instanceof Point3D))
+			return false;
+		Point3D other = (Point3D) obj;
+		return x.equals(other.x) && y.equals(other.y) && z.equals(other.z);
 	}
-	
+
 	@Override
 	public String toString() {
 		return "(" + x + ", " + y + ", " + z + ")";
 	}
+
 	/**
 	 * get the X double value
+	 * 
 	 * @return the X double value
 	 */
 	public double getX() {
 		return x.coord;
 	}
+
 	/**
 	 * get the Y double value
+	 * 
 	 * @return the Y double value
 	 */
 	public double getY() {
@@ -117,6 +112,7 @@ public final class Point3D {
 
 	/**
 	 * get the Z double value
+	 * 
 	 * @return the Z double value
 	 */
 	public double getZ() {
