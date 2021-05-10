@@ -1,6 +1,5 @@
 package geometries;
 
-import java.util.Iterator;
 import java.util.List;
 
 import primitives.*;
@@ -9,7 +8,7 @@ import static primitives.Util.*;
 /**
  * represents a plane in a space
  */
-public class Plane extends Geometry {
+public class Plane implements Geometry {
 
 	private Point3D pivot;
 	private Vector normal;
@@ -86,14 +85,6 @@ public class Plane extends Geometry {
 
 		double scalar = alignZero(num / denom);
 		return scalar <= 0 ? null : List.of(ray.getPoint(scalar));
-	}
-
-	@Override
-	public List<GeoPoint> findGeoIntersections(Ray ray) {
-		List<Point3D> l = this.findIntersections(ray);
-		if(l == null)
-			return null;
-		return List.of(new GeoPoint(this,  l.get(0)));
 	}
 
 }

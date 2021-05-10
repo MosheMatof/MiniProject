@@ -12,7 +12,6 @@ import primitives.*;
 /**
  * Integration test of Camera and Geometries
  */
-
 public class CameraGeometriesIntegrationTest {
 
 	/**
