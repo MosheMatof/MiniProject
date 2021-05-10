@@ -3,13 +3,12 @@ package geometries;
 import java.util.LinkedList;
 import java.util.List;
 
-import primitives.Point3D;
 import primitives.Ray;
 
 /**
  * list of Intersectable objects as a composite object
  */
-public class Geometries implements Intersectable {
+public class Geometries implements Intersectable{
 	private LinkedList<Intersectable> components = new LinkedList<Intersectable>();
 
 	/**
@@ -37,15 +36,31 @@ public class Geometries implements Intersectable {
 			components.add(intersectable);
 	}
 
-	// finds all the intersections point of all the components with 'ray'
+//	// finds all the intersections point of all the components with 'ray'
+//	@Override
+//	public List<Point3D> findIntersections(Ray ray) {
+//		List<Point3D> intrsctPnts = null;
+//		for (Intersectable component : components) {
+//			List<Point3D> fi = component.findIntersections(ray);
+//			if (fi != null) {
+//				if (intrsctPnts == null) {
+//					intrsctPnts = new LinkedList<Point3D>(fi);
+//				} else {
+//					intrsctPnts.addAll(fi);
+//				}
+//			}		
+//		}
+//		return intrsctPnts;
+//	}
+
 	@Override
-	public List<Point3D> findIntersections(Ray ray) {
-		List<Point3D> intrsctPnts = null;
+	public List<GeoPoint> findGeoIntersections(Ray ray) {
+		List<GeoPoint> intrsctPnts = null;
 		for (Intersectable component : components) {
-			List<Point3D> fi = component.findIntersections(ray);
+			List<GeoPoint> fi = component.findGeoIntersections(ray);
 			if (fi != null) {
 				if (intrsctPnts == null) {
-					intrsctPnts = new LinkedList<Point3D>(fi);
+					intrsctPnts = new LinkedList<GeoPoint>(fi);
 				} else {
 					intrsctPnts.addAll(fi);
 				}

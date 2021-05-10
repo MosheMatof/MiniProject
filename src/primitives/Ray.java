@@ -5,6 +5,8 @@ package primitives;
 
 import java.util.List;
 
+import geometries.Intersectable.GeoPoint;
+
 /**
  * 
  * represents a ray by point and vector
@@ -61,29 +63,51 @@ public class Ray {
 		return origin.add(dir.scale(t));
 	}
 
+//	/**
+//	 * finds from a list of points the closest point to the origin of this ray
+//	 * 
+//	 * @param points the list of points to choose from
+//	 * @return the closest point to the origin of this ray
+//	 */
+//	public Point3D findClosestPoint(List<Point3D> points) {
+//		if (points == null) // if the list is empty or null
+//			return null;
+//		Point3D closestPoint = null;
+//		double smallestDist = Double.POSITIVE_INFINITY;
+//
+//		// find the closest point
+//		for (Point3D point : points) {
+//			double pointDist = origin.distanceSquared(point);
+//			if (pointDist < smallestDist) {
+//				smallestDist = pointDist;
+//				closestPoint = point;
+//			}
+//		}
+//		return closestPoint;
+//	}
+	
 	/**
-	 * finds from a list of points the closest point to the origin of this ray
-	 * 
-	 * @param points the list of points to choose from
-	 * @return the closest point to the origin of this ray
+	 * finds from a list of GeoPoints the GeoPoint with the closest point to the origin of this ray
+	 * @param gpoints the list of GeoPoints to choose from
+	 * @return the GeoPoint with the closest point to the origin of this ray
 	 */
-	public Point3D findClosestPoint(List<Point3D> points) {
-		if (points == null) // if the list is empty or null
+	public GeoPoint findClosestGeoPoint(List<GeoPoint> gpoints) {
+		if (gpoints == null) // if the list is empty or null
 			return null;
-		Point3D closestPoint = null;
+		GeoPoint closestPoint = null;
 		double smallestDist = Double.POSITIVE_INFINITY;
 
-		// find the closest point
-		for (Point3D point : points) {
-			double pointDist = origin.distanceSquared(point);
+		// find the GeoPoint with the closest point
+		for (GeoPoint gpoint : gpoints) {
+			double pointDist = origin.distanceSquared(gpoint.point);
 			if (pointDist < smallestDist) {
 				smallestDist = pointDist;
-				closestPoint = point;
+				closestPoint = gpoint;
 			}
 		}
 		return closestPoint;
 	}
-
+	
 	@Override
 	public String toString() {
 		return origin.toString() + " " + dir.toString();

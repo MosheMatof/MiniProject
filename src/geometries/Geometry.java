@@ -3,7 +3,7 @@ package geometries;
 import primitives.*;
 
 /**
- * the interface provide the getNormal function for any geometries, used for reflection proposes.
+ * the abstract class provide the getNormal function for any geometries, used for reflection proposes.
  */
 abstract class Geometry implements Intersectable {
 
@@ -14,7 +14,7 @@ abstract class Geometry implements Intersectable {
 	 * @param point point to produce the normal at
 	 * @return the normal in a specific point
 	 */
-	abstract Vector getNormal(Point3D point);
+	abstract public Vector getNormal(Point3D point);
 	/**
 	 * get the emission
 	 * @return the emission

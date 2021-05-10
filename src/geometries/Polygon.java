@@ -103,10 +103,44 @@ public class Polygon extends Geometry {
 		return result;
 	}
 
+//	@Override
+//	public List<Point3D> findIntersections(Ray ray) {
+//		//
+//		List<Point3D> interPoint = this.plane.findIntersections(ray);
+//		if (interPoint == null) {
+//			return null;
+//		}
+//		int size = vertices.size();
+//		
+//		//array of all the vectors from the ray point to the vertices
+//		Vector[] rayToVertices = new Vector[size];
+//		int i = 0;
+//		for (Point3D p : vertices) {
+//			rayToVertices[i++] = p.subtract(ray.getOrigin());
+//		}
+//		//array of all the normal vectors that come form crossProduct between each adjacent vectors(rayToVertices)
+//		Vector[] normalsFromVertices = new Vector[size];
+//		for (int j = 0; j < size - 1; j++) {
+//			normalsFromVertices[j] = rayToVertices[j].crossProduct(rayToVertices[j + 1]).normalize();
+//		}
+//		normalsFromVertices[size - 1] = rayToVertices[size - 1].crossProduct(rayToVertices[0]).normalize();
+//		
+//		//the values of all the normals * ray
+//		List<Double> normals = new ArrayList<Double>();
+//		for (Vector s : normalsFromVertices) {
+//			normals.add(Util.alignZero(ray.getDir().dotProduct(s)));
+//		}
+//		
+//		//if all the scalars have the same sign and non of theme is zero => the point is inside the polygon
+//		if (normals.stream().allMatch(d -> d > 0) || normals.stream().allMatch(d -> d < 0)) {
+//			return interPoint;
+//		}
+//		return null;
+//	}
+
 	@Override
-	public List<Point3D> findIntersections(Ray ray) {
-		//
-		List<Point3D> interPoint = this.plane.findIntersections(ray);
+	public List<GeoPoint> findGeoIntersections(Ray ray) {
+		List<GeoPoint> interPoint = this.plane.findGeoIntersections(ray);
 		if (interPoint == null) {
 			return null;
 		}
@@ -133,16 +167,9 @@ public class Polygon extends Geometry {
 		
 		//if all the scalars have the same sign and non of theme is zero => the point is inside the polygon
 		if (normals.stream().allMatch(d -> d > 0) || normals.stream().allMatch(d -> d < 0)) {
+			interPoint.get(0).geometry = this;
 			return interPoint;
 		}
 		return null;
-	}
-
-	@Override
-	public List<GeoPoint> findGeoIntersections(Ray ray) {
-		List<Point3D> l = this.findIntersections(ray);
-		if(l == null)
-			return null;
-		return List.of(new GeoPoint(this,  l.get(0)));
 	}
 }

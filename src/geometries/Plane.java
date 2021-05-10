@@ -8,7 +8,7 @@ import static primitives.Util.*;
 /**
  * represents a plane in a space
  */
-public class Plane implements Geometry {
+public class Plane extends Geometry {
 
 	private Point3D pivot;
 	private Vector normal;
@@ -37,7 +37,7 @@ public class Plane implements Geometry {
 		this.normal = v1.crossProduct(v2).normalized();
 		this.pivot = p1;
 	}
-
+	
 	@Override
 	public Vector getNormal(Point3D point) {
 		return normal;
@@ -66,8 +66,29 @@ public class Plane implements Geometry {
 		return pivot;
 	}
 
+//	@Override
+//	public List<Point3D> findIntersections(Ray ray) {
+//		Vector u;
+//		try {
+//			u = this.pivot.subtract(ray.getOrigin());
+//		} catch (IllegalArgumentException e) {
+//			// if the ray start at the represented point of the plane
+//			return null;
+//		}
+//
+//		// numerator
+//		double num = this.getNormal().dotProduct(u);
+//		// denominator
+//		double denom = this.getNormal().dotProduct(ray.getDir());
+//		if (isZero(denom))
+//			return null;
+//
+//		double scalar = alignZero(num / denom);
+//		return scalar <= 0 ? null : List.of(ray.getPoint(scalar));
+//	}
+
 	@Override
-	public List<Point3D> findIntersections(Ray ray) {
+	public List<GeoPoint> findGeoIntersections(Ray ray) {
 		Vector u;
 		try {
 			u = this.pivot.subtract(ray.getOrigin());
@@ -84,7 +105,7 @@ public class Plane implements Geometry {
 			return null;
 
 		double scalar = alignZero(num / denom);
-		return scalar <= 0 ? null : List.of(ray.getPoint(scalar));
+		return scalar <= 0 ? null : List.of(new GeoPoint(this, ray.getPoint(scalar)));
 	}
 
 }

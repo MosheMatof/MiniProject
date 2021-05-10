@@ -2,13 +2,14 @@ package geometries;
 
 import java.util.List;
 
+import geometries.Intersectable.GeoPoint;
 import primitives.*;
 import static primitives.Util.*;
 
 /**
  * represents sphere by point and radius
  */
-public class Sphere implements Geometry {
+public class Sphere extends Geometry {
 
 	private Point3D center;
 	private double radius;
@@ -48,44 +49,84 @@ public class Sphere implements Geometry {
 		return radius;
 	}
 
+//	@Override
+//	public List<Point3D> findIntersections(Ray ray) {
+//		// if the origin point of the ray is in the center
+//		if (ray.getOrigin().equals(center)) {
+//			return List.of(ray.getPoint(radius));
+//		}
+//
+//		// vector from the origin point of the ray to the center
+//		Vector u = center.subtract(ray.getOrigin());
+//
+//		// the length from the origin point of the ray to the middle point between the
+//		// intersection of the line of the ray
+//		double tm = u.dotProduct(ray.getDir());
+//
+//		// the length Squared between the center and the line of the ray
+//		double dSqr = u.lengthSquared() - tm * tm;
+//		// the half length between the intersection of the line of the ray
+//		double thSqr = radiusSquared - dSqr;
+//
+//		// if the length between the center and the line of the ray is bigger
+//		if (alignZero(thSqr) <= 0)
+//			return null;
+//
+//		// the half length between the intersection of the line of the ray
+//		double th = Math.sqrt(thSqr);
+//
+//		// the distance between the origin of the ray and the most positive intersection
+//		// point
+//		double t2 = alignZero(tm + th);
+//		if (t2 <= 0)
+//			return null;
+//		Point3D p2 = ray.getPoint(t2);
+//
+//		// the distance between the origin of the ray and the most negative intersection
+//		// point
+//		double t1 = alignZero(tm - th);
+//
+//		return t1 <= 0 ? List.of(p2) : List.of(ray.getPoint(t1), p2);
+//	}
+
 	@Override
-	public List<Point3D> findIntersections(Ray ray) {
+	public List<GeoPoint> findGeoIntersections(Ray ray) {
 		// if the origin point of the ray is in the center
-		if (ray.getOrigin().equals(center)) {
-			return List.of(ray.getPoint(radius));
-		}
+				if (ray.getOrigin().equals(center)) {
+					return List.of(new GeoPoint(this, ray.getPoint(radius)));
+				}
 
-		// vector from the origin point of the ray to the center
-		Vector u = center.subtract(ray.getOrigin());
+				// vector from the origin point of the ray to the center
+				Vector u = center.subtract(ray.getOrigin());
 
-		// the length from the origin point of the ray to the middle point between the
-		// intersection of the line of the ray
-		double tm = u.dotProduct(ray.getDir());
+				// the length from the origin point of the ray to the middle point between the
+				// intersection of the line of the ray
+				double tm = u.dotProduct(ray.getDir());
 
-		// the length Squared between the center and the line of the ray
-		double dSqr = u.lengthSquared() - tm * tm;
-		// the half length between the intersection of the line of the ray
-		double thSqr = radiusSquared - dSqr;
+				// the length Squared between the center and the line of the ray
+				double dSqr = u.lengthSquared() - tm * tm;
+				// the half length between the intersection of the line of the ray
+				double thSqr = radiusSquared - dSqr;
 
-		// if the length between the center and the line of the ray is bigger
-		if (alignZero(thSqr) <= 0)
-			return null;
+				// if the length between the center and the line of the ray is bigger
+				if (alignZero(thSqr) <= 0)
+					return null;
 
-		// the half length between the intersection of the line of the ray
-		double th = Math.sqrt(thSqr);
+				// the half length between the intersection of the line of the ray
+				double th = Math.sqrt(thSqr);
 
-		// the distance between the origin of the ray and the most positive intersection
-		// point
-		double t2 = alignZero(tm + th);
-		if (t2 <= 0)
-			return null;
-		Point3D p2 = ray.getPoint(t2);
+				// the distance between the origin of the ray and the most positive intersection
+				// point
+				double t2 = alignZero(tm + th);
+				if (t2 <= 0)
+					return null;
+				Point3D p2 = ray.getPoint(t2);
 
-		// the distance between the origin of the ray and the most negative intersection
-		// point
-		double t1 = alignZero(tm - th);
+				// the distance between the origin of the ray and the most negative intersection
+				// point
+				double t1 = alignZero(tm - th);
 
-		return t1 <= 0 ? List.of(p2) : List.of(ray.getPoint(t1), p2);
+				return t1 <= 0 ? List.of(new GeoPoint(this, p2)) : List.of(new GeoPoint(this, ray.getPoint(t1)),new GeoPoint(this, p2));
 	}
 
 }
