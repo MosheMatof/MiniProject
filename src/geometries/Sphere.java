@@ -17,7 +17,6 @@ public class Sphere extends Geometry {
 
 	/**
 	 * Sphere constructor by point and radius
-	 * 
 	 * @param center the center of the sphere
 	 * @param radius the radius of the sphere
 	 */
