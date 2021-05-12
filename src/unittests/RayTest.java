@@ -59,8 +59,6 @@ public class RayTest {
 				new GeoPoint(spr, new Point3D(0, -3.976587309161571, 1.348941793892286)));
 		assertEquals("TC04: closest point is the last point in the list", ray.findClosestGeoPoint(gpoints),
 				new GeoPoint(spr, new Point3D(0, -3.976587309161571, 1.348941793892286)));
-		
-
 	}
 
 }

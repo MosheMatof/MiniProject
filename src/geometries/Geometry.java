@@ -5,7 +5,7 @@ import primitives.*;
 /**
  * the abstract class provide the getNormal function for any geometries, used for reflection proposes.
  */
-abstract class Geometry implements Intersectable {
+public abstract class Geometry implements Intersectable {
 
 	protected Color emission = Color.BLACK;
 	
@@ -28,7 +28,7 @@ abstract class Geometry implements Intersectable {
 	 * @param emission the new emission
 	 * @return it self
 	 */
-	Geometry setEmission(Color emission) {
+	public Geometry setEmission(Color emission) {
 		this.emission = emission;
 		return this;
 	}

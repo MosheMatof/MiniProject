@@ -48,11 +48,11 @@ public class Cylinder extends Tube {
 		return point.subtract(o).normalize();
 	}
 
-//	@Override
-//	public String toString() {
-//		return super.toString() + ", height: " + height;
-//	}
-//
+	@Override
+	public String toString() {
+		return super.toString() + ", height: " + height;
+	}
+
 //	@Override
 //	public List<Point3D> findIntersections(Ray ray) {
 //		Point3D topPoint = this.axis.getPoint(height);
@@ -106,7 +106,7 @@ public class Cylinder extends Tube {
 //		}
 //		return null;
 //	}
-//
+
 	@Override
 	public List<GeoPoint> findGeoIntersections(Ray ray) {
 		Point3D topPoint = this.axis.getPoint(height);
@@ -120,9 +120,10 @@ public class Cylinder extends Tube {
 			for (GeoPoint gp : tubePoints) {
 				double s1 = Util.alignZero(axisVec.dotProduct(gp.point.subtract(topPoint)));
 				double s2 = Util.alignZero(axisVec.dotProduct(gp.point.subtract(bottomPoint)));
-				if (s1 < 0 && s2 > 0)
+				if (s1 < 0 && s2 > 0) {
 					gp.geometry = this;
 					validPoints.add(gp);
+				}
 			}
 			if (validPoints.size() == 2) {
 				return validPoints;
@@ -136,11 +137,11 @@ public class Cylinder extends Tube {
 		Plane topPlane = new Plane(topPoint, axisVec);
 		List<GeoPoint> planePoint = topPlane.findGeoIntersections(ray);
 		if (planePoint != null) {
-			GeoPoint p = planePoint.get(0);
-			double s = Util.alignZero(p.point.subtract(topPoint).lengthSquared());
+			GeoPoint gp = planePoint.get(0);
+			double s = Util.alignZero(gp.point.subtract(topPoint).lengthSquared());
 			if (s < sqrRadius) {
-				p.geometry = this;
-				validPoints.add(p);
+				gp.geometry = this;
+				validPoints.add(gp);
 				if (validPoints.size() == 2)
 					return validPoints;
 			}
