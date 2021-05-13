@@ -14,7 +14,6 @@ public class BasicRayTracer extends RayTracerBase {
 
 	/**
 	 * constructs a new BasicRayTracer with scene = 'scene'
-	 * 
 	 * @param scene the scene of the BasicRayTracer
 	 */
 	public BasicRayTracer(Scene scene) {
@@ -36,11 +35,10 @@ public class BasicRayTracer extends RayTracerBase {
 
 	/**
 	 * calculates the color for a given point
-	 * 
 	 * @param point the point to find the color for
 	 * @return the color of this point
 	 */
-	private Color calcColor(GeoPoint point) {
+	private Color calcColor(GeoPoint point, Ray ray) {
 		return scene.ambientLight.getIntensity().add(point.geometry.getEmission());
 	}
 }

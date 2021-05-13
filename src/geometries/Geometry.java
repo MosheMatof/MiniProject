@@ -1,5 +1,7 @@
 package geometries;
 
+import com.sun.tools.classfile.Opcode.Set;
+
 import primitives.*;
 
 /**
@@ -8,6 +10,7 @@ import primitives.*;
 public abstract class Geometry implements Intersectable {
 
 	protected Color emission = Color.BLACK;
+	private Material material = new Material();
 	
 	/**
 	 * get the orthogonal vector in length 1 from a point on a geometry object
@@ -30,6 +33,24 @@ public abstract class Geometry implements Intersectable {
 	 */
 	public Geometry setEmission(Color emission) {
 		this.emission = emission;
+		return this;
+	}
+	
+	/**
+	 * get the material
+	 * @return the material
+	 */
+	public Material getMaterial() {
+		return material;
+	}
+	
+	/**
+	 * sets the material of the geometry
+	 * @param material the material to set
+	 * @return it self
+	 */
+	public Geometry setMaterial(Material material) {
+		this.material = material;
 		return this;
 	}
 }

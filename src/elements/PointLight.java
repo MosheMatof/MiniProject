@@ -72,7 +72,6 @@ public class PointLight extends Light implements LightSource {
 	}
 
 	/**
-	 * 
 	 * @param kC the kC to set
 	 * @return instance of this PointLight
 	 */
@@ -82,7 +81,6 @@ public class PointLight extends Light implements LightSource {
 	}
 
 	/**
-	 * 
 	 * @param kL the kL to set
 	 * @return instance of this PointLight
 	 */
@@ -92,8 +90,8 @@ public class PointLight extends Light implements LightSource {
 	}
 
 	/**
-	 * 
 	 * @param kQ the kQ to set
+	 * @return instance of this pointLight
 	 */
 	public PointLight setkQ(double kQ) {
 		this.kQ = kQ;
