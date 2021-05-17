@@ -33,30 +33,9 @@ public class SpotLight extends PointLight implements LightSource {
 		this.direction = direction;
 	}
 
-	/**
-	 * Extended PointLight constructor
-	 * @param intensity the intensity of the light      
-	 * @param position the position point of the light  
-	 * @param kC
-	 * @param kL
-	 * @param kQ
-	 * @param direction
-	 */
-	public SpotLight(Color intensity, Point3D position, double kC , double kL, double kQ, Vector direction) {
-		super(intensity, position, kC , kL, kQ);
-		this.direction = direction;
-	}
-
 	@Override
 	public Color getIntensity(Point3D p) {
-		// TODO Auto-generated method stub
-		return null;
+		double dp = Math.max(0, direction.dotProduct(getL(p)));
+		return super.getIntensity().scale(dp);
 	}
-
-	@Override
-	public Vector getL(Point3D p) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
 }

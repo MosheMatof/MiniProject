@@ -8,6 +8,7 @@ import java.util.stream.Collectors;
 
 import primitives.Point3D;
 import primitives.Ray;
+import primitives.Vector;
 
 /**
  * the interface provide the function findIntersections for any object in space, used to find intersections between objects and rays  
@@ -49,7 +50,13 @@ public interface Intersectable {
 		public String toString() {
 			return point.toString() + geometry.toString();
 		}
-		
+		/**
+		 * get the normal of the geometry at this point
+		 * @return the normal of the geometry at this point
+		 */
+		public Vector getNormal() {
+			return geometry.getNormal(point);
+		}
 	}
 	
 	/**
@@ -70,4 +77,5 @@ public interface Intersectable {
 	 * @return a list of {@link GeoPoint} of the intersection points
 	 */
 	List<GeoPoint> findGeoIntersections(Ray ray);
+	
 }

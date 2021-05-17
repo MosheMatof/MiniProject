@@ -32,8 +32,7 @@ public class DirectionalLight extends Light implements LightSource{
 
 	@Override
 	public Color getIntensity(Point3D p) {
-		// TODO Auto-generated method stub
-		return null;
+		return intensity;
 	}
 
 	@Override

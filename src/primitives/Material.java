@@ -5,7 +5,7 @@ package primitives;
  */
 public class Material {
 	public double kD = 0, kS = 0;
-	int nShinines = 1;
+	public int nShinines = 1;
 	
 	/**
 	 * set this.kD to be 'kD'
@@ -32,8 +32,9 @@ public class Material {
 	 * @param nShinines the nShinines to set
 	 * return it self
 	 */
-	public void setnShinines(int nShinines) {
+	public Material setShininess(int nShinines) {
 		this.nShinines = nShinines;
+		return this;
 	}
 	
 	

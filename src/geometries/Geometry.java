@@ -1,8 +1,8 @@
 package geometries;
 
-import com.sun.tools.classfile.Opcode.Set;
 
 import primitives.*;
+
 
 /**
  * the abstract class provide the getNormal function for any geometries, used for reflection proposes.
