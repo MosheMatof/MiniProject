@@ -44,7 +44,7 @@ public class PointLight extends Light implements LightSource {
 
 	@Override
 	public Vector getL(Point3D p) {
-		return p.subtract(position).normalized();
+		return p.subtract(position).normalize();
 	}
 
 	/**
@@ -57,6 +57,7 @@ public class PointLight extends Light implements LightSource {
 	}
 
 	/**
+	 * set the kC
 	 * @param kC the kC to set
 	 * @return instance of this PointLight
 	 */
@@ -66,6 +67,7 @@ public class PointLight extends Light implements LightSource {
 	}
 
 	/**
+	 * set the kL
 	 * @param kL the kL to set
 	 * @return instance of this PointLight
 	 */
@@ -75,6 +77,7 @@ public class PointLight extends Light implements LightSource {
 	}
 
 	/**
+	 * set the kQ
 	 * @param kQ the kQ to set
 	 * @return instance of this pointLight
 	 */

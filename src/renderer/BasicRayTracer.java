@@ -86,14 +86,14 @@ public class BasicRayTracer extends RayTracerBase {
 	 * @return the specular component of the final color
 	 */
 	private Color calcSpecular(double ks, Vector l, Vector n, Vector v, int nShininess, Color lightIntensity) {
-		Vector r = n.scale(2 * n.dotProduct(l)).subtract(l).normalized();
-		double scale = Math.pow(ks * Math.max(0, v.scale(-1).dotProduct(r)), nShininess);
+		Vector r = l.subtract(n.scale(2 * n.dotProduct(l))).normalize();
+		double scale = ks *  Math.pow(Math.max(0, v.scale(-1).dotProduct(r)), nShininess);
 		return lightIntensity.scale(scale);
 	}
 
 	/**
 	 * calculate the diffuse component of the final color
-	 * @param kd difuse
+	 * @param kd diffuse
 	 * @param l the normalized vector from the light source to the intersection point
 	 * @param n the normal to the geometry at the intersection point
 	 * @param lightIntensity the intensity of the light
