@@ -10,10 +10,10 @@ import scene.Scene;
  * Rendering the image from the scene
  */
 public class Render {
-	ImageWriter imageWriter;
-	Scene scene;
-	Camera camera;
-	RayTracerBase rayTracer;
+	private ImageWriter imageWriter;
+	private Scene scene;
+	private Camera camera;
+	private RayTracerBase rayTracer;
 
 	/**
 	 * set the imageWriter of the render

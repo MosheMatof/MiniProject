@@ -1,8 +1,6 @@
 package geometries;
 
-
 import primitives.*;
-
 
 /**
  * the abstract class provide the getNormal function for any geometries, used for reflection proposes.

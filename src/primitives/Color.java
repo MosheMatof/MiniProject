@@ -17,6 +17,9 @@ public class Color {
 	private double g = 0.0;
 	private double b = 0.0;
 
+	/**
+	 * black color
+	 */
 	public static final Color BLACK = new Color();
 
 	/**

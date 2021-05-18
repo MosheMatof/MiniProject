@@ -30,7 +30,7 @@ public class Material {
 	/**
 	 * set this.nShinines to be 'nShinines'
 	 * @param nShinines the nShinines to set
-	 * return it self
+	 * @return it self
 	 */
 	public Material setShininess(int nShinines) {
 		this.nShinines = nShinines;

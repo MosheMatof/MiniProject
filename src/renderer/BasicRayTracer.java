@@ -16,7 +16,6 @@ public class BasicRayTracer extends RayTracerBase {
 
 	/**
 	 * constructs a new BasicRayTracer with scene = 'scene'
-	 * 
 	 * @param scene the scene of the BasicRayTracer
 	 */
 	public BasicRayTracer(Scene scene) {
@@ -38,7 +37,6 @@ public class BasicRayTracer extends RayTracerBase {
 
 	/**
 	 * calculates the color for a given point
-	 * 
 	 * @param gPoint the point to find the color for
 	 * @return the color of this point
 	 */
@@ -48,6 +46,12 @@ public class BasicRayTracer extends RayTracerBase {
 		return color;
 	}
 
+	/**
+	 * calculating the final color of the intersection point considering all the light source of the scene
+	 * @param intersection the intersection point
+	 * @param ray the ray of the intersection
+	 * @return the final color of the intersection point considering all the light source of the scene
+	 */
 	private Color calcLocalEffects(GeoPoint intersection, Ray ray) {
 		Vector v = ray.getDir();
 		Vector n = intersection.getNormal();
@@ -72,13 +76,14 @@ public class BasicRayTracer extends RayTracerBase {
 	}
 
 	/**
-	 * @param ks
-	 * @param l
-	 * @param n
-	 * @param v
-	 * @param nShininess
-	 * @param lightIntensity
-	 * @return
+	 * calculate the specular component of the final color
+	 * @param ks specular
+	 * @param l the normalized vector from the light source to the intersection point
+	 * @param n the normal to the geometry at the intersection point
+	 * @param v the normalized vector from the camera to the intersection point  
+	 * @param nShininess the shininess level of the geometry
+	 * @param lightIntensity the intensity of the light
+	 * @return the specular component of the final color
 	 */
 	private Color calcSpecular(double ks, Vector l, Vector n, Vector v, int nShininess, Color lightIntensity) {
 		Vector r = n.scale(2 * n.dotProduct(l)).subtract(l).normalized();
@@ -87,11 +92,12 @@ public class BasicRayTracer extends RayTracerBase {
 	}
 
 	/**
-	 * @param kd
-	 * @param l
-	 * @param n
-	 * @param lightIntensity
-	 * @return
+	 * calculate the diffuse component of the final color
+	 * @param kd difuse
+	 * @param l the normalized vector from the light source to the intersection point
+	 * @param n the normal to the geometry at the intersection point
+	 * @param lightIntensity the intensity of the light
+	 * @return the diffuse component of the final color
 	 */
 	private Color calcDiffusive(double kd, Vector l, Vector n, Color lightIntensity) {
 		double scale = Math.abs(l.dotProduct(n)) * kd;

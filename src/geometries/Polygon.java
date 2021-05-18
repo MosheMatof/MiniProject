@@ -90,6 +90,11 @@ public class Polygon extends Geometry {
 	public Vector getNormal(Point3D point3d) {
 		return getNormal();
 	}
+	
+	/**
+	 * get the normal to the plane that contains the polygon
+	 * @return the normal to the plane that contains the polygon
+	 */
 	public Vector getNormal() {
 		return plane.getNormal();
 	}

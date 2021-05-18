@@ -46,10 +46,6 @@ public interface Intersectable {
 			return this.point.equals(other.point) && this.geometry.equals(other.geometry);
 		}
 		
-		@Override
-		public String toString() {
-			return point.toString() + geometry.toString();
-		}
 		/**
 		 * get the normal of the geometry at this point
 		 * @return the normal of the geometry at this point
@@ -57,6 +53,12 @@ public interface Intersectable {
 		public Vector getNormal() {
 			return geometry.getNormal(point);
 		}
+		
+		@Override
+		public String toString() {
+			return point.toString() + geometry.toString();
+		}
+		
 	}
 	
 	/**
@@ -77,5 +79,4 @@ public interface Intersectable {
 	 * @return a list of {@link GeoPoint} of the intersection points
 	 */
 	List<GeoPoint> findGeoIntersections(Ray ray);
-	
 }

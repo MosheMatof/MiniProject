@@ -19,7 +19,7 @@ import geometries.Sphere;
 public class RayTest {
 
 	/**
-	 * Test method for {@link primitives.Ray#findClosestPoint(java.util.List)}.
+	 * Test method for {@link primitives.Ray#findClosestGeoPoint(java.util.List)}.
 	 */
 	@Test
 	public void testFindClosestPoint() {

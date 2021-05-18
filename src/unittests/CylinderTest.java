@@ -16,6 +16,9 @@ import primitives.Vector;
  */
 public class CylinderTest {
 
+	/**
+	 * test the function {@link Cylinder#getNormal(Point3D)}
+	 */
 	@Test
 	public void testGetNormal() {
 		Ray ray = new Ray(new Point3D(1, 2, 3), new Vector(1, 2, 3));
