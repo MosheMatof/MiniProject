@@ -13,13 +13,13 @@ import primitives.Vector;
 public class SpotLight extends PointLight implements LightSource {
 
 	private Vector direction;
+	private double kB = 1;
 	/**
 	 * PointLight constructor
 	 * @param intensity the intensity of the light
 	 */
 	public SpotLight(Color intensity) {
 		super(intensity);
-		// TODO Auto-generated constructor stub
 	}
 
 	/**
@@ -30,12 +30,22 @@ public class SpotLight extends PointLight implements LightSource {
 	 */
 	public SpotLight(Color intensity, Point3D position, Vector direction) {
 		super(intensity,position);
-		this.direction = direction;
+		this.direction = direction.normalize();
 	}
 
 	@Override
 	public Color getIntensity(Point3D p) {
-		double dp = Math.max(0, direction.dotProduct(getL(p)));
+		double dp = Math.pow(Math.max(0, direction.dotProduct(getL(p))),kB);
 		return super.getIntensity().scale(dp);
 	}
+
+	/**
+	 * set the broadness of the light (kB), kB < 1 -> wider light, kB > 1 -> thiner light  
+	 * @param kB the kB to set
+	 */
+	public SpotLight setkB(double kB) {
+		this.kB = kB;
+		return this;
+	}
+	
 }
