@@ -3,7 +3,6 @@ package unittests;
 
 import static org.junit.Assert.*;
 
-import java.util.LinkedList;
 import java.util.List;
 
 import primitives.*;
@@ -28,22 +27,22 @@ public class RayTest {
 		Sphere spr = new Sphere(new Point3D(0,0,0), 1);
 		// ____________EP___________________
 		// TC01: closest point is in the middle of the list
-		List<GeoPoint> gpoints = List.of(new GeoPoint(spr, new Point3D(0, -2.064155224010097, 2.623896517326602)),
-				new GeoPoint(spr, new Point3D(0, 0, 4)),
-				new GeoPoint(spr, new Point3D(0, -3.976587309161571, 1.348941793892286)),
-				new GeoPoint(spr, new Point3D(0, 1.956242772188382, 5.304161848125588)),
-				new GeoPoint(spr, new Point3D(0, 5.519693402097971, 7.679795601398647)));
-		assertEquals("TC01: closest point is in the middle of the list", ray.findClosestGeoPoint(gpoints),
-				new GeoPoint(spr, new Point3D(0, -3.976587309161571, 1.348941793892286)));
+		List<Point3D> points = List.of(new Point3D(0, -2.064155224010097, 2.623896517326602),
+				new Point3D(0, 0, 4),
+				new Point3D(0, -3.976587309161571, 1.348941793892286),
+				new Point3D(0, 1.956242772188382, 5.304161848125588),
+				new Point3D(0, 5.519693402097971, 7.679795601398647));
+		assertEquals("TC01: closest point is in the middle of the list", ray.findClosestPoint(points),
+				new Point3D(0, -3.976587309161571, 1.348941793892286));
 
 		// ____________BVA__________________
 
 		// TC02: empty list
-		assertNull("TC02: empty list", ray.findClosestGeoPoint(new LinkedList<GeoPoint>()));
+		assertNull("TC02: empty list", ray.findClosestGeoPoint(null));
 
 		// TC03: closest point is the first point in the list
 		
-		gpoints = List.of(new GeoPoint(spr, new Point3D(0, -3.976587309161571, 1.348941793892286)),
+		List<GeoPoint> gpoints = List.of(new GeoPoint(spr, new Point3D(0, -3.976587309161571, 1.348941793892286)),
 				new GeoPoint(spr, new Point3D(0, -2.064155224010097, 2.623896517326602)),
 				new GeoPoint(spr, new Point3D(0, 0, 4)),
 				new GeoPoint(spr, new Point3D(0, 1.956242772188382, 5.304161848125588)),

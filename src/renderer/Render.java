@@ -4,14 +4,12 @@ import java.util.MissingResourceException;
 
 import elements.Camera;
 import primitives.Color;
-import scene.Scene;
 
 /**
  * Rendering the image from the scene
  */
 public class Render {
 	private ImageWriter imageWriter;
-	private Scene scene;
 	private Camera camera;
 	private RayTracerBase rayTracer;
 
@@ -22,16 +20,6 @@ public class Render {
 	 */
 	public Render setImageWriter(ImageWriter imageWriter) {
 		this.imageWriter = imageWriter;
-		return this;
-	}
-
-	/**
-	 * set the scene of the render
-	 * @param scene the scene for the render
-	 * @return instance of this scene
-	 */
-	public Render setScene(Scene scene) {
-		this.scene = scene;
 		return this;
 	}
 
@@ -59,14 +47,13 @@ public class Render {
 	 * Rendering the image by imageWriter according to the rayTracer and camera 
 	 */
 	public void renderImage() {
+		var render = "Render";
 		if (imageWriter == null)
-			throw new MissingResourceException("imageWriter is null ", "Render", "imageWriter");
+			throw new MissingResourceException("imageWriter is null ", render, "imageWriter");
 		if (rayTracer == null)
-			throw new MissingResourceException("rayTracer is null ", "Render", "rayTracer");
+			throw new MissingResourceException("rayTracer is null ", render, "rayTracer");
 		if (camera == null)
-			throw new MissingResourceException("camera is null ", "Render", "camera");
-		if (scene == null)
-			throw new MissingResourceException("scene is null ", "Render", "scene");
+			throw new MissingResourceException("camera is null ", render, "camera");
 
 		int nX = imageWriter.getNx();
 		int nY = imageWriter.getNy();

@@ -16,12 +16,8 @@ import scene.Scene;
  * @author Dan
  */
 public class LightsTests {
-	private Scene scene1 = new Scene("Test scene")
-			.setAmbientLight(new AmbientLight(new Color(java.awt.Color.WHITE), 0.15))
-			.setBackground(Color.BLACK);
-	private Scene scene2 = new Scene("Test scene") //
-			.setAmbientLight(new AmbientLight(new Color(java.awt.Color.WHITE), 0.15))
-			.setBackground(Color.BLACK);
+	private Scene scene1 = new Scene("Test scene");
+	private Scene scene2 = new Scene("Test scene");
 	private Camera camera1 = new Camera(new Point3D(0, 0, 1000), new Vector(0, 1, 0), new Vector(0, 0, -1)) //
 			.setViewPlaneSize(150, 150) //
 			.setDistance(1000);
@@ -49,8 +45,7 @@ public class LightsTests {
 		Render render = new Render()//
 				.setImageWriter(imageWriter) //
 				.setCamera(camera1) //
-				.setRayTracer(new BasicRayTracer(scene1))
-				.setScene(scene1);
+				.setRayTracer(new BasicRayTracer(scene1));
 		render.renderImage();
 		render.writeToImage();
 	}
@@ -68,8 +63,7 @@ public class LightsTests {
 		Render render = new Render()//
 				.setImageWriter(imageWriter) //
 				.setCamera(camera1) //
-				.setRayTracer(new BasicRayTracer(scene1))
-				.setScene(scene1);
+				.setRayTracer(new BasicRayTracer(scene1));
 		render.renderImage();
 		render.writeToImage();
 	}
@@ -87,8 +81,7 @@ public class LightsTests {
 		Render render = new Render()//
 				.setImageWriter(imageWriter) //
 				.setCamera(camera1) //
-				.setRayTracer(new BasicRayTracer(scene1))
-				.setScene(scene1);
+				.setRayTracer(new BasicRayTracer(scene1));
 		render.renderImage();
 		render.writeToImage();
 	}
@@ -106,8 +99,7 @@ public class LightsTests {
 		Render render = new Render()//
 				.setImageWriter(imageWriter) //
 				.setCamera(camera2) //
-				.setRayTracer(new BasicRayTracer(scene2))
-				.setScene(scene2);
+				.setRayTracer(new BasicRayTracer(scene2));
 		render.renderImage();
 		render.writeToImage();
 	}
@@ -126,8 +118,7 @@ public class LightsTests {
 		Render render = new Render()//
 				.setImageWriter(imageWriter) //
 				.setCamera(camera2) //
-				.setRayTracer(new BasicRayTracer(scene2))
-				.setScene(scene2);
+				.setRayTracer(new BasicRayTracer(scene2));
 		render.renderImage();
 		render.writeToImage();
 	}
@@ -146,9 +137,8 @@ public class LightsTests {
 		Render render = new Render()//
 				.setImageWriter(imageWriter) //
 				.setCamera(camera2) //
-				.setRayTracer(new BasicRayTracer(scene2))
-				.setScene(scene2);
-		
+				.setRayTracer(new BasicRayTracer(scene2));
+
 		render.renderImage();
 		render.writeToImage();
 	}
@@ -160,18 +150,17 @@ public class LightsTests {
 	public void sphereNarrowSpot() {
 		scene1.geometries.add(sphere);
 		scene1.lights.add(new SpotLight(new Color(500, 300, 0), new Point3D(-50, -50, 50), new Vector(1, 1, -2)) //
-				.setkB(10).setkL(0.00001));
+				.setKB(5).setkL(0.000005).setkQ(0.00000025));
 
 		ImageWriter imageWriter = new ImageWriter("lightSphereNarrowSpot", 500, 500);
 		Render render = new Render()//
 				.setImageWriter(imageWriter) //
 				.setCamera(camera1) //
-				.setRayTracer(new BasicRayTracer(scene1))
-				.setScene(scene1);
+				.setRayTracer(new BasicRayTracer(scene1));
 		render.renderImage();
 		render.writeToImage();
 	}
-	
+
 	/**
 	 * Produce a picture of a two triangles lighted by a spot light
 	 */
@@ -179,16 +168,15 @@ public class LightsTests {
 	public void trianglesNarrowSpot() {
 		scene2.geometries.add(triangle1.setMaterial(new Material().setkD(0.5).setkS(0.5).setShininess(300)),
 				triangle2.setMaterial(new Material().setkD(0.5).setkS(0.5).setShininess(300)));
-		scene2.lights.add(new SpotLight(new Color(500, 250, 250), new Point3D(10, -10, -130), new Vector(-2, -2, -1)) //
-				.setkB(3).setkL(0.0001).setkQ(0.000005));
+		scene2.lights.add(new SpotLight(new Color(800, 400, 400), new Point3D(10, -10, -130), new Vector(-2, -2, -1)) //
+				.setKB(5).setkL(0.00005).setkQ(0.0000025));
 
 		ImageWriter imageWriter = new ImageWriter("lightTrianglesNarrowSpot", 500, 500);
 		Render render = new Render()//
 				.setImageWriter(imageWriter) //
 				.setCamera(camera2) //
-				.setRayTracer(new BasicRayTracer(scene2))
-				.setScene(scene2);
-		
+				.setRayTracer(new BasicRayTracer(scene2));
+
 		render.renderImage();
 		render.writeToImage();
 	}
@@ -199,22 +187,20 @@ public class LightsTests {
 	@Test
 	public void SphereManyLightSources() {
 		scene1.geometries.add(sphere);
-		scene1.lights.addAll(List.of(
-				new DirectionalLight(new Color(0, 100, 100), new Vector(-1, 1, -2)),
-				new PointLight(new Color(200,0,200), new Point3D(-400, 500, 600))
-				.setkL(0.00001).setkQ(0.0000001),
-				new SpotLight(new Color(200, 200, 200), new Point3D(-400, -500, 500), new Vector(1,1,-1))
-				.setkL(0.00001).setkQ(0.00001)));
+		scene1.lights.addAll(List.of(new DirectionalLight(new Color(0, 100, 100), new Vector(-1, 1, -2)),
+				new PointLight(new Color(200, 0, 200), new Point3D(-400, 500, 600)).setkL(0.00001).setkQ(0.0000001),
+				new SpotLight(new Color(200, 200, 200), new Point3D(-400, -500, 500), new Vector(1, 1, -1))
+						.setkL(0.00001).setkQ(0.00001)));
 
 		ImageWriter imageWriter = new ImageWriter("SphereManyLightSources", 500, 500);
 		Render render = new Render()//
 				.setImageWriter(imageWriter) //
 				.setCamera(camera1) //
-				.setRayTracer(new BasicRayTracer(scene1))
-				.setScene(scene1);
+				.setRayTracer(new BasicRayTracer(scene1));
 		render.renderImage();
 		render.writeToImage();
 	}
+
 	/**
 	 * Produce a picture of a two triangles lighted by severals light sources
 	 */
@@ -223,20 +209,18 @@ public class LightsTests {
 		scene2.geometries.add(triangle1.setMaterial(new Material().setkD(0.5).setkS(0.5).setShininess(300)), //
 				triangle2.setMaterial(new Material().setkD(0.5).setkS(0.5).setShininess(300)));
 		scene2.lights.addAll(List.of(new PointLight(new Color(500, 250, 250), new Point3D(10, -10, -130)) //
-				.setkL(0.0005).setkQ(0.0005)
-				,new DirectionalLight(new Color(0, 300, 0), new Vector(423,-638,-250))
-				,new SpotLight(new Color(0, 20, 70),new Point3D(20, 50, -100) ,new Vector(-4,20,-12))));
+				.setkL(0.0005).setkQ(0.0005),//
+				new DirectionalLight(new Color(0, 300, 0), new Vector(423, -638, -250)),
+				new SpotLight(new Color(0, 250, 500), new Point3D(-20, -40, -130), new Vector(-2, -2, -1)) //
+				.setkL(0.0001).setkQ(0.000005)));
 
 		ImageWriter imageWriter = new ImageWriter("lightTrianglesAllLights", 500, 500);
 		Render render = new Render()//
 				.setImageWriter(imageWriter) //
 				.setCamera(camera2) //
-				.setRayTracer(new BasicRayTracer(scene2))
-				.setScene(scene2);
+				.setRayTracer(new BasicRayTracer(scene2));
 		render.renderImage();
 		render.writeToImage();
 	}
-	
-	
 
 }

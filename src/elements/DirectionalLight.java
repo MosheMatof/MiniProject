@@ -11,14 +11,6 @@ import primitives.*;
 public class DirectionalLight extends Light implements LightSource{
 
 	private Vector direction;
-	/**
-	 * DirectionalLight constructor
-	 * @param intensity the intensity of the light
-	 */
-	protected DirectionalLight(Color intensity) {
-		super(intensity);
-		// TODO Auto-generated constructor stub
-	}
 
 	/**
 	 * Extended DirectionalLight constructor

@@ -29,7 +29,6 @@ public interface Intersectable {
 		 * @param point the intersection point
 		 */
 		public GeoPoint(Geometry geometry, Point3D point) {
-			super();
 			this.geometry = geometry;
 			this.point = point;
 		}

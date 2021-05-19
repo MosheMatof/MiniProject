@@ -15,4 +15,11 @@ public class AmbientLight extends Light {
 	public AmbientLight(Color color, double i) {
 		super(color.scale(i));
 	}
+	
+	/**
+	 * AmbientLight constructor to set it to black
+	 */
+	public AmbientLight() {
+		super(Color.BLACK);
+	}
 }

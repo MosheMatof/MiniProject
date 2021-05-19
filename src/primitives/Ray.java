@@ -4,6 +4,7 @@
 package primitives;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import geometries.Intersectable.GeoPoint;
 
@@ -63,28 +64,19 @@ public class Ray {
 		return origin.add(dir.scale(t));
 	}
 
-//	/**
-//	 * finds from a list of points the closest point to the origin of this ray
-//	 * 
-//	 * @param points the list of points to choose from
-//	 * @return the closest point to the origin of this ray
-//	 */
-//	public Point3D findClosestPoint(List<Point3D> points) {
-//		if (points == null) // if the list is empty or null
-//			return null;
-//		Point3D closestPoint = null;
-//		double smallestDist = Double.POSITIVE_INFINITY;
-//
-//		// find the closest point
-//		for (Point3D point : points) {
-//			double pointDist = origin.distanceSquared(point);
-//			if (pointDist < smallestDist) {
-//				smallestDist = pointDist;
-//				closestPoint = point;
-//			}
-//		}
-//		return closestPoint;
-//	}
+	/**
+	 * finds from a list of points the closest point to the origin of this ray
+	 * 
+	 * @param points the list of points to choose from
+	 * @return the closest point to the origin of this ray
+	 */
+	public Point3D findClosestPoint(List<Point3D> points) {
+		if (points == null) // if the list is empty or null
+			return null;
+		return findClosestGeoPoint( //
+				points.stream().map(p -> new GeoPoint(null, p)).collect(Collectors.toList()) //
+				).point;
+	}
 	
 	/**
 	 * finds from a list of GeoPoints the GeoPoint with the closest point to the origin of this ray
