@@ -89,7 +89,7 @@ public class Sphere extends Geometry {
 //	}
 
 	@Override
-	public List<GeoPoint> findGeoIntersections(Ray ray) {
+	public List<GeoPoint> findGeoIntersections(Ray ray, double maxDist) {
 		// if the origin point of the ray is in the center
 				if (ray.getOrigin().equals(center)) {
 					return List.of(new GeoPoint(this, ray.getPoint(radius)));
@@ -117,15 +117,27 @@ public class Sphere extends Geometry {
 				// the distance between the origin of the ray and the most positive intersection
 				// point
 				double t2 = alignZero(tm + th);
-				if (t2 <= 0)
-					return null;
-				Point3D p2 = ray.getPoint(t2);
-
 				// the distance between the origin of the ray and the most negative intersection
 				// point
 				double t1 = alignZero(tm - th);
-
-				return t1 <= 0 ? List.of(new GeoPoint(this, p2)) : List.of(new GeoPoint(this, ray.getPoint(t1)),new GeoPoint(this, p2));
+				if (t2 <= 0) {
+					return null;
+				}
+				
+				if (t1 > maxDist) {
+					return null;
+				}
+				
+				Point3D p2 = ray.getPoint(t2);
+				
+				if(t1 <= 0) {
+					return t2 > 0 ? List.of(new GeoPoint(this, p2)) : null;
+				}
+				
+				if(t2 >= maxDist) {
+					return t1 < maxDist ? List.of(new GeoPoint(this, ray.getPoint(t1))) : null;
+				}
+				return List.of(new GeoPoint(this, ray.getPoint(t1)), new GeoPoint(this, p2));
 	}
 
 }

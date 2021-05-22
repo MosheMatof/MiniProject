@@ -36,28 +36,11 @@ public class Geometries implements Intersectable{
 			components.add(intersectable);
 	}
 
-//	// finds all the intersections point of all the components with 'ray'
-//	@Override
-//	public List<Point3D> findIntersections(Ray ray) {
-//		List<Point3D> intrsctPnts = null;
-//		for (Intersectable component : components) {
-//			List<Point3D> fi = component.findIntersections(ray);
-//			if (fi != null) {
-//				if (intrsctPnts == null) {
-//					intrsctPnts = new LinkedList<Point3D>(fi);
-//				} else {
-//					intrsctPnts.addAll(fi);
-//				}
-//			}		
-//		}
-//		return intrsctPnts;
-//	}
-
 	@Override
-	public List<GeoPoint> findGeoIntersections(Ray ray) {
+	public List<GeoPoint> findGeoIntersections(Ray ray, double maxDist) {
 		List<GeoPoint> intrsctPnts = null;
 		for (Intersectable component : components) {
-			List<GeoPoint> fi = component.findGeoIntersections(ray);
+			List<GeoPoint> fi = component.findGeoIntersections(ray, maxDist);
 			if (fi != null) {
 				if (intrsctPnts == null) {
 					intrsctPnts = new LinkedList<GeoPoint>(fi);

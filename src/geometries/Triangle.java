@@ -26,36 +26,10 @@ public final class Triangle extends Polygon {
 		return super.toString();
 	}
 
-//	@Override
-//	public List<Point3D> findIntersections(Ray ray) {
-//		var intersections = this.plane.findIntersections(ray);
-//		if (intersections == null)
-//			return null;
-//
-//		Point3D origin = ray.getOrigin();
-//		Vector v1 = this.vertices.get(0).subtract(origin);
-//		Vector v2 = this.vertices.get(1).subtract(origin);
-//		Vector v3 = this.vertices.get(2).subtract(origin);
-//
-//		Vector dir = ray.getDir();
-//		double s1 = dir.dotProduct(v1.crossProduct(v2));
-//		if (isZero(s1))
-//			return null;
-//
-//		double s2 = dir.dotProduct(v2.crossProduct(v3));
-//		if (alignZero(s1 * s2) <= 0)
-//			return null;
-//
-//		double s3 = Util.alignZero(dir.dotProduct(v3.crossProduct(v1)));
-//		if (alignZero(s1 * s3) <= 0)
-//			return null;
-//
-//		return intersections;
-//	}
 	
 	@Override
-	public List<GeoPoint> findGeoIntersections(Ray ray) {
-		List<GeoPoint> intersections = this.plane.findGeoIntersections(ray);
+	public List<GeoPoint> findGeoIntersections(Ray ray, double maxDist) {
+		List<GeoPoint> intersections = this.plane.findGeoIntersections(ray, maxDist);
 		if (intersections == null)
 			return null;
 

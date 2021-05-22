@@ -66,29 +66,8 @@ public class Plane extends Geometry {
 		return pivot;
 	}
 
-//	@Override
-//	public List<Point3D> findIntersections(Ray ray) {
-//		Vector u;
-//		try {
-//			u = this.pivot.subtract(ray.getOrigin());
-//		} catch (IllegalArgumentException e) {
-//			// if the ray start at the represented point of the plane
-//			return null;
-//		}
-//
-//		// numerator
-//		double num = this.getNormal().dotProduct(u);
-//		// denominator
-//		double denom = this.getNormal().dotProduct(ray.getDir());
-//		if (isZero(denom))
-//			return null;
-//
-//		double scalar = alignZero(num / denom);
-//		return scalar <= 0 ? null : List.of(ray.getPoint(scalar));
-//	}
-
 	@Override
-	public List<GeoPoint> findGeoIntersections(Ray ray) {
+	public List<GeoPoint> findGeoIntersections(Ray ray, double maxDist) {
 		Vector u;
 		try {
 			u = this.pivot.subtract(ray.getOrigin());
@@ -105,7 +84,7 @@ public class Plane extends Geometry {
 			return null;
 
 		double scalar = alignZero(num / denom);
-		return scalar <= 0 ? null : List.of(new GeoPoint(this, ray.getPoint(scalar)));
+		return scalar <= 0 || scalar > maxDist? null : List.of(new GeoPoint(this, ray.getPoint(scalar)));
 	}
 
 }
