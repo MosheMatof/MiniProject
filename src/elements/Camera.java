@@ -26,7 +26,7 @@ public class Camera {
 	 * @param vUp the direction vector from the top of the camera
 	 * @param vTo the direction vector of the camera
 	 */
-	public Camera(Point3D p0, Vector vUp, Vector vTo) {
+	public Camera(Point3D p0, Vector vTo, Vector vUp) {
 		super();
 		this.p0 = p0;
 		this.vUp = vUp.normalize();

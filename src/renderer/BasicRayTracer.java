@@ -1,4 +1,4 @@
-package renderer;
+ package renderer;
 
 import java.util.List;
 
@@ -131,7 +131,7 @@ public class BasicRayTracer extends RayTracerBase {
 	 */
 	private boolean unshaded(Vector l, Vector n, GeoPoint gp, LightSource lc) {
 		Vector lightDirection = l.scale(-1);  // from point to light source
-		Vector delta = n.scale(n.dotProduct(lightDirection) > 0 ? DELTA : - DELTA);  // build the delta vector
+		Vector delta = n.scale(n.dotProduct(lightDirection) > 0 ? DELTA : -DELTA);  // build the delta vector
 		Point3D point = gp.point.add(delta);  // move the start point of the (gp to light)'s ray by the delta vector
 		Ray lightRay = new Ray(point, lightDirection);  // build the (gp to light)'s ray
 		List<GeoPoint> intersections = scene.geometries.findGeoIntersections(lightRay, lc.getDistance(point));  // search for intersections with this ray

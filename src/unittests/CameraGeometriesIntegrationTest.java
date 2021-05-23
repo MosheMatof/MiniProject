@@ -37,7 +37,7 @@ public class CameraGeometriesIntegrationTest {
 	 */
 	@Test
 	public void SphereIntegrationTest() {
-		Camera cam1 = new Camera(new Point3D(0,0,0), new Vector(0,1,0), new Vector(0,0,-1));
+		Camera cam1 = new Camera(new Point3D(0,0,0), new Vector(0,0,-1), new Vector(0,1,0));
 		cam1.setDistance(1);
 		cam1.setViewPlaneSize(3, 3);
 		//TC01: sphere right in front of the camera intersect twice with the middle pixel
@@ -45,7 +45,7 @@ public class CameraGeometriesIntegrationTest {
 		assertEquals("TC01: sphere right in front of the camera intersect once with the middle pixel", findNumOfIntersections(cam1, spr1), 2);
 		
 		//TC02: all the pixels intersecting (18 intersection) 
-		Camera cam2 = new Camera(new Point3D(0,0,0.5), new Vector(0,1,0), new Vector(0,0,-1));
+		Camera cam2 = new Camera(new Point3D(0,0,0.5), new Vector(0,0,-1), new Vector(0,1,0));
 		cam2.setDistance(1);
 		cam2.setViewPlaneSize(3, 3); 
 		Sphere spr2 = new Sphere(new Point3D(0,0,-2.5), 2.5);
@@ -68,7 +68,7 @@ public class CameraGeometriesIntegrationTest {
 	 */
 	@Test
 	public void PlaneIntegrationTest() {
-		Camera cam1 = new Camera(new Point3D(0,0,0), new Vector(0,1,0), new Vector(0,0,-1));
+		Camera cam1 = new Camera(new Point3D(0,0,0), new Vector(0,0,-1), new Vector(0,1,0));
 		cam1.setDistance(1);
 		cam1.setViewPlaneSize(3, 3);
 		
@@ -89,7 +89,7 @@ public class CameraGeometriesIntegrationTest {
 	 */
 	@Test 
 	public void TriangleIntegrationTest() {
-		Camera cam1 = new Camera(new Point3D(0,0,0), new Vector(0,1,0), new Vector(0,0,-1));
+		Camera cam1 = new Camera(new Point3D(0,0,0), new Vector(0,0,-1), new Vector(0,1,0));
 		cam1.setDistance(1);
 		cam1.setViewPlaneSize(3, 3);
 		
