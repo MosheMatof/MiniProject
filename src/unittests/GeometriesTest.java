@@ -59,7 +59,7 @@ public class GeometriesTest {
 	}
 	
 	/**
-	 * test for {@link Geometries#findGeoIntersections(primitives.Ray)}
+	 * test for {@link Geometries#findGeoIntersections(Ray, double)}
 	 */
 	@Test
 	public void testFindGeoIntersections() {

@@ -6,6 +6,9 @@ import scene.*;
  *  Responsible to trace the ray in the scene, and find it's intersections points and their colors
  */
 public abstract class RayTracerBase {
+	/**
+	 * the scene to trace the ray in
+	 */
 	protected Scene scene;
 
 	/**

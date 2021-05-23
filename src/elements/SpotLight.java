@@ -35,10 +35,10 @@ public class SpotLight extends PointLight implements LightSource {
 	}
 
 	/**
-	 * set the broadness of the light (kB), kB < 1 -> wider light, kB > 1 -> thiner
+	 * set the broadness of the light (kB), if kB less then 1 -> wider light, if kB more then 1 -> thiner
 	 * light
-	 * 
 	 * @param kB the kB to set
+	 * @return it self
 	 */
 	public SpotLight setKB(double kB) {
 		this.kB = kB;

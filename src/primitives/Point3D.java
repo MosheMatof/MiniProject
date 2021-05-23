@@ -11,9 +11,17 @@ public final class Point3D {
 	 */
 	public static Point3D ZERO = new Point3D(0, 0, 0);
 
-	// private fields
+	/**
+	 * x coordinate
+	 */
 	final Coordinate x;
+	/**
+	 * y coordinate
+	 */
 	final Coordinate y;
+	/**
+	 * z coordinate
+	 */
 	final Coordinate z;
 
 	/**

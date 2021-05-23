@@ -6,6 +6,9 @@ package primitives;
  */
 public final class Vector {
 	// ___________private fields__________________
+	/**
+	 * the head of the vector
+	 */
 	Point3D head;
 
 	// ___________ctors___________________________

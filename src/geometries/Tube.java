@@ -11,7 +11,13 @@ import geometries.Intersectable.GeoPoint;
  */
 public class Tube extends Geometry{
 
+	/**
+	 * a ray that contained in the axis line of the Tube
+	 */
 	protected Ray axis;
+	/**
+	 * the radius of the Tube
+	 */
 	protected double radius;
 	
 	/**

@@ -4,7 +4,25 @@ package primitives;
  * the material of the surface of an object
  */
 public class Material {
-	public double kD = 0, kS = 0;
+	/**
+	 * defuse level
+	 */
+	public double kD = 0;
+	/**
+	 * specular level
+	 */
+	public double kS = 0;
+	/**
+	 * transparency level
+	 */
+	public double kT = 0;
+	/**
+	 * reflection level
+	 */
+	public double kR = 0;
+	/**
+	 * shininess level
+	 */
 	public int nShinines = 1;
 	
 	/**
