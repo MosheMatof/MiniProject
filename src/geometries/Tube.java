@@ -113,9 +113,9 @@ public class Tube extends Geometry{
 			}
 			
 			double dissqrt = Math.sqrt(dis);
-			double t1 = Util.alignZero((-b + dissqrt)/(2*a)); 
-			double t2 = Util.alignZero((-b - dissqrt)/(2*a));
-
+			double t1 = Util.alignZero((-b - dissqrt)/(2*a)); 
+			double t2 = Util.alignZero((-b + dissqrt)/(2*a));
+			
 			if (t2 <= 0 || t1 > maxDist) {
 				return null;
 			}
