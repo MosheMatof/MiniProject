@@ -13,6 +13,9 @@ import scene.Scene;
  */
 public class BasicRayTracer extends RayTracerBase {
 
+	private static final int MAX_CALC_COLOR_LEVEL = 10;
+	private static final double MIN_CALC_COLOR_K = 0.001;
+	
 	/**
 	 * small number to move the start point of reflection's or transparency's ray
 	 */
@@ -31,17 +34,15 @@ public class BasicRayTracer extends RayTracerBase {
 		if (scene.geometries == null) {
 			return scene.background;
 		}
-		List<GeoPoint> points = scene.geometries.findGeoIntersections(ray, Double.POSITIVE_INFINITY);
-		if (points == null) {
+		GeoPoint closestPoint = findClosestIntersection(ray);
+		if (closestPoint == null)
 			return scene.background;
-		} else {
-			return calcColor(ray.findClosestGeoPoint(points), ray);
-		}
+			
+		return calcColor(closestPoint, ray);
 	}
 
 	/**
 	 * calculates the color for a given point
-	 * 
 	 * @param gPoint the point to find the color for
 	 * @return the color of this point
 	 */
@@ -49,6 +50,12 @@ public class BasicRayTracer extends RayTracerBase {
 		Color color = scene.ambientLight.getIntensity().add(gPoint.geometry.getEmission());
 		color = color.add(calcLocalEffects(gPoint, ray));
 		return color;
+	}
+	
+	private Color calcColor(GeoPoint geopoint, Ray ray, int level, double k) {
+		Color color = geopoint.geometry.getEmission();
+		color = color.add(calcLocalEffects(geopoint, ray));
+		return 1 == level ? color : color.add(calcGlobalEffects(geopoint, ray, level, k));
 	}
 
 	/**
@@ -136,5 +143,42 @@ public class BasicRayTracer extends RayTracerBase {
 		Ray lightRay = new Ray(point, lightDirection);  // build the (gp to light)'s ray
 		List<GeoPoint> intersections = scene.geometries.findGeoIntersections(lightRay, lc.getDistance(point));  // search for intersections with this ray
 		return intersections == null;  // return if there wasn't any intersections with (gp to light)'s ray
+	}
+	
+	/**
+	 * find the intersection with the ray that is the closest intersection to the start of the ray
+	 * @param ray the ray to find the intersection with
+	 * @return the intersection with the ray that is the closest intersection to the start of the ray (if there is no intersections then return null)
+	 */
+	private GeoPoint findClosestIntersection(Ray ray) {
+		return ray.findClosestGeoPoint(scene.geometries.findGeoIntersections(ray, Double.POSITIVE_INFINITY));
+	}
+	
+	
+	/**
+	 * calculate the reflected ray relative to the original ray, the normal at the intersection point and the intersection point
+	 * @param r the original ray
+	 * @param n the normal at the intersection point
+	 * @param gp the GeoPoint of the intersection
+	 * @return the reflected ray relative to the original ray and the normal at the intersection point
+	 */
+	private Ray getReflectRay(Ray r, Vector n, GeoPoint gp) {
+		Vector v = r.getDir();
+		Vector reflectVec = v.subtract(n.scale(2*v.dotProduct(n)));//the direction of the reflection
+		Vector deltaVec = n.scale(n.dotProduct(v) > 0 ? DELTA : -DELTA);
+		return new Ray(gp.point.add(deltaVec), reflectVec);
+	}
+	
+	/**
+	 * calculate the transparency ray relative to the original ray, the normal at the intersection point and the intersection point
+	* @param r the original ray
+	 * @param n the normal at the intersection point
+	 * @param gp the GeoPoint of the intersection
+	 * @return the transparency ray relative to the original ray, the normal at the intersection point and the intersection point
+	 */
+	private Ray getTransparecyRay(Ray r, Vector n, GeoPoint gp) {
+		Vector v = r.getDir();
+		Vector deltaVec = n.scale(n.dotProduct(v) > 0 ? -DELTA : DELTA);
+		return new Ray(gp.point.add(deltaVec), r.getDir());
 	}
 }

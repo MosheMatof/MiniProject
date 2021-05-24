@@ -26,7 +26,7 @@ public class Material {
 	public int nShinines = 1;
 	
 	/**
-	 * set this.kD to be 'kD'
+	 * seter for kS
 	 * @param kD the kD to set
 	 * @return it self
 	 */
@@ -36,7 +36,7 @@ public class Material {
 	}
 
 	/**
-	 * set this.kS to be 'kS'
+	 * seter for kS
 	 * @param kS the kS to set
 	 * @return it self
 	 */
@@ -45,6 +45,26 @@ public class Material {
 		return this;
 	}
 
+	/**
+	 * seter for kT
+	 * @param kT the kT to set
+	 * @return it self 
+	 */
+	public Material setkT(double kT) {
+		this.kT = kT;
+		return this;
+	}
+	
+	/**
+	 * seter for kR
+	 * @param kR the kR to set
+	 * @return it self
+	 */
+	public Material setkR(double kR) {
+		this.kR = kR;
+		return this;
+	}
+	
 	/**
 	 * set this.nShinines to be 'nShinines'
 	 * @param nShinines the nShinines to set
