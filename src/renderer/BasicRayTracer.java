@@ -103,7 +103,7 @@ public class BasicRayTracer extends RayTracerBase {
 				if (kTvalue*k > MIN_CALC_COLOR_K) {
 					Color lightIntensity = lightSource.getIntensity(intersection.point).scale(kTvalue);
 					color = color.add(calcDiffusive(kd, l, n, lightIntensity),
-							calcSpecular(ks, l, n, v, nShininess, lightIntensity));
+					calcSpecular(ks, l, n, v, nShininess, lightIntensity));
 				}
 			}
 		}
@@ -256,7 +256,7 @@ public class BasicRayTracer extends RayTracerBase {
 	private Ray getReflectRay(Ray r, Vector n, GeoPoint gp) {
 		Vector v = r.getDir();
 		Vector reflectVec = v.subtract(n.scale(2*v.dotProduct(n)));//the direction of the reflection
-		Vector deltaVec = n.scale(n.dotProduct(v) > 0 ? DELTA : -DELTA);
+		Vector deltaVec = n.scale(n.dotProduct(v) > 0 ? -DELTA : DELTA);
 		return new Ray(gp.point.add(deltaVec), reflectVec);
 	}
 	
@@ -269,7 +269,7 @@ public class BasicRayTracer extends RayTracerBase {
 	 */
 	private Ray getTransparencyRay(Ray r, Vector n, GeoPoint gp) {
 		Vector v = r.getDir();
-		Vector deltaVec = n.scale(n.dotProduct(v) > 0 ? -DELTA : DELTA);
+		Vector deltaVec = n.scale(n.dotProduct(v) > 0 ? DELTA : -DELTA);
 		return new Ray(gp.point.add(deltaVec), v);
 	}
 }
