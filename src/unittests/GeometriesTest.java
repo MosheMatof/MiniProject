@@ -51,31 +51,11 @@ public class GeometriesTest {
 		Ray r4 = new Ray(new Point3D(0,5,1), new Vector(1,-10,-1));
 		assertEquals("TC04: all components are intersecting: worng number of intersactions points", gmtrs.findIntersections(r4).size(),4);
 		
-		//___________________ Boundary Values Tests __________________
+		//__________________ Boundary Values Tests __________________
 		
 		//TC05: some of the components are intersect
 		Ray r5 = new Ray(new Point3D(1,-5,-1), new Vector(1,5,-1));
 		assertEquals("TC05: some of the components are intersect", gmtrs.findIntersections(r5).size(),3);
-	}
-	
-	/**
-	 * test for {@link Geometries#findGeoIntersections(Ray, double)}
-	 */
-	@Test
-	public void testFindGeoIntersections() {
-		Geometries gmtrs = new Geometries();
-		Triangle trngl = new Triangle(new Point3D(1, 1, 1) , new Point3D(-2, -2, 1), new Point3D(-1, 1, -1));
-		Sphere spr = new Sphere(new Point3D(0,0,1), 4);
-		Plane pln = new Plane(new Point3D(1, 2, 3), new Point3D(2, 2, 2), new Point3D(5, 6, 7));
-		gmtrs.add(trngl, spr, pln);
-		
-		//TC01: all components are intersecting but some of the intersections is too far (3 points)
-		Ray r = new Ray(new Point3D(0,5,1), new Vector(1,-10,-1));
-		assertEquals("TC01: all components are intersecting: worng number of intersactions points but some of the intersections is too far (3 points)", gmtrs.findGeoIntersections(r, 6.217).size(),3);
-				
-		//TC02: all components are intersecting but some of the intersections is too far (1 points)
-		assertEquals("TC01: all components are intersecting: worng number of intersactions points but some of the intersections is too far (1 points)", gmtrs.findGeoIntersections(r, 2.45).size(),1);
-				
 	}
 
 }

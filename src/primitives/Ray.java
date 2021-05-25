@@ -21,19 +21,24 @@ public class Ray {
 	 * ray constructor by point and vector
 	 * 
 	 * @param p0  the origin point
-	 * @param dir ray direction
+	 * @param dir the ray direction
 	 */
 	public Ray(Point3D p0, Vector dir) {
 		this.origin = p0;
 		this.dir = dir.normalized();
 	}
 
-	/*
-	 * public Ray(Ray other) { this.dir.head.x = new
-	 * Coordinate(other.dir.head.x.coord); this.dir.head.y = new
-	 * Coordinate(other.dir.head.y.coord); this.dir.head.z = new
-	 * Coordinate(other.dir.head.z.coord); }
+	/**
+	 * ray constructor move the origin by delta vector
+	 * @param p0  the origin point
+	 * @param dir the ray direction
+	 * @param deltaVec the vector to move the origin by
 	 */
+	public Ray(Point3D p0, Vector dir, Vector deltaVec) {
+		this.dir = dir.normalized();
+		this.origin = p0.add(deltaVec);
+	}
+
 	/**
 	 * get the starting point of the ray
 	 * 
