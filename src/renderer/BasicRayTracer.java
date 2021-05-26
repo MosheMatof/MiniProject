@@ -14,13 +14,13 @@ import scene.Scene;
 public class BasicRayTracer extends RayTracerBase {
 
 	/**
-	 * 
+	 * the initial value of the 
 	 */
 	private static final double INITIAL_K = 1.0;
 	/**
 	 * 
 	 */
-	private static final int MAX_CALC_COLOR_LEVEL = 10;
+	private static final int MAX_CALC_COLOR_LEVEL = 5;
 	/**
 	 * 
 	 */

@@ -6,6 +6,7 @@ package unittests;
 import org.junit.Test;
 
 import elements.*;
+import geometries.Cylinder;
 import geometries.Sphere;
 import geometries.Triangle;
 import primitives.*;
@@ -111,6 +112,33 @@ public class ReflectionRefractionTests {
 				.setKl(4E-5).setKq(2E-7));
 
 		ImageWriter imageWriter = new ImageWriter("refractionShadow", 600, 600);
+		Render render = new Render() //
+				.setImageWriter(imageWriter) //
+				.setCamera(camera) //
+				.setRayTracer(new BasicRayTracer(scene));
+
+		render.renderImage();
+		render.writeToImage();
+	}
+	@Test
+	public void ReflectionTransparecyIntegration() {
+		Camera camera = new Camera(new Point3D(0, -2200, 500), new Vector(80, 1900, -500), new Vector(0, 40, 152)) //
+				.setViewPlaneSize(200, 200).setDistance(1000);
+
+		scene.setAmbientLight(new AmbientLight(new Color(java.awt.Color.WHITE), 0.15));//.setBackground(new Color(java.awt.Color.WHITE));
+
+		scene.geometries.add( //
+				new Sphere(new Point3D(0, 0, 0), 40).setEmission(new Color(20, 20, 100)).setMaterial(new Material().setKd(0.2).setShininess(10)),
+				new Sphere(new Point3D(1000, 700, -100), 1000).setEmission(new Color(100, 100, 300))
+				.setMaterial(new Material().setKd(0.4).setKs(0.2).setShininess(10).setkR(1)),
+				new Cylinder(new Ray(new Point3D(0, 0, 60), new Vector(0,0,-90)), 60, 120)
+				.setEmission(new Color(0,0,100)).setMaterial(new Material().setKd(0.2).setKs(0.2).setShininess(30).setkT(0.7)));
+				
+
+		scene.lights.add(new PointLight(new Color(700, 300, 500), new Point3D(-150, -150, 120)) //
+				.setKl(4E-5).setKq(2E-7));
+
+		ImageWriter imageWriter = new ImageWriter("ReflectionTransparecyIntegration", 600, 600);
 		Render render = new Render() //
 				.setImageWriter(imageWriter) //
 				.setCamera(camera) //
