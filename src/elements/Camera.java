@@ -32,7 +32,7 @@ public class Camera {
 		this.vUp = vUp.normalize();
 		this.vTo = vTo.normalize();
 		// if the vectors are orthogonal -> generates the right vector
-		if (vUp.dotProduct(vTo) == 0) {
+		if (Util.isZero(vUp.dotProduct(vTo))) {
 			this.vRight = vTo.crossProduct(vUp).normalize();
 		} else {
 			throw new IllegalArgumentException("the vTo and vUp aren't orthogonal");
