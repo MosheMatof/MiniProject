@@ -3,6 +3,9 @@
  */
 package elements;
 
+import java.util.LinkedList;
+import java.util.List;
+
 import primitives.*;
 
 /**
@@ -65,16 +68,16 @@ public class Camera {
 	}
 
 	/**
-	 * computes the ray that start from the camera and go trough the i,j pixel in
+	 * generate a list of rays that start at p0 and pass at a points on the pixel
 	 * the view plane
-	 * 
 	 * @param nX number of pixels in the right-left axis
 	 * @param nY number of pixels in the up-down axis
 	 * @param j  the column of the desired pixel
 	 * @param i  the row of the desired pixel
-	 * @return a ray from the camera that pass trough the desired pixel
+	 * @param nRays the number of rays to contract through the pixel
+	 * @return a list of rays that start at p0 and pass at a points in the pixel
 	 */
-	public Ray constructRayThroughPixel(int nX, int nY, int j, int i) {
+	public List<Ray> constructRayThroughPixel(int nX, int nY, int j, int i, int nRays) {
 
 		double ry = height / nY; // the height of each pixel
 		double rx = width / nX; // the width of each pixel
@@ -91,10 +94,28 @@ public class Camera {
 		if (xj != 0) { // to prevent a creation of a zero vector
 			pIJ = pIJ.add(vRight.scale(xj));
 		}
-		Vector dir = pIJ.subtract(p0); // calculate the direction vector of the ray
-		return new Ray(p0, dir); // create and return the ray
+		
+		List<Point3D> points = pointsInPixel(pIJ, height, width, nRays);
+		List<Ray> rays = new LinkedList<Ray>();
+		for (Point3D point : points) {
+			rays.add(new Ray(p0, point.subtract(p0)));
+		}
+		
+		return rays; // create and return the ray
 	}
 
+	/**
+	 * generate a list of points in a pixel
+	 * @param center the point at the center of the pixel
+	 * @param height the height of the pixel
+	 * @param width the width of the pixel
+	 * @param n the number of points to generate
+	 * @return a list of 'n' points in the pixel
+	 */
+	private List<Point3D> pointsInPixel(Point3D center, double height, double width, int n){
+		return List.of(center);
+	}
+	
 	/**
 	 * set a new position for the camera, keeps the vUp vector around the axis y
 	 * positive direction
@@ -199,5 +220,36 @@ public class Camera {
 	public double getDis() {
 		return dis;
 	}
+	
+	/**
+	 * generate the ray that start from the camera and go trough the i,j pixel in
+	 * the view plane
+	 * @param nX number of pixels in the right-left axis
+	 * @param nY number of pixels in the up-down axis
+	 * @param j  the column of the desired pixel
+	 * @param i  the row of the desired pixel
+	 * @return a ray from the camera that pass trough the desired pixel
+	 */
+	public Ray constructRayThroughPixel(int nX, int nY, int j, int i) {
 
+		double ry = height / nY; // the height of each pixel
+		double rx = width / nX; // the width of each pixel
+
+		Point3D pCenter = p0.add(vTo.scale(dis)); // the center of the view plane
+		double yi = ((nY - 1) / 2d - i) * ry; // the distance from the center of the view plane to the middle of the
+												// pixel in the y axis
+		double xj = (j - (nX - 1) / 2d) * rx; // the distance from the center of the view plane to the middle of the
+												// pixel in the y axis
+		Point3D pIJ = pCenter;
+		if (yi != 0) { // to prevent a creation of a zero vector
+			pIJ = pIJ.add(vUp.scale(yi));
+		}
+		if (xj != 0) { // to prevent a creation of a zero vector
+			pIJ = pIJ.add(vRight.scale(xj));
+		}
+		
+		return new Ray(p0, pIJ.subtract(p0)); // create and return the ray
+	}
+
+	
 }

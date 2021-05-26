@@ -1,9 +1,12 @@
 package renderer;
 
+import java.util.LinkedList;
+import java.util.List;
 import java.util.MissingResourceException;
 
 import elements.Camera;
 import primitives.Color;
+import primitives.Ray;
 
 /**
  * Rendering the image from the scene
@@ -12,6 +15,7 @@ public class Render {
 	private ImageWriter imageWriter;
 	private Camera camera;
 	private RayTracerBase rayTracer;
+	private int RaysPerPixel = 1;
 
 	/**
 	 * set the imageWriter of the render
@@ -59,12 +63,30 @@ public class Render {
 		int nY = imageWriter.getNy();
 		for (int i = 0; i < nY; i++) {
 			for (int j = 0; j < nX; j++) {
-				Color color = rayTracer.traceRay(camera.constructRayThroughPixel(nX, nY, j, i));
+				List<Ray> Rays = camera.constructRayThroughPixel(nX, nY, j, i, RaysPerPixel);
+				List<Color> colors = new LinkedList<Color>();
+				for (Ray ray : Rays) {
+					colors.add(rayTracer.traceRay(ray));
+				}
+				Color color = averageColor(colors);
 				imageWriter.writePixel(j, i, color);
 			}
 		}
 	}
 
+	/**
+	 * calculate the average color from all the colors in the list 'colors'
+	 * @param colors the list of colors to find the average from
+	 * @return the average color from all the colors in the list 'colors'
+	 */
+	private Color averageColor(List<Color> colors) {
+		Color sumColors = Color.BLACK;
+		for (Color color : colors) {
+			sumColors = sumColors.add(color);
+		}
+		return sumColors.reduce(colors.size());
+	}
+	
 	/**
 	 * prints a grid on the image. the spaces between the lines is the size of the "interval"
 	 * @param interval the space size between the lines
@@ -94,6 +116,16 @@ public class Render {
 		if (imageWriter == null)
 			throw new MissingResourceException("imageWriter is null ", "Render", "imageWriter");
 		imageWriter.writeToImage();
+	}
+	
+	/**
+	 * setter for RaysPerPixel
+	 * @param raysPerPixel the raysPerPixel to set
+	 * @return it self
+	 */
+	public Render setRaysPerPixel(int raysPerPixel) {
+		RaysPerPixel = raysPerPixel;
+		return this;
 	}
 
 }
