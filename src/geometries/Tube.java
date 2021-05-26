@@ -122,7 +122,11 @@ public class Tube extends Geometry{
 			double t1 = Util.alignZero((-b - dissqrt)/(2*a)); 
 			double t2 = Util.alignZero((-b + dissqrt)/(2*a));
 			
-			if (t2 <= 0 || t1 > maxDist) {
+			if (t2 <= 0) {
+				return null;
+			}
+			
+			if (t1 > maxDist) {
 				return null;
 			}
 			
