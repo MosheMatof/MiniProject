@@ -96,6 +96,37 @@ public class Camera {
 	}
 
 	/**
+	 * set a new position for the camera, keeps the vUp vector around the axis y positive direction
+	 * @param pos the position point
+	 * @param target the target point
+	 * @return this camera
+	 */
+	public Camera setPosition(Point3D pos,Point3D target) {
+		this.p0 = pos;
+		vTo = target.subtract(pos).normalize();
+		//produce the vUp vector
+		Vector yN = new Vector(0,1,0);	
+		try {
+			Vector t1 = new Vector(1,0,0).crossProduct(vTo).normalize();
+			if(t1.dotProduct(yN) < 0)
+				t1.scale(-1);
+			Vector t2 = new Vector(0,0,-1).crossProduct(vTo).normalize();
+			if(t1.dotProduct(yN) < 0)
+				t1.scale(-1);	
+			vUp = t1.add(t2).normalize();
+		} catch (Exception e) { // the vTo vector is parallel to the x-z plain
+			vUp = new Vector(0,1,0);
+		}
+			
+		// if the vectors are orthogonal -> generates the vRight
+				if (Util.isZero(vUp.dotProduct(vTo))) {
+					this.vRight = vTo.crossProduct(vUp).normalize();
+				} else {
+					throw new IllegalArgumentException("the vTo and vUp aren't orthogonal");
+				}
+		return this;
+	}
+	/**
 	 * get the location of the camera
 	 * @return the location of the camera
 	 */
