@@ -28,15 +28,17 @@ public class Ray {
 		this.dir = dir.normalized();
 	}
 
+	private static final double DELTA = 0.1;
+	
 	/**
 	 * ray constructor move the origin by delta vector
 	 * @param p0  the origin point
-	 * @param dir the ray direction
-	 * @param deltaVec the vector to move the origin by
+	 * @param v the ray direction - must be normalized
+	 * @param n the vector to move the origin by
 	 */
-	public Ray(Point3D p0, Vector dir, Vector deltaVec) {
-		this.dir = dir.normalized();
-		this.origin = p0.add(deltaVec);
+	public Ray(Point3D p0, Vector v, Vector n) {
+		this.dir = v;
+		this.origin = p0.add(n.scale(v.dotProduct(n) > 0 ? DELTA : -DELTA));
 	}
 
 	/**

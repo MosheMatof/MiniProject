@@ -5,11 +5,11 @@ package primitives;
  */
 public class Material {
 	/**
-	 * defuse level
+	 * diffuse factor
 	 */
 	public double kD = 0;
 	/**
-	 * specular level
+	 * specular factor
 	 */
 	public double kS = 0;
 	/**

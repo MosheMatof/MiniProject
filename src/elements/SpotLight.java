@@ -28,15 +28,17 @@ public class SpotLight extends PointLight implements LightSource {
 	@Override
 	public Color getIntensity(Point3D p) {
 		double dp = Util.alignZero(direction.dotProduct(getL(p)));
-		if (dp<=0)return Color.BLACK;
+		if (dp <= 0)
+			return Color.BLACK;
 		if (kB != 1)
-			dp = Math.pow(dp,kB);
+			dp = Math.pow(dp, kB);
 		return super.getIntensity(p).scale(dp);
 	}
 
 	/**
-	 * set the broadness of the light (kB), if kB less then 1 -> wider light, if kB more then 1 -> thiner
-	 * light
+	 * set the broadness of the light (kB), if kB less then 1 -> wider light, if kB
+	 * more then 1 -> thiner light
+	 * 
 	 * @param kB the kB to set
 	 * @return it self
 	 */
