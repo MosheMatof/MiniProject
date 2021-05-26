@@ -84,7 +84,7 @@ public class Plane extends Geometry {
 			return null;
 
 		double scalar = alignZero(num / denom);
-		return scalar <= 0 || scalar > maxDist? null : List.of(new GeoPoint(this, ray.getPoint(scalar)));
+		return scalar <= 0 || alignZero(scalar - maxDist) >= 0 ? null : List.of(new GeoPoint(this, ray.getPoint(scalar)));
 	}
 
 }
