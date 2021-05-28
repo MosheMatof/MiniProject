@@ -28,6 +28,9 @@ public class Ray {
 		this.dir = dir.normalized();
 	}
 
+	/**
+	 * small number to move the start point of reflection's or transparency's ray
+	 */
 	private static final double DELTA = 0.1;
 	
 	/**

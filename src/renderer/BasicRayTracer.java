@@ -26,11 +26,7 @@ public class BasicRayTracer extends RayTracerBase {
 	 */
 	private static final double MIN_CALC_COLOR_K = 0.001;
 
-	/**
-	 * small number to move the start point of reflection's or transparency's ray
-	 */
-	private static final double DELTA = 0.1;
-
+	
 	/**
 	 * constructs a new BasicRayTracer with scene = 'scene'
 	 * 
