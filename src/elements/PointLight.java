@@ -14,7 +14,7 @@ import static primitives.Util.*;
 public class PointLight extends Light implements LightSource {
 
 	private Point3D position;
-	private double radius = 5;
+	private double radius = 1;
 	private double kC = 1;
 	private double kL = 0;
 	private double kQ = 0;
