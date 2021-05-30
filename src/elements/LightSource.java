@@ -16,7 +16,7 @@ public interface LightSource {
 	 */
 	public Color getIntensity(Point3D p);
 	/**
-	 * get the vector from the light source to a given point
+	 * get the normalize vector from the light source to a given point
 	 * @param p the requested point
 	 * @return the vector from the light source to a given point
 	 */

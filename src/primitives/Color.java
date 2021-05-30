@@ -1,5 +1,7 @@
 package primitives;
 
+import java.util.List;
+
 /**
  * Wrapper class for java.jwt.Color The constructors operate with any
  * non-negative RGB values. The colors are maintained without upper limit of
@@ -66,6 +68,22 @@ public class Color {
 		b = other.getBlue();
 	}
 
+	/**
+	 * constructor produce the average color from all the colors in the list 'colors'
+	 * @param colors the list of colors to find the average from
+	 * @return the average color from all the colors in the list 'colors'
+	 */
+	public Color(List<Color> colors) {
+		for (Color color : colors) {
+			r += color.r < 255 ? color.r : 255;
+			g += color.g < 255 ? color.g : 255;
+			b += color.b < 255 ? color.b : 255;
+		}
+		int size = colors.size();
+		r = r/size;
+		g = g/size;
+		b = b/size;
+	}
 	/**
 	 * Color setter to reset the color to BLACK
 	 * 

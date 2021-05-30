@@ -1,8 +1,10 @@
 package renderer;
 
+import java.util.LinkedList;
 import java.util.List;
 
 import elements.LightSource;
+import elements.PointLight;
 import geometries.Intersectable.GeoPoint;
 import primitives.*;
 import static primitives.Util.*;
@@ -26,7 +28,8 @@ public class BasicRayTracer extends RayTracerBase {
 	 */
 	private static final double MIN_CALC_COLOR_K = 0.001;
 
-	
+	private int kSS = 0;
+
 	/**
 	 * constructs a new BasicRayTracer with scene = 'scene'
 	 * 
@@ -97,17 +100,45 @@ public class BasicRayTracer extends RayTracerBase {
 		Color color = Color.BLACK;
 
 		for (LightSource lightSource : scene.lights) {
-			Vector l = lightSource.getL(intersection.point);
+			Point3D interP = intersection.point;
+			Vector l = lightSource.getL(interP);
 			double nl = alignZero(n.dotProduct(l));
 
-			if (nl * nv > 0) { // sign(nl) == sing(nv)
-				double kTvalue = transparency(l, n, intersection, lightSource);
-				if (kTvalue * k > MIN_CALC_COLOR_K) {
-					Color lightIntensity = lightSource.getIntensity(intersection.point).scale(kTvalue);
-					color = color.add(calcDiffusive(kd, l, n, lightIntensity),
-							calcSpecular(ks, l, n, v, nShininess, lightIntensity));
+			if (lightSource instanceof PointLight && kSS > 1) { 
+				PointLight pointLight = (PointLight)lightSource;
+				List<Vector> vecs = pointLight.getSampleVector(interP, n);
+				List<Vector> validVecs = new LinkedList<>();
+				for (Vector vc : vecs) {
+					if(Math.signum(vc.dotProduct(n)) == Math.signum(nv))
+						validVecs.add(vc);
 				}
+				if (!validVecs.isEmpty()) {
+					List<Vector> restVecs = pointLight.getRandomVectors(interP, n, kSS);
+					for (Vector vc : restVecs) {
+						if(Math.signum(vc.dotProduct(n)) == Math.signum(nv))
+							validVecs.add(vc);
+					}
+					double kTvalue = 0;
+					for (Vector vec : validVecs) {
+						 kTvalue += transparency(vec, n, intersection, lightSource);
+					}
+					kTvalue = kTvalue/(vecs.size() + restVecs.size());
+					if (kTvalue * k > MIN_CALC_COLOR_K) {
+						Color lightIntensity = lightSource.getIntensity(interP).scale(kTvalue);
+						color = color.add(calcDiffusive(kd, l, n, lightIntensity),
+								calcSpecular(ks, l, n, v, nShininess, lightIntensity));
+					}
+				}		
 			}
+			//the light is directional light
+			else if (Math.signum(nl) == Math.signum(nv)) {
+				double kTvalue = transparency(l, n, intersection, lightSource);
+					if (kTvalue * k > MIN_CALC_COLOR_K) {
+						Color lightIntensity = lightSource.getIntensity(interP).scale(kTvalue);
+						color = color.add(calcDiffusive(kd, l, n, lightIntensity),
+								calcSpecular(ks, l, n, v, nShininess, lightIntensity));
+					}
+			}		
 		}
 		return color;
 	}
@@ -151,24 +182,6 @@ public class BasicRayTracer extends RayTracerBase {
 		return lightIntensity.scale(scale);
 	}
 
-//	/**
-//	 * checks if the light from a light source arrives to this point
-//	 * @param l the direction from the light source to the intersection point
-//	 * @param n the normal of this GeoPoint
-//	 * @param gp the GeoPoint to check for shadows
-//	 * @param lc the light source
-//	 * @return true if there wasn't any intersections with (gp to light)'s ray that aren't clear, otherwise false 
-//	 */
-//	private boolean unshaded(Vector l, Vector n, GeoPoint gp, LightSource lc) {
-//		Vector lightDirection = l.scale(-1);  // from point to light source
-//		Vector delta = n.scale(n.dotProduct(lightDirection) > 0 ? DELTA : -DELTA);  // build the delta vector
-//		Point3D point = gp.point.add(delta);  // move the start point of the (gp to light)'s ray by the delta vector
-//		Ray lightRay = new Ray(point, lightDirection);  // build the (gp to light)'s ray
-//		List<GeoPoint> intersections = scene.geometries.findGeoIntersections(lightRay, lc.getDistance(point));  // search for intersections with this ray
-//		 // return if there wasn't any intersections with (gp to light)'s ray that aren't clear
-//		return intersections == null || intersections.stream().noneMatch(g -> g.geometry.getMaterial().kT == 0) ; 
-//	}
-
 	/**
 	 * calculates the sum value of the light ->
 	 * <h1>possibilities values:</h1>
@@ -189,7 +202,7 @@ public class BasicRayTracer extends RayTracerBase {
 		Ray lightRay = new Ray(gp.point, lightDirection, n); // build the (gp to light)'s ray
 		List<GeoPoint> intersections = scene.geometries.findGeoIntersections(lightRay,
 				lc.getDistance(lightRay.getOrigin())); // search for intersections with this ray
-		// return if there wasn't any intersections with (gp to light)'s ray that aren't
+		// return 1 if there wasn't any intersections with (gp to light)'s ray that aren't
 		// clear
 		double kTvalue = 1;
 		if (intersections != null) {
@@ -239,8 +252,6 @@ public class BasicRayTracer extends RayTracerBase {
 			else {
 				color = color.add(scene.background);
 			}
-			// color = color.add(calcGlobalEffect( getReflectRay(ray, n, intersection),
-			// level - 1,kr, kkr));
 		}
 		// calculates transparency
 		double kt = intersection.geometry.getMaterial().kT, kkt = k * kt;
@@ -283,5 +294,16 @@ public class BasicRayTracer extends RayTracerBase {
 	 */
 	private Ray getTransparencyRay(Vector v, Vector n, GeoPoint gp) {
 		return new Ray(gp.point, v, n);
+	}
+
+	/**
+	 * setter for the soft shadow factor.
+	 * the number of the rays to send to the light
+	 * @param kSS the soft shadow factor
+	 * @return instance of this scene
+	 */
+	public BasicRayTracer setKS(int kSS) {
+		this.kSS = kSS;
+		return this;
 	}
 }

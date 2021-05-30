@@ -75,10 +75,15 @@ public class Camera {
 	 * @param nY number of pixels in the up-down axis
 	 * @param j  the column of the desired pixel
 	 * @param i  the row of the desired pixel
-	 * @param nRays the number of rays to contract through the pixel
+	 * @param n the dimnension of matrix of the random rays contracted through the pixel
 	 * @return a list of rays that start at p0 and pass at a points in the pixel
+	 * <ul>
+	 * <li>n == 1 -> return sample of 5 points (center and 4 carves)</li>
+	 * <li>n < 1 -> return 1 ray from the center</li>
+	 * <li>n > 1 -> return n*n rays from the semi random location in the pixel</li>
+	 * </ul>
 	 */
-	public List<Ray> constructRayThroughPixel(int nX, int nY, int j, int i, int nRays) {
+	public List<Ray> constructRayThroughPixel(int nX, int nY, int j, int i, int n) {
 
 		double ry = height / nY; // the height of each pixel
 		double rx = width / nX; // the width of each pixel
@@ -96,11 +101,11 @@ public class Camera {
 			pIJ = pIJ.add(vRight.scale(xj));
 		}
 		//
-		if (nRays < 1) { // if number of ray not provided return only the center ray
+		if (n < 1) { // if number of ray not provided return only the center ray
 			return List.of(new Ray(p0, pIJ.subtract(p0))); // create and return the ray
 		}
-		if (nRays > 1) { // generats random rays through the pixel
-			List<Point3D> points = randomPointsInPixel(pIJ, ry, rx, nRays);
+		if (n > 1) { // generats random rays through the pixel
+			List<Point3D> points = randomPointsInPixel(pIJ, ry, rx, n);
 			List<Ray> rays = new LinkedList<>();
 			for (Point3D point : points) {
 				rays.add(new Ray(p0, point.subtract(p0)));
@@ -108,7 +113,7 @@ public class Camera {
 			return rays; // create and return the ray
 		}
 		//if 'nRays' == 1 => return sample of 5 points (center and 4 carves)
-		List<Point3D> points = SamplePoints(pIJ, ry, rx);
+		List<Point3D> points = samplePoints(pIJ, ry, rx);
 		List<Ray> rays = new LinkedList<>();
 		for (Point3D point : points) {
 			rays.add(new Ray(p0, point.subtract(p0)));
@@ -153,13 +158,13 @@ public class Camera {
 	 * @param width the width of the pixel
 	 * @return list of 5 points in the pixel (the center included) 
 	 */
-	private List<Point3D> SamplePoints(Point3D center, double height, double width){
-		double halfH = height/2 , halfW = width/2;
+	private List<Point3D> samplePoints(Point3D center, double height, double width){
+		double thirdH = height/3 , thirdW = width/3;
 		return List.of(
-			center.add(vUp.scale(halfH).add(vRight.scale(halfW))),
-			center.add(vUp.scale(-halfH).add(vRight.scale(halfW))),
-			center.add(vUp.scale(halfH).add(vRight.scale(-halfW))),
-			center.add(vUp.scale(-halfH).add(vRight.scale(-halfW)))
+			center.add(vUp.scale(thirdH).add(vRight.scale(thirdW))),
+			center.add(vUp.scale(-thirdH).add(vRight.scale(thirdW))),
+			center.add(vUp.scale(thirdH).add(vRight.scale(-thirdW))),
+			center.add(vUp.scale(-thirdH).add(vRight.scale(-thirdW)))
 		);
 	}
 	/**

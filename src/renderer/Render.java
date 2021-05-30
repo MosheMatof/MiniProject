@@ -15,7 +15,7 @@ public class Render {
 	private ImageWriter imageWriter;
 	private Camera camera;
 	private RayTracerBase rayTracer;
-
+	private int kA = 0;
 	/**
 	 * set the imageWriter of the render
 	 * @param imageWriter the imageWriter for the render
@@ -47,17 +47,21 @@ public class Render {
 	}
 
 	/**
-	 * simple image Rendering by imageWriter according to the rayTracer and camera 
+	 * setter for the antialising factor.
+	 *  the number determine the dimension of the sample rays metrix in each pixel (kA*kA)
+	 * @param kA the antialising factor
+	 * @return instance of this scene
 	 */
-	public void renderImage() {
-		renderImage(-1);
+	public Render setKA(int kA) {
+		this.kA = kA;
+		return this;
 	}
 
 	/** 
 	 * Rendering the image by imageWriter according to the rayTracer and camera 
 	 * @param rays the number of rays per pixel
 	 */
-	public void renderImage(int rays) {
+	public void renderImage() {
 		var render = "Render";
 		if (imageWriter == null)
 			throw new MissingResourceException("imageWriter is null ", render, "imageWriter");
@@ -66,8 +70,14 @@ public class Render {
 		if (camera == null)
 			throw new MissingResourceException("camera is null ", render, "camera");
 
+		if (kA < 1) {
+			createsSimpleImage();
+			return;
+		}
+
 		int nX = imageWriter.getNx();
 		int nY = imageWriter.getNy();
+
 		for (int i = 0; i < nY; i++) {
 			for (int j = 0; j < nX; j++) {
 				//get sample of 5 colors
@@ -76,45 +86,57 @@ public class Render {
 				for (Ray ray : sampleRays) {
 					sampleColors.add(rayTracer.traceRay(ray));
 				}
-				Color sampleAvg = averageColor(sampleColors);
+				Color sampleAvg = new Color(sampleColors);
 
 				if (calcVarianceColors(sampleColors, sampleAvg) < 2) {
 					imageWriter.writePixel(j, i, sampleAvg);
 				} else {
-					List<Ray> randomRays = camera.constructRayThroughPixel(nX, nY, j, i, 10);
+					List<Ray> randomRays = camera.constructRayThroughPixel(nX, nY, j, i, kA);
 					List<Color> colors = sampleColors;
 					for (Ray ray : randomRays) {
 						colors.add(rayTracer.traceRay(ray));
 					}
-					Color color = averageColor(colors);
-					imageWriter.writePixel(j, i, color);
+					Color averageColor = new Color(colors);
+					imageWriter.writePixel(j, i, averageColor);
 				}			
-				// List<Ray> randomRays = camera.constructRayThroughPixel(nX, nY, j, i, 10);
-				// List<Color> colors = new LinkedList<>();
-				// for (Ray ray : randomRays) {
-				// 	colors.add(rayTracer.traceRay(ray));
-				// }
-				// Color color = averageColor(colors);
-				// imageWriter.writePixel(j, i, color);	
 			}
 		}
 	}
 
-
-	//maybe use 'getColor' 
 	/**
-	 * calculate the average color from all the colors in the list 'colors'
-	 * @param colors the list of colors to find the average from
-	 * @return the average color from all the colors in the list 'colors'
+	 * creates image by only 1 ray from each pixel
 	 */
-	private Color averageColor(List<Color> colors) {
-		Color sumColors = Color.BLACK;
-		for (Color color : colors) {
-			sumColors = sumColors.add(color);
+	private void createsSimpleImage() {
+		int nX = imageWriter.getNx();
+		int nY = imageWriter.getNy();
+		for (int i = 0; i < nY; i++) {
+			for (int j = 0; j < nX; j++) {
+				Ray ray = camera.constructRayThroughPixel(nX, nY, j, i);
+				Color color = rayTracer.traceRay(ray);
+				imageWriter.writePixel(j, i, color);
+			}
 		}
-		return sumColors.reduce(colors.size());
 	}
-	
+
+	// /**
+	//  * calculate the average color from all the colors in the list 'colors'
+	//  * @param colors the list of colors to find the average from
+	//  * @return the average color from all the colors in the list 'colors'
+	//  */
+	// private Color averageColor(List<Color> colors) {
+	// 	Color sumColors = Color.BLACK;
+	// 	for (Color color : colors) {
+	// 		//sumColors = sumColors.add(new Color(color.getColor()));
+	// 		sumColors = sumColors.add(color);
+	// 	}
+	// 	return sumColors.reduce(colors.size());
+	// }
+	/**
+	 * calculates the variance of list of color
+	 * @param colors list of colors
+	 * @param average the averade color
+	 * @return the variance 
+	 */
 	private double calcVarianceColors(List<Color> colors, Color average) {
 		int rAvg = average.getColor().getRed();
 		int gAvg = average.getColor().getGreen();
@@ -158,15 +180,5 @@ public class Render {
 			throw new MissingResourceException("imageWriter is null ", "Render", "imageWriter");
 		imageWriter.writeToImage();
 	}
-	
-	// /**
-	//  * setter for RaysPerPixel
-	//  * @param raysPerPixel the raysPerPixel to set
-	//  * @return it self
-	//  */
-	// public Render setRaysPerPixel(int raysPerPixel) {
-	// 	RaysPerPixel = raysPerPixel;
-	// 	return this;
-	// }
 
 }
