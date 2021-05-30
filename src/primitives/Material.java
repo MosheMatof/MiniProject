@@ -31,6 +31,7 @@ public class Material {
 	 * @return it self
 	 */
 	public Material setKd(double kD) {
+		
 		this.kD = kD;
 		return this;
 	}
