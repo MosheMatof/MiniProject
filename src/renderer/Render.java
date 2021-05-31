@@ -12,10 +12,11 @@ import primitives.Ray;
  * Rendering the image from the scene
  */
 public class Render {
+	private static final double MAX_VARIANCE = 2;
 	private ImageWriter imageWriter;
 	private Camera camera;
 	private RayTracerBase rayTracer;
-	private int kA = 0;
+	private int kA = 1;
 	/**
 	 * set the imageWriter of the render
 	 * @param imageWriter the imageWriter for the render
@@ -83,7 +84,7 @@ public class Render {
 					}
 					Color sampleAvg = new Color(sampleColors);
 
-					if (calcVarianceColors(sampleColors, sampleAvg) < 2) {
+					if (calcVarianceColors(sampleColors, sampleAvg) < MAX_VARIANCE) {
 						imageWriter.writePixel(j, i, sampleAvg);
 					} else {
 						renderImageByRandomRays(i, j, sampleAvg);
@@ -104,7 +105,7 @@ public class Render {
 	 * creates image by only 1 ray from each pixel
 	 */
 	private void renderImageByRandomRays(int i, int j, Color average) {
-		List<Ray> randomRays = camera.constructRayThroughPixel(imageWriter.getNx(), imageWriter.getNy(), j, i, kA);
+		List<Ray> randomRays = camera.constructRaysThroughPixel(imageWriter.getNx(), imageWriter.getNy(), j, i, kA);
 		List<Color> colors = new LinkedList<>();
 		if(average != null)
 			colors.add(average);

@@ -302,7 +302,7 @@ public class BasicRayTracer extends RayTracerBase {
 	 * @param kSS the soft shadow factor
 	 * @return instance of this scene
 	 */
-	public BasicRayTracer setKS(int kSS) {
+	public BasicRayTracer setKSS(int kSS) {
 		this.kSS = kSS;
 		return this;
 	}
