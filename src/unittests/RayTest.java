@@ -60,4 +60,24 @@ public class RayTest {
 				new GeoPoint(spr, new Point3D(0, -3.976587309161571, 1.348941793892286)));
 	}
 
+	// @Test
+	// public void multiplySpeed(){
+	// 	double a = 123456789123456789d;
+	// 	double b = 123456789123456789d;
+	// 	for (double i = 0; i < 2000000000d; i++) {
+	// 		if (a*b < 0) {
+	// 			a = b;
+	// 		}
+	// 	}
+	// }
+	// @Test
+	// public void signNumSpeed(){
+	// 	double a = 123456789123456789d;
+	// 	double b = 123456789123456789d;
+	// 	for (double i = 0; i < 2000000000d; i++) {
+	// 		if (Math.signum(a) != Math.signum(b)) {
+	// 			a = b;
+	// 		}
+	// 	}
+	// }
 }

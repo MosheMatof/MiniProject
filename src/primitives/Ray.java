@@ -3,7 +3,9 @@
  */
 package primitives;
 
+import java.util.LinkedList;
 import java.util.List;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
 
 import geometries.Intersectable.GeoPoint;
@@ -87,7 +89,110 @@ public class Ray {
 				points.stream().map(p -> new GeoPoint(null, p)).collect(Collectors.toList()) //
 				).point;
 	}
+
+	/**
+	 * generates sample of 5 rays (from center and 4 carves)
+	 * @param target the targrt point to send the rays to
+	 * @param radius the half width of the Square
+	 * @param vUp the normal vector - orthogonal to the normal of the origin point 
+	 * @return sample of 5 rays
+	 */
+	public List<Ray> getSempleRaysSquare(Point3D target, double radius,Vector vUp) {
+		Vector vRight = vUp.crossProduct(this.dir);
+		List<Ray> rays = new LinkedList<>();
+		List<Point3D> points = List.of(
+			target.add(vUp.scale(radius).add(vRight.scale(radius))),
+			target.add(vUp.scale(-radius).add(vRight.scale(radius))),
+			target.add(vUp.scale(radius).add(vRight.scale(-radius))),
+			target.add(vUp.scale(-radius).add(vRight.scale(-radius)))
+		);
+		for (Point3D p : points) {
+			rays.add(new Ray(this.origin, p.subtract(this.origin)));
+		}
+		rays.add(this);
+		return rays; // create and return the ray
+	}	
 	
+	/**
+	 * generates sample of rays
+	 * @param target the targrt point
+	 * @param radius the half width of the Square
+	 * @param vUp the normal vector - orthogonal to the normal of the origin point 
+	 * @param n the dimnension of matrix of the random rays contracted through the pixel
+	 * @return list of n*n rays
+	 */
+	public List<Ray> getRaysSquare(Point3D target, double radius,Vector vUp,int n) {
+		Vector vRight = vUp.crossProduct(this.dir);
+		List<Ray> rays = new LinkedList<>();
+		double interval = (2*radius)/(n-1);
+		for (double i = -radius; i < radius; i+=interval) {
+			for (double j = -radius; j < radius; j+=interval) {
+				double rH = ThreadLocalRandom.current().nextDouble(interval) + i;
+				double rW = ThreadLocalRandom.current().nextDouble(interval) + j;
+				Point3D p = target;
+				if (!Util.isZero(rH)) { // to prevent a creation of a zero vector
+					p = p.add(vUp.scale(rH));
+				}
+				if (!Util.isZero(rW)) { // to prevent a creation of a zero vector
+					p = p.add(vRight.scale(rW));
+				}
+				rays.add(new Ray(this.origin, p.subtract(this.origin)));
+			}
+		}
+		rays.add(this);
+		return rays; // create and return the ray
+	}	
+
+	/**
+	
+	
+	/**
+	 * generates sample of 5 rays (from center and 4 carves)
+	 * @param target the targrt point to send the rays to
+	 * @param radius the radius of the circle
+	 * @param vUp the normal vector - orthogonal to the normal of the origin point 
+	 * @return sample of 5 rays
+	 */
+	public List<Ray> getSempleRaysCircle(Point3D target, double radius,Vector vUp) {
+		Vector vRight = vUp.crossProduct(this.dir);
+		List<Ray> rays = new LinkedList<>();
+		List<Point3D> points = List.of(
+			target.add(vUp.scale(radius)),
+			target.add(vUp.scale(-radius)),
+			target.add(vRight.scale(radius)),
+			target.add(vRight.scale(-radius))
+		);
+		for (Point3D p : points) {
+			rays.add(new Ray(this.origin, p.subtract(this.origin)));
+		}
+		rays.add(this);
+		return rays; // create and return the ray
+	}	
+
+	/**
+	 * generates sample of rays from given point to random points on a circle
+	 * @param target the targrt point
+	 * @param radius the radius of the circle
+	 * @param vUp the normal vector - orthogonal to the normal of the origin point 
+	 * @param n the dimnension of matrix of the random rays contracted through the pixel
+	 * @return list of n rays
+	 */
+	public List<Ray> getRaysCircle(Point3D target, double radius,Vector vUp,int n) {
+		Vector vRight = vUp.crossProduct(this.dir);
+		List<Ray> rays = new LinkedList<>();
+		for (int i = 0; i < n; i++) {
+			Point3D p = target;
+			double sn = ThreadLocalRandom.current().nextDouble(2 * radius) - radius;
+			if(!Util.isZero(sn))
+				p = p.add(vRight.scale(sn));
+			double sv = ThreadLocalRandom.current().nextDouble(2 * radius) - radius;
+			if(!Util.isZero(sv))
+				p = p.add(vUp.scale(sv));
+			rays.add(new Ray(this.origin, p.subtract(this.origin)));
+		}
+		rays.add(this);
+		return rays; // create and return the ray
+	}	
 	/**
 	 * finds from a list of GeoPoints the GeoPoint with the closest point to the origin of this ray
 	 * @param gpoints the list of GeoPoints to choose from
