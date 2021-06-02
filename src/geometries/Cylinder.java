@@ -39,12 +39,12 @@ public class Cylinder extends Tube {
 		if (Util.isZero(t)) {
 			return axis.getDir().scale(-1);
 		}
-		// if t == height then the point is on the lower surface of the cylinder
+		// if t == height then the point is on the upper surface of the cylinder
 		if (Util.isZero(t - height)) {
 			return axis.getDir();
 		}
 		// the point is on the sides of the cylinder
-		Point3D o = axis.getOrigin().add(vector.scale(t));
+		Point3D o = axis.getOrigin().add(axis.getDir().scale(t));
 		return point.subtract(o).normalize();
 	}
 

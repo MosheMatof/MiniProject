@@ -95,6 +95,9 @@ public class Render {
 		else{
 			for (int i = 0; i < nY; i++) {
 				for (int j = 0; j < nX; j++) {
+					if (j == 90 && i == 120) {
+						int a = 1;
+					}
 					renderImageByRandomRays(i, j, null);
 				}
 			}

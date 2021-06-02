@@ -26,7 +26,7 @@ public class Material {
 	public int nShinines = 1;
 	
 	/**
-	 * seter for kS
+	 * seter for kS (diffuse factor)
 	 * @param kD the kD to set
 	 * @return it self
 	 */
@@ -36,7 +36,7 @@ public class Material {
 	}
 
 	/**
-	 * seter for kS
+	 * seter for kS (specular factor)
 	 * @param kS the kS to set
 	 * @return it self
 	 */
@@ -46,7 +46,7 @@ public class Material {
 	}
 
 	/**
-	 * seter for kT
+	 * seter for kT (transparency level)
 	 * @param kT the kT to set
 	 * @return it self 
 	 */
@@ -56,7 +56,7 @@ public class Material {
 	}
 	
 	/**
-	 * seter for kR
+	 * seter for kR (reflection level)
 	 * @param kR the kR to set
 	 * @return it self
 	 */

@@ -22,7 +22,7 @@ public class BasicRayTracer extends RayTracerBase {
 	/**
 	 * 
 	 */
-	private static final int MAX_CALC_COLOR_LEVEL = 5;
+	private static final int MAX_CALC_COLOR_LEVEL = 4;
 	/**
 	 * 
 	 */
@@ -250,7 +250,7 @@ public class BasicRayTracer extends RayTracerBase {
 			if (reflectedPoint != null)
 				color = color.add(calcColor(reflectedPoint, reflectedRay.getDir(), level - 1, kkr).scale(kr));
 			else {
-				color = color.add(scene.background);
+				color = color.add(scene.background).scale(kr);
 			}
 		}
 		// calculates transparency
@@ -261,7 +261,7 @@ public class BasicRayTracer extends RayTracerBase {
 			if (transpPoint != null)
 				color = color.add(calcColor(transpPoint, transpRay.getDir(), level - 1, kkt).scale(kt));
 			else {
-				color = color.add(scene.background);
+				color = color.add(scene.background).scale(kr);
 			}
 		}
 		return color;
@@ -278,7 +278,7 @@ public class BasicRayTracer extends RayTracerBase {
 	 *         intersection point
 	 */
 	private Ray getReflectRay(Vector v, Vector n, GeoPoint gp) {
-		Vector reflectVec = v.subtract(n.scale(2 * v.dotProduct(n)));// the direction of the reflection
+		Vector reflectVec = v.subtract(n.scale(2 * v.dotProduct(n))).normalize();// the direction of the reflection
 		return new Ray(gp.point, reflectVec, n);
 	}
 
