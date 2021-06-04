@@ -3,12 +3,16 @@
  */
 package primitives;
 
+import java.awt.Point;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
 
+import com.sun.management.VMOption.Origin;
+
 import geometries.Intersectable.GeoPoint;
+import renderer.BlackBoard;
 
 /**
  * 
@@ -168,7 +172,49 @@ public class Ray {
 		rays.add(this);
 		return rays; // create and return the ray
 	}	
-
+	
+	/**
+	 * create a beam of rays that start at the origin point of this ray and goes through each point on the black board,
+	 * when locating the black board in the distance 'dist' from the origin of this ray   
+	 * @param bb the black board
+	 * @param dist the distance from the origin point to locate the black board
+	 * @param vUp the up direction of the black board
+	 * @param vRight the right direction of the black board
+	 * @return a beam of rays that start at the origin point of this ray and goes through each point on the black board,
+	 * 		   when locating the black board in the distance 'dist' from the origin of this ray
+	 */
+	public List<Ray> createBeam(BlackBoard bb, double dist, Vector vUp, Vector vRight){
+		List<Point3D> points = bb.generate3dPoints(vUp, vRight, getPoint(dist));
+		List<Ray> beam = new LinkedList<>();
+		for(Point3D p : points) {
+			try {
+				beam.add(new Ray(origin, p.subtract(origin)));
+			}
+			catch (Exception e) {
+				var a = 5;
+			}
+		}
+		return beam;
+	}
+	
+	/**
+	 * create a beam of rays that start at points on the black board and goes through the point 'through',
+	 * the center point of the black point is the origin point of this ray
+	 * @param bb the black board
+	 * @param vUp the up direction of the black board
+	 * @param vRight the right direction of the black board
+	 * @param through the point that the rays goes through 
+	 * @return a beam of rays that start at points on the black board and goes through the point 'through'
+	 */
+	public List<Ray> createBeamThrough(BlackBoard bb, Vector vUp, Vector vRight, Point3D through){
+		List<Point3D> points = bb.generate3dPoints(vUp, vRight, origin);
+		List<Ray> beam = new LinkedList<>();
+		for(Point3D p : points) {
+			beam.add(new Ray(p, through.subtract(p)));
+		}
+		return beam;
+	}
+	
 	/**
 	 * generates sample of rays from given point to random points on a circle
 	 * @param target the targrt point

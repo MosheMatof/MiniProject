@@ -33,12 +33,12 @@ public class BlackBoard {
 	 * generates a black board with 5 points in a 2X2 square boundary(from center and 4 carves)
 	 * @return a black board with 5 points 2X2 square boundary(from center and 4 carves)
 	 */
-	public static BlackBoard sempleSquare() {
-		Point2D ur = new Point2D(1, 1);  // the up-right point
-		Point2D ul = new Point2D(-1, 1);  // the up-left point
+	public static BlackBoard sempleSquare(double size) {
+		Point2D ur = new Point2D(size, size);  // the up-right point
+		Point2D ul = new Point2D(-size, size);  // the up-left point
 		Point2D mid = new Point2D(0, 0);  // the mid point
-		Point2D dr = new Point2D(1, -1);  // the down-right point
-		Point2D dl = new Point2D(-1, -1);  // the down-left point
+		Point2D dr = new Point2D(size, -size);  // the down-right point
+		Point2D dl = new Point2D(-size, -size);  // the down-left point
 		return new BlackBoard(ur, ul, mid, dr, dl);
 	}
 	
@@ -48,11 +48,11 @@ public class BlackBoard {
 	 * @param n the square root of the number of points to generate in the blackBoard
 	 * @return a BlackBoard with points randomly arrange in square boundary
 	 */
-	public static BlackBoard squareRandom(int n) {
+	public static BlackBoard squareRandom(int n, double size) {
 		LinkedList<Point2D> points = new LinkedList<Point2D>();
-		double interval = 2/(n-1);
-		for (double i = -1; i < 1; i+=interval) {
-			for (double j = -1; j < 1; j+=interval) {
+		double interval = 2*size/(n-1);
+		for (double i = -size; i < size; i+=interval) {
+			for (double j = -size; j < size; j+=interval) {
 				double rH = ThreadLocalRandom.current().nextDouble(interval) + i;
 				double rW = ThreadLocalRandom.current().nextDouble(interval) + j;
 				points.add(new Point2D(rW, rH));
@@ -65,29 +65,34 @@ public class BlackBoard {
 	 * generates a black board with 5 points in the unit circle boundary(from center and 4 vertices)
 	 * @return a black board with 5 points in the unit circle boundary(from center and 4 vertices)
 	 */
-	public static BlackBoard sempleCircle() {
-		Point2D up = new Point2D(0,1); // up point
-		Point2D dp = new Point2D(0,-1); // down point
-		Point2D rp = new Point2D(1, 0); // right point
-		Point2D lp = new Point2D(-1,0); // left point
+	public static BlackBoard sempleCircle(double radius) {
+		Point2D up = new Point2D(0,radius); // up point
+		Point2D dp = new Point2D(0,-radius); // down point
+		Point2D rp = new Point2D(radius, 0); // right point
+		Point2D lp = new Point2D(-radius,0); // left point
 		Point2D cp = new Point2D(0,0); // center point
 		return new BlackBoard(up, dp, rp, lp, cp);
 	}
+	
+	/**
+	 * the square root of the ratio between the unit circle and a 2X2 square
+	 */
+	private static final double RATIO_CIRCLE_SQUAR_SQURT = 1.128379167;
 	
 	/**
 	 * generate a BlackBoard with points randomly arrange in the unit circle boundary
 	 * @param n the square root of the number of points to generate in the blackBoard
 	 * @return a BlackBoard with points randomly arrange in the unit circle boundary
 	 */
-	public static BlackBoard circleRandom(int n) {
+	public static BlackBoard circleRandom(int n, double radius) {
 		LinkedList<Point2D> points = new LinkedList<Point2D>();
-		n = (int)1.128379167*n; // the square root of the ratio between the unit circle and a 2X2 square
-		double interval = 2/(n-1);
-		for (double i = -1; i < 1; i+=interval) {
-			for (double j = -1; j < 1; j+=interval) {
+		n *= RATIO_CIRCLE_SQUAR_SQURT;
+		double interval = 2*radius/(n-1);
+		for (double i = -radius; i < radius; i+=interval) {
+			for (double j = -radius; j < radius; j+=interval) {
 				double rH = ThreadLocalRandom.current().nextDouble(interval) + i;
 				double rW = ThreadLocalRandom.current().nextDouble(interval) + j;
-				if(Util.alignZero(rH*rH + rW*rW - 1) > 0)
+				if(Util.alignZero(rH*rH + rW*rW - radius*radius) > 0) // if this coordinates is outside of the circle
 					continue;
 				points.add(new Point2D(rW, rH));
 			}
@@ -141,6 +146,19 @@ public class BlackBoard {
 	}
 	
 	private List<Point2D> points = new LinkedList<Point2D>();
+	private double width = 1;
+	private double height = 1;
+	/**
+	 * when generating a 3d points from the black board
+	 * the scaleWidth will make all the points in the right width place according to the current width
+	 */
+	private double scaleWidth = 1;
+	/**
+	 * when generating a 3d points from the black board
+	 * the scaleHeight will make all the points in the right Height place according to the current height
+	 */
+	private double scaleHeight = 1;
+	
 	
 	/**
 	 * construct a BlackBoard with a given points
@@ -176,35 +194,72 @@ public class BlackBoard {
 	 * @return a List<Point3D> of 3d points that is a transformation of the 2d points of the BlackBord to
 	 *  a 3d points in space relative to the position and orientation of the board in space
 	 */
-	public List<Point3D> generate3dPoints(Vector up, Vector right, Point3D center, double scale){
+	public List<Point3D> generate3dPoints(Vector up, Vector right, Point3D center){
 		LinkedList<Point3D> points3d = new LinkedList<Point3D>();
 		for(Point2D point2d : points) {
-			Point3D point3d = center.add(right.scale(point2d.x * scale)).add(up.scale(point2d.y * scale));
+			Point3D point3d = center;
+			if(!Util.isZero(point2d.x))
+				point3d = point3d.add(right.scale(point2d.x * scaleWidth));
+			if(!Util.isZero(point2d.y))
+				point3d = point3d.add(up.scale(point2d.y * scaleHeight));
 			points3d.add(point3d);
 		}
 		return points3d;
 	}
 	
+//	/**
+//	 * generates a beam of rays that start at p0 and goes through each point in the blackBoard
+//	 * @param p0 the start point of the beam
+//	 * @param up the up direction of the blackBoard
+//	 * @param right the right direction of the blackBoard
+//	 * @param center the center point of the blackBoard
+//	 * @param scale how much to scale the blackBoard
+//	 * @return a beam of rays that start at p0 and goes through each point in the blackBoard
+//	 */
+//	public List<Ray> genrateBeamFromPoint(Point3D p0, Vector up, Vector right, Point3D center){
+//		LinkedList<Ray> beam = new LinkedList<Ray>();
+//		for(Point2D point2d : points) {
+//			Point3D point3d = center;
+//			if (!Util.isZero(point2d.x))
+//				point3d.add(right.scale(point2d.x));
+//			if (!Util.isZero(point2d.y))
+//				point3d.add(up.scale(point2d.y));
+//			Ray r = new Ray(p0, point3d.subtract(p0));
+//			beam.add(r);
+//		}
+//		return beam;
+//	}
+	
 	/**
-	 * generates a beam of rays that start at p0 and goes through each point in the blackBoard
-	 * @param p0 the start point of the beam
-	 * @param up the up direction of the blackBoard
-	 * @param right the right direction of the blackBoard
-	 * @param center the center point of the blackBoard
-	 * @param scale how much to scale the blackBoard
-	 * @return a beam of rays that start at p0 and goes through each point in the blackBoard
+	 * changes the width of the board
+	 * @param w the new width
+	 * @return it self
 	 */
-	public List<Ray> genrateBeamFromPoint(Point3D p0, Vector up, Vector right, Point3D center, double scale){
-		LinkedList<Ray> beam = new LinkedList<Ray>();
-		for(Point2D point2d : points) {
-			Point3D point3d = center;
-			if (!Util.isZero(point2d.x))
-				point3d.add(right.scale(scale*point2d.x));
-			if (!Util.isZero(point2d.y))
-				point3d.add(up.scale(scale*point2d.y));
-			Ray r = new Ray(p0, point3d.subtract(p0));
-			beam.add(r);
-		}
-		return beam;
+	public BlackBoard setWidth(double w) {
+		scaleWidth *= width/w;
+		width = w;
+		return this;
+	}
+	
+	/**
+	 * changes the height of the board
+	 * @param h the new height
+	 * @return it self
+	 */
+	public BlackBoard setHeight(double h) {
+		scaleHeight *= height/h;
+		height = h;
+		return this;
+	}
+	
+	/**
+	 * changes the radius of the circle blocked in the board of the board
+	 * @param r the new radius
+	 * @return it self
+	 */
+	public BlackBoard setRadius(double r) {
+		setHeight(2*r);
+		setWidth(2*r);
+		return this;
 	}
 }

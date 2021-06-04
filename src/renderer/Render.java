@@ -16,7 +16,7 @@ public class Render {
 	private ImageWriter imageWriter;
 	private Camera camera;
 	private RayTracerBase rayTracer;
-	private int kA = 1;
+	private int kA = 5;
 	/**
 	 * set the imageWriter of the render
 	 * @param imageWriter the imageWriter for the render
@@ -73,11 +73,13 @@ public class Render {
 
 		int nX = imageWriter.getNx();
 		int nY = imageWriter.getNy();
+		BlackBoard sampleBoard = BlackBoard.sempleSquare(1);
+		BlackBoard randomBoard = BlackBoard.squareRandom(1, kA);
 		if (kA > 4) {
 			for (int i = 0; i < nY; i++) {
 				for (int j = 0; j < nX; j++) {
 					//get sample of 5 colors
-					List<Ray> sampleRays = camera.getSempleRays(nX, nY, j, i);
+					List<Ray> sampleRays = camera.constructBeamThroughPixel(sampleBoard, nX, nY, i, j);
 					List<Color> sampleColors = new LinkedList<>();
 					for (Ray ray : sampleRays) {
 						sampleColors.add(rayTracer.traceRay(ray));
@@ -87,7 +89,13 @@ public class Render {
 					if (calcVarianceColors(sampleColors, sampleAvg) < MAX_VARIANCE) {
 						imageWriter.writePixel(j, i, sampleAvg);
 					} else {
-						renderImageByRandomRays(i, j, sampleAvg);
+						List<Ray> rays = camera.constructBeamThroughPixel(randomBoard, nX, nY, i, j);
+						List<Color> colors = new LinkedList<>();
+						for (Ray ray : rays) {
+							colors.add(rayTracer.traceRay(ray));
+						}
+						colors.addAll(sampleColors);
+						Color AvgColor = new Color(colors);
 					}			
 				}
 			}
@@ -98,26 +106,34 @@ public class Render {
 					if (j == 90 && i == 120) {
 						int a = 1;
 					}
-					renderImageByRandomRays(i, j, null);
+					List<Ray> rays = camera.constructBeamThroughPixel(randomBoard, nX, nY, i, j);
+					List<Color> colors = new LinkedList<>();
+					for (Ray ray : rays) {
+						colors.add(rayTracer.traceRay(ray));
+					}
+					Color AvgColor = new Color(colors);
+					
 				}
 			}
 		}		
 	}
 
-	/**
-	 * creates image by only 1 ray from each pixel
-	 */
-	private void renderImageByRandomRays(int i, int j, Color average) {
-		List<Ray> randomRays = camera.constructRaysThroughPixel(imageWriter.getNx(), imageWriter.getNy(), j, i, kA);
-		List<Color> colors = new LinkedList<>();
-		if(average != null)
-			colors.add(average);
-		for (Ray ray : randomRays) {
-			colors.add(rayTracer.traceRay(ray));
-		}
-		Color averageColor = new Color(colors);
-		imageWriter.writePixel(j, i, averageColor);
-	}
+	
+	
+//	/**
+//	 * creates image by only 1 ray from each pixel
+//	 */
+//	private void renderImageByRandomRays(int i, int j, Color average) {
+//		List<Ray> randomRays = camera.constructRaysThroughPixel(imageWriter.getNx(), imageWriter.getNy(), j, i, kA);
+//		List<Color> colors = new LinkedList<>();
+//		if(average != null)
+//			colors.add(average);
+//		for (Ray ray : randomRays) {
+//			colors.add(rayTracer.traceRay(ray));
+//		}
+//		Color averageColor = new Color(colors);
+//		imageWriter.writePixel(j, i, averageColor);
+//	}
 
 	// /**
 	//  * calculate the average color from all the colors in the list 'colors'

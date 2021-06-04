@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.concurrent.*;
 
 import primitives.*;
+import renderer.BlackBoard;
 
 /**
  * the point of view the scene
@@ -68,16 +69,16 @@ public class Camera {
 		return this;
 	}
 
-	/**
-	 * generate a list of rays that start at p0 and pass at a points on the pixel
-	 * the view plane
-	 * @param nX number of pixels in the right-left axis
-	 * @param nY number of pixels in the up-down axis
-	 * @param j  the column of the desired pixel
-	 * @param i  the row of the desired pixel
-	 * @param n the dimnension of matrix of the random rays contracted through the pixel
-	 * @return a list of rays that start at p0 and pass at a points in the pixel
-	 */
+//	/**
+//	 * generate a list of rays that start at p0 and pass at a points on the pixel
+//	 * the view plane
+//	 * @param nX number of pixels in the right-left axis
+//	 * @param nY number of pixels in the up-down axis
+//	 * @param j  the column of the desired pixel
+//	 * @param i  the row of the desired pixel
+//	 * @param n the dimnension of matrix of the random rays contracted through the pixel
+//	 * @return a list of rays that start at p0 and pass at a points in the pixel
+//	 */
 	public List<Ray> constructRaysThroughPixel(int nX, int nY, int j, int i, int n) {
 		double ry = height / nY; // the height of each pixel
 		double rx = width / nX; // the width of each pixel
@@ -95,30 +96,46 @@ public class Camera {
 		}
 		return List.of(ray); // create and return the ray
 	}
-
+	
+//	/**
+//	 * generate a square black board with 5 points 
+//	 * (one in the center and 4 in the vertices of the
+//	 *  square blocked in the rectangle shaped pixel) 
+//	 * @param nX number of pixels in the right-left axis
+//	 * @param nY number of pixels in the up-down axis
+//	 * @return a square black board with 5 points 
+//	 * (one in the center and 4 in the vertices of the
+//	 * square blocked in the rectangle shaped pixel)
+//	 */
+//	public BlackBoard getSempleBlackBoard(int nX, int nY) {
+//		double ry = height / nY; // the height of each pixel
+//		double rx = width / nX; // the width of each pixel
+//		double radius = rx > ry ? ry : rx;
+//		
+//		return BlackBoard.sempleSquare(rx > ry? ry : rx); // the square blocked in the rectangle shaped pixel
+//	}	
+//	
 	/**
-	 * generates sample of 5 rays (from center and 4 carves)
+	 * generate a square black board with n points 
+	 * randomly spread on the board
 	 * @param nX number of pixels in the right-left axis
 	 * @param nY number of pixels in the up-down axis
-	 * @param j  the column of the desired pixel
-	 * @param i  the row of the desired pixel
-	 * @return sample of 5 rays
+	 * @param n
+	 * @return a square black board with n points 
+	 * randomly spread on the board
 	 */
-	public List<Ray> getSempleRays(int nX, int nY, int j, int i) {
+	public List<Ray> constructBeamThroughPixel(BlackBoard bb, int nX, int nY, int i, int j) {
 		double ry = height / nY; // the height of each pixel
 		double rx = width / nX; // the width of each pixel
-		double radius = rx > ry ? ry : rx;
-		Point3D center = calcCenter(nX, nY, j, i);
-		Ray ray = new Ray(p0, center.subtract(p0));
-
-		return ray.getSempleRaysSquare(center, radius, vUp);
-		// List<Point3D> points = samplePoints(center, ry, rx);
-		// List<Ray> rays = new LinkedList<>();
-		// for (Point3D point : points) {
-		// 	rays.add(new Ray(p0, point.subtract(p0)));
-		// }
-		// return rays; // create and return the ray
-	}	
+		bb.setHeight(ry).setWidth(rx);
+		Ray mainRay = constructRayThroughPixel(nX, nY, i, j);
+		//calc distance
+		double a = (i + 0.5) * width;
+		double b = (j + 0.5) * height;
+		double distance = Math.sqrt(a*a + b*b + dis*dis);
+		return mainRay.createBeam(bb, distance, vUp, vRight);
+	}
+	
 	/**
 	 * calculates the center point in the pixel
 	 * @param nX number of pixels in the right-left axis
