@@ -236,7 +236,7 @@ public class BlackBoard {
 	 * @return it self
 	 */
 	public BlackBoard setWidth(double w) {
-		scaleWidth *= width/w;
+		scaleWidth *= w/width;
 		width = w;
 		return this;
 	}
@@ -247,7 +247,7 @@ public class BlackBoard {
 	 * @return it self
 	 */
 	public BlackBoard setHeight(double h) {
-		scaleHeight *= height/h;
+		scaleHeight *= h/height;
 		height = h;
 		return this;
 	}

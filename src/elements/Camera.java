@@ -130,8 +130,8 @@ public class Camera {
 		bb.setHeight(ry).setWidth(rx);
 		Ray mainRay = constructRayThroughPixel(nX, nY, i, j);
 		//calc distance
-		double a = (i + 0.5) * width;
-		double b = (j + 0.5) * height;
+		double a = (j + 0.5) * width;
+		double b = (i + 0.5) * height;
 		double distance = Math.sqrt(a*a + b*b + dis*dis);
 		return mainRay.createBeam(bb, distance, vUp, vRight);
 	}

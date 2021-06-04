@@ -87,7 +87,7 @@ public class Render {
 					Color sampleAvg = new Color(sampleColors);
 
 					if (calcVarianceColors(sampleColors, sampleAvg) < MAX_VARIANCE) {
-						imageWriter.writePixel(j, i, sampleAvg);
+						imageWriter.writePixel(i, j, sampleAvg);
 					} else {
 						List<Ray> rays = camera.constructBeamThroughPixel(randomBoard, nX, nY, i, j);
 						List<Color> colors = new LinkedList<>();
@@ -96,6 +96,7 @@ public class Render {
 						}
 						colors.addAll(sampleColors);
 						Color AvgColor = new Color(colors);
+						imageWriter.writePixel(i, j, AvgColor);
 					}			
 				}
 			}
@@ -112,7 +113,7 @@ public class Render {
 						colors.add(rayTracer.traceRay(ray));
 					}
 					Color AvgColor = new Color(colors);
-					
+					imageWriter.writePixel(i, j, AvgColor);
 				}
 			}
 		}		
