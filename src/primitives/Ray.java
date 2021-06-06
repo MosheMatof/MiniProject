@@ -175,24 +175,23 @@ public class Ray {
 	
 	/**
 	 * create a beam of rays that start at the origin point of this ray and goes through each point on the black board,
-	 * when locating the black board in the distance 'dist' from the origin of this ray   
+	 * when locating the black board with 'center' at it center
 	 * @param bb the black board
-	 * @param dist the distance from the origin point to locate the black board
+	 * @param center the point to put at the center of the black board when generates the points from it 
 	 * @param vUp the up direction of the black board
 	 * @param vRight the right direction of the black board
 	 * @return a beam of rays that start at the origin point of this ray and goes through each point on the black board,
-	 * 		   when locating the black board in the distance 'dist' from the origin of this ray
+	 * 		   when locating the black board with 'center' at it center
 	 */
-	public List<Ray> createBeam(BlackBoard bb, double dist, Vector vUp, Vector vRight){
-		List<Point3D> points = bb.generate3dPoints(vUp, vRight, getPoint(dist));
+	public List<Ray> createBeam(BlackBoard bb, Point3D center, Vector vUp, Vector vRight){
+		List<Point3D> points = bb.generate3dPoints(vUp, vRight, center);
 		List<Ray> beam = new LinkedList<>();
 		for(Point3D p : points) {
-			try {
-				beam.add(new Ray(origin, p.subtract(origin)));
-			}
-			catch (Exception e) {
-				var a = 5;
-			}
+			if(p.equals(origin))
+				continue;
+			Vector v = p.subtract(origin);
+			Vector vn = v.normalized();
+			beam.add(new Ray(origin, vn));
 		}
 		return beam;
 	}

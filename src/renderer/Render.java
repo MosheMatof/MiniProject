@@ -3,6 +3,8 @@ package renderer;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.MissingResourceException;
+import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 
 import elements.Camera;
 import primitives.Color;
@@ -16,6 +18,7 @@ public class Render {
 	private Camera camera;
 	private RayTracerBase rayTracer;
 	private int kA = 1;
+	final private BlackBoard sampleBoard = BlackBoard.sempleSquare(1);
 
 	private static final String RESOURCE_ERROR = "Renderer resource not set";
 	private static final String RENDER_CLASS = "Render";
@@ -227,13 +230,20 @@ public class Render {
 		final int nX = imageWriter.getNx();
 		final int nY = imageWriter.getNy();
 		final Pixel thePixel = new Pixel(nY, nX);
+		final BlackBoard randomBoard = BlackBoard.squareRandom(kA, 1);
+		int rbbsSize = 100;
+		BlackBoard rbbs[] = new BlackBoard[rbbsSize];
+		for(int i = 0; i < rbbsSize; i++)
+			rbbs[i] = BlackBoard.squareRandom(kA, 1);
 		// Generate threads
 		Thread[] threads = new Thread[threadsCount];
 		for (int i = threadsCount - 1; i >= 0; --i) {
 			threads[i] = new Thread(() -> {
 				Pixel pixel = new Pixel();
-				while (thePixel.nextPixel(pixel))
-					renderImage(nX, nY, pixel.col, pixel.row);
+				while (thePixel.nextPixel(pixel)) {
+					int randInt = ThreadLocalRandom.current().nextInt(0, rbbsSize);
+					renderImage(nX, nY, pixel.col, pixel.row, rbbs[randInt]);
+				}
 			});
 		}
 		// Start threads
@@ -257,10 +267,10 @@ public class Render {
 	 * Rendering the image by imageWriter according to the rayTracer and camera 
 	 * @param rays the number of rays per pixel
 	 */
-	private void renderImage(int nX, int nY, int j, int i) {
+	private void renderImage(int nX, int nY, int i, int j, BlackBoard randomBoard) {
 
-		BlackBoard sampleBoard = BlackBoard.sempleSquare(1);
-		BlackBoard randomBoard = BlackBoard.squareRandom(1, kA);
+//		BlackBoard sampleBoard = BlackBoard.sempleSquare(1);
+//		BlackBoard randomBoard = BlackBoard.squareRandom(kA, 1);
 		if (kA > 4) {
 			//get sample of 5 colors
 			List<Ray> sampleRays = camera.constructBeamThroughPixel(sampleBoard, nX, nY, i, j);
@@ -278,7 +288,7 @@ public class Render {
 				for (Ray ray : rays) {
 					colors.add(rayTracer.traceRay(ray));
 				}
-				colors.addAll(sampleColors);
+				colors.add(sampleAvg);
 				Color AvgColor = new Color(colors);
 				imageWriter.writePixel(i, j, AvgColor);
 			}
@@ -375,10 +385,11 @@ public class Render {
 
 		final int nX = imageWriter.getNx();
 		final int nY = imageWriter.getNy();
+		BlackBoard randomBoard = BlackBoard.squareRandom(kA, 1);
 		if (threadsCount == 0)
 			for (int i = 0; i < nY; ++i)
 				for (int j = 0; j < nX; ++j)
-					renderImage(nX, nY, j, i);
+					renderImage(nX, nY, j, i, randomBoard);
 		else
 			renderImageThreaded();
 		}
