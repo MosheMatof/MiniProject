@@ -106,23 +106,25 @@ public class BasicRayTracer extends RayTracerBase {
 
 			if (lightSource instanceof PointLight && kSS > 1) { 
 				PointLight pointLight = (PointLight)lightSource;
-				List<Vector> vecs = pointLight.getSampleVector(interP, n);
-				List<Vector> validVecs = new LinkedList<>();
-				for (Vector vc : vecs) {
-					if(Math.signum(vc.dotProduct(n)) == Math.signum(nv))
-						validVecs.add(vc);
-				}
-				if (!validVecs.isEmpty()) {
-					List<Vector> restVecs = pointLight.getRandomVectors(interP, n, kSS);
-					for (Vector vc : restVecs) {
-						if(Math.signum(vc.dotProduct(n)) == Math.signum(nv))
-							validVecs.add(vc);
-					}
+				List<Ray> sampRays = pointLight.getSampleBeam(interP, n);
+				int sampSize = sampRays.size();
+				sampRays.removeIf(r ->  Math.signum(r.getDir().dotProduct(n)) == Math.signum(nv));
+				// List<Vector> vecs = pointLight.getSampleVector(interP, n);
+				// List<Vector> validVecs = new LinkedList<>();
+				// for (Vector vc : vecs) {
+				// 	if(Math.signum(vc.dotProduct(n)) == Math.signum(nv))
+				// 		validVecs.add(vc);
+				// }
+				if (!sampRays.isEmpty()) {
+					List<Ray> restRays = pointLight.getRandomBeam(interP, n, kSS);
+					int restSize = restRays.size();
+					restRays.removeIf(r ->  Math.signum(r.getDir().dotProduct(n)) == Math.signum(nv));
+					restRays.addAll(sampRays);
 					double kTvalue = 0;
-					for (Vector vec : validVecs) {
-						 kTvalue += transparency(vec, n, intersection, lightSource);
+					for (Ray ray : restRays) {
+						 kTvalue += transparency(ray, intersection, lightSource);
 					}
-					kTvalue = kTvalue/(vecs.size() + restVecs.size());
+					kTvalue = kTvalue/(sampSize + restSize);
 					if (kTvalue * k > MIN_CALC_COLOR_K) {
 						Color lightIntensity = lightSource.getIntensity(interP).scale(kTvalue);
 						color = color.add(calcDiffusive(kd, l, n, lightIntensity),
@@ -132,7 +134,8 @@ public class BasicRayTracer extends RayTracerBase {
 			}
 			//the light is directional light
 			else if (Math.signum(nl) == Math.signum(nv)) {
-				double kTvalue = transparency(l, n, intersection, lightSource);
+				Ray ray = new Ray(interP, l.scale(-1), n);
+				double kTvalue = transparency(ray, intersection, lightSource);
 					if (kTvalue * k > MIN_CALC_COLOR_K) {
 						Color lightIntensity = lightSource.getIntensity(interP).scale(kTvalue);
 						color = color.add(calcDiffusive(kd, l, n, lightIntensity),
@@ -197,11 +200,9 @@ public class BasicRayTracer extends RayTracerBase {
 	 * @param lc the light source
 	 * @return true the value of light
 	 */
-	private double transparency(Vector l, Vector n, GeoPoint gp, LightSource lc) {
-		Vector lightDirection = l.scale(-1); // from point to light source
-		Ray lightRay = new Ray(gp.point, lightDirection, n); // build the (gp to light)'s ray
-		List<GeoPoint> intersections = scene.geometries.findGeoIntersections(lightRay,
-				lc.getDistance(lightRay.getOrigin())); // search for intersections with this ray
+	private double transparency(Ray ray, GeoPoint gp, LightSource lc) {
+		List<GeoPoint> intersections = scene.geometries.findGeoIntersections(ray,
+				lc.getDistance(ray.getOrigin())); // search for intersections with this ray
 		// return 1 if there wasn't any intersections with (gp to light)'s ray that aren't
 		// clear
 		double kTvalue = 1;
@@ -214,7 +215,23 @@ public class BasicRayTracer extends RayTracerBase {
 		}
 		return kTvalue;
 	}
-
+	// private double transparency(Vector l, Vector n, GeoPoint gp, LightSource lc) {
+	// 	Vector lightDirection = l.scale(-1); // from point to light source
+	// 	Ray lightRay = new Ray(gp.point, lightDirection, n); // build the (gp to light)'s ray
+	// 	List<GeoPoint> intersections = scene.geometries.findGeoIntersections(lightRay,
+	// 			lc.getDistance(lightRay.getOrigin())); // search for intersections with this ray
+	// 	// return 1 if there wasn't any intersections with (gp to light)'s ray that aren't
+	// 	// clear
+	// 	double kTvalue = 1;
+	// 	if (intersections != null) {
+	// 		for (GeoPoint geoPoint : intersections) {
+	// 			kTvalue *= geoPoint.geometry.getMaterial().kT;
+	// 			if (kTvalue < MIN_CALC_COLOR_K)
+	// 				return 0;
+	// 		}
+	// 	}
+	// 	return kTvalue;
+	// }
 	/**
 	 * find the intersection with the ray that is the closest intersection to the
 	 * start of the ray

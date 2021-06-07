@@ -4,6 +4,7 @@
 package renderer;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 
 import primitives.*;
@@ -14,8 +15,8 @@ import primitives.*;
 public class BlackBoard {
 
 	static class Point2D{
-		final double x;
-		final double y;
+		private double x;
+		private double y;
 
 		/**
 		 * ctor for Point2D
@@ -46,6 +47,7 @@ public class BlackBoard {
 	/**
 	 * generate a BlackBoard with points randomly arrange in 2X2 square boundary
 	 * @param n the square root of the number of points to generate in the blackBoard
+	 * @param size the dimantions of the square
 	 * @return a BlackBoard with points randomly arrange in square boundary
 	 */
 	public static BlackBoard squareRandom(int n, double size) {
@@ -88,17 +90,44 @@ public class BlackBoard {
 	 */
 	public static BlackBoard circleRandom(int n, double radius) {
 		LinkedList<Point2D> points = new LinkedList<Point2D>();
-		n *= RATIO_CIRCLE_SQUAR_SQURT;
-		double interval = 2*radius/(n-1);
-		for (double i = -radius; i < radius; i+=interval) {
-			for (double j = -radius; j < radius; j+=interval) {
-				double rH = ThreadLocalRandom.current().nextDouble(interval) + i;
-				double rW = ThreadLocalRandom.current().nextDouble(interval) + j;
-				if(Util.alignZero(rH*rH + rW*rW - radius*radius) > 0) // if this coordinates is outside of the circle
-					continue;
-				points.add(new Point2D(rW, rH));
-			}
+		// n *= RATIO_CIRCLE_SQUAR_SQURT;
+		// double interval = 2*radius/(n-1);
+		// for (double i = -radius; i < radius; i+=interval) {
+		// 	for (double j = -radius; j < radius; j+=interval) {
+		// 		double rH = ThreadLocalRandom.current().nextDouble(interval) + i;
+		// 		double rW = ThreadLocalRandom.current().nextDouble(interval) + j;
+		// 		if(Util.alignZero(rH*rH + rW*rW - radius*radius) > 0) // if this coordinates is outside of the circle
+		// 			continue;
+		// 		points.add(new Point2D(rW, rH));
+		// 	}
+		// }
+		for (int i = 0; i < n; i++) {
+			// create random polar system coordinates of a point in circle of radius r
+			double cosTeta = ThreadLocalRandom.current().nextDouble(-1,1);
+			double sinTeta = Math.sqrt(1 - cosTeta*cosTeta); // זהות בסיסית בטריגו
+			double d = ThreadLocalRandom.current().nextDouble(-radius,radius);
+			// Convert polar coordinates to Cartesian ones 
+			double x = d*cosTeta;
+			double y = d*sinTeta;
+			// pC - center of the circle
+			// p0 - start of central ray, v - its direction, distance - from p0 to pC
+			Point2D point = new Point2D(0, 0);
+			if (!Util.isZero(x)) 
+				point.x = x;
+			if (!Util.isZero(y)) 
+				point.y = y;
+			points.add(point); // normalized inside Ray ctor
 		}
+		// for (int i = 0; i < n; i++) {
+		// 	Point2D point = new Point2D(0, 0);
+		//  	double x = ThreadLocalRandom.current().nextDouble(-radius,radius);
+		// 	double y = ThreadLocalRandom.current().nextDouble(-radius,radius);
+		// 	if (!Util.isZero(x)) 
+		// 		point.x = x;
+		// 	if (!Util.isZero(y)) 
+		// 		point.y = y;
+		// 	points.add(point);	
+		// }			
 		return new BlackBoard(points);
 	}
 	

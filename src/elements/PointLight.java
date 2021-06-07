@@ -4,7 +4,11 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
+import javax.swing.text.html.CSS;
+
 import primitives.*;
+import renderer.BlackBoard;
+
 import static primitives.Util.*;
 
 
@@ -18,6 +22,9 @@ public class PointLight extends Light implements LightSource {
 	private double kC = 1;
 	private double kL = 0;
 	private double kQ = 0;
+
+	private BlackBoard randomBB = null;
+	private BlackBoard sampleBB = null;
 
 	/**
 	 * Extended PointLight constructor
@@ -56,47 +63,80 @@ public class PointLight extends Light implements LightSource {
 	/**
 	 * get sample vectors from the center and the edge of the light source to a given point
 	 * @param p the requested point
-	 * @param normal the normal in the requested point
+	 * @param n the normal in the requested point
 	 * @return the vector from the edge of the light source to a given point
 	 */
-	public List<Vector> getSampleVector(Point3D p, Vector normal) {
-		if (radius > 0) {
-			Vector l = p.subtract(position).normalize();
-			Vector v = l.crossProduct(normal).normalize();//orthogonal to the normal
-			return List.of(p.subtract(position.add(normal.scale(radius))).normalize(), 
-			p.subtract(position.add(normal.scale(-radius))).normalize(),
-			p.subtract(position.add(v.scale(radius))).normalize(),
-			p.subtract(position.add(v.scale(-radius))).normalize(), l);
+	public List<Ray> getSampleBeam(Point3D p, Vector n) {
+		Vector v = position.subtract(p);
+		Ray ray = new Ray(p, v, n);
+		if (sampleBB == null) {
+			sampleBB = BlackBoard.sempleCircle(radius);
 		}
-		return List.of(getL(p));
+		Vector vRight = v.crossProduct(n).normalize();
+		Vector vUp = v.crossProduct(vRight).normalize();
+		return ray.createBeam(sampleBB, position, vUp, vRight);
 	}
 	/**
 	 * get random vectors from all the radius of the light source, to the given point
 	 * @param p the requested point
-	 * @param normal the normal in the requested point
-	 * @param n the amount of vectors
+	 * @param n the normal in the requested point
+	 * @param kSS the amount of vectors
 	 * @return the vector from the edge of the light source to a given point
 	 */
-	public List<Vector> getRandomVectors(Point3D p, Vector normal, int n) {
-		if (radius > 0) {
-			Vector l = p.subtract(position).normalize();
-			Vector v = l.crossProduct(normal).normalize();//orthogonal to the normal
-
-			List<Vector> vectors = new LinkedList<>();
-			for (int i = 0; i < n; i++) {
-				Point3D pos = position;
-				double sn = ThreadLocalRandom.current().nextDouble(2 * radius) - radius;
-				if(!isZero(sn))
-					pos = pos.add(normal.scale(sn));
-				double sv = ThreadLocalRandom.current().nextDouble(2 * radius) - radius;
-				if(!isZero(sv))
-					pos = pos.add(v.scale(sv));
-				vectors.add(p.subtract(pos).normalize());
-			}
-			return vectors;
+	public List<Ray> getRandomBeam(Point3D p, Vector n, int kSS) {
+		Vector v = position.subtract(p);
+		Ray ray = new Ray(p, v, n);
+		if (randomBB == null) {
+			randomBB = BlackBoard.circleRandom(kSS,radius);
 		}
-		return List.of(getL(p));
+		Vector vRight = v.crossProduct(n).normalize();
+		Vector vUp = v.crossProduct(vRight).normalize();
+		return ray.createBeam(randomBB, position, vUp, vRight);
 	}
+	// /**
+	//  * get sample vectors from the center and the edge of the light source to a given point
+	//  * @param p the requested point
+	//  * @param normal the normal in the requested point
+	//  * @return the vector from the edge of the light source to a given point
+	//  */
+	// public List<Vector> getSampleVector(Point3D p, Vector normal) {
+	// 	if (radius > 0) {
+	// 		Vector l = p.subtract(position).normalize();
+	// 		Vector v = l.crossProduct(normal).normalize();//orthogonal to the normal
+	// 		return List.of(p.subtract(position.add(normal.scale(radius))).normalize(), 
+	// 		p.subtract(position.add(normal.scale(-radius))).normalize(),
+	// 		p.subtract(position.add(v.scale(radius))).normalize(),
+	// 		p.subtract(position.add(v.scale(-radius))).normalize(), l);
+	// 	}
+	// 	return List.of(getL(p));
+	// }
+	// /**
+	//  * get random vectors from all the radius of the light source, to the given point
+	//  * @param p the requested point
+	//  * @param normal the normal in the requested point
+	//  * @param n the amount of vectors
+	//  * @return the vector from the edge of the light source to a given point
+	//  */
+	// public List<Vector> getRandomVectors(Point3D p, Vector normal, int n) {
+	// 	if (radius > 0) {
+	// 		Vector l = p.subtract(position).normalize();
+	// 		Vector v = l.crossProduct(normal).normalize();//orthogonal to the normal
+
+	// 		List<Vector> vectors = new LinkedList<>();
+	// 		for (int i = 0; i < n; i++) {
+	// 			Point3D pos = position;
+	// 			double sn = ThreadLocalRandom.current().nextDouble(2 * radius) - radius;
+	// 			if(!isZero(sn))
+	// 				pos = pos.add(normal.scale(sn));
+	// 			double sv = ThreadLocalRandom.current().nextDouble(2 * radius) - radius;
+	// 			if(!isZero(sv))
+	// 				pos = pos.add(v.scale(sv));
+	// 			vectors.add(p.subtract(pos).normalize());
+	// 		}
+	// 		return vectors;
+	// 	}
+	// 	return List.of(getL(p));
+	// }
 	/**
 	 * set the kC
 	 * @param kC the kC to set
@@ -133,9 +173,24 @@ public class PointLight extends Light implements LightSource {
 		return radius;
 	}
 
+	// public BlackBoard getRandomBB(int kss){
+	// 	if (randomBB == null) {
+	// 		randomBB = BlackBoard.circleRandom(kss, radius);
+	// 	}
+	// 	return randomBB;
+	// }
+
+	// public BlackBoard getSampleBB(int kss){
+	// 	if (sampleBB == null) {
+	// 		sampleBB = BlackBoard.circleRandom(kss, radius);
+	// 	}
+	// 	return sampleBB;
+	// }
+
 	@Override
 	public double getDistance(Point3D point) {
 		return position.distance(point);
 	}
+
 
 }

@@ -18,7 +18,9 @@ public class Render {
 	private Camera camera;
 	private RayTracerBase rayTracer;
 	private int kA = 1;
-	final private BlackBoard sampleBoard = BlackBoard.sempleSquare(1);
+	private int rbbsSize = 100;
+	private final BlackBoard sampleBoard = BlackBoard.sempleSquare(1);	
+	private BlackBoard[] rbbs;
 
 	private static final String RESOURCE_ERROR = "Renderer resource not set";
 	private static final String RENDER_CLASS = "Render";
@@ -31,6 +33,11 @@ public class Render {
 	private static final double MAX_VARIANCE = 2;
 	private boolean print = false; // printing progress percentage
 
+	public Render() {
+		rbbs = new BlackBoard[rbbsSize];
+		for(int i = 0; i < rbbsSize; i++)
+			rbbs[i] = BlackBoard.squareRandom(kA, 1);
+	}
 	/**
 	 * Set multi-threading <br>
 	 * - if the parameter is 0 - number of cores less 2 is taken
@@ -222,7 +229,21 @@ public class Render {
 		this.kA = kA;
 		return this;
 	}
-/**
+
+	/**
+	 * reset the size of the list of random blackBoards
+	 * @param size the new size
+	 * @return instance of this scene
+	 */
+	public Render setRbbsSize(int size){
+		rbbsSize = size;
+		rbbs = new BlackBoard[rbbsSize];
+		for(int i = 0; i < rbbsSize; i++)
+			rbbs[i] = BlackBoard.squareRandom(kA, 1);
+		return this;
+	}
+
+	/**
 	 * This function renders image's pixel color map from the scene included with
 	 * the Renderer object - with multi-threading
 	 */
@@ -230,19 +251,14 @@ public class Render {
 		final int nX = imageWriter.getNx();
 		final int nY = imageWriter.getNy();
 		final Pixel thePixel = new Pixel(nY, nX);
-		final BlackBoard randomBoard = BlackBoard.squareRandom(kA, 1);
-		int rbbsSize = 100;
-		BlackBoard rbbs[] = new BlackBoard[rbbsSize];
-		for(int i = 0; i < rbbsSize; i++)
-			rbbs[i] = BlackBoard.squareRandom(kA, 1);
+		
 		// Generate threads
 		Thread[] threads = new Thread[threadsCount];
 		for (int i = threadsCount - 1; i >= 0; --i) {
 			threads[i] = new Thread(() -> {
 				Pixel pixel = new Pixel();
 				while (thePixel.nextPixel(pixel)) {
-					int randInt = ThreadLocalRandom.current().nextInt(0, rbbsSize);
-					renderImage(nX, nY, pixel.col, pixel.row, rbbs[randInt]);
+					renderImage(nX, nY, pixel.col, pixel.row);
 				}
 			});
 		}
@@ -267,10 +283,8 @@ public class Render {
 	 * Rendering the image by imageWriter according to the rayTracer and camera 
 	 * @param rays the number of rays per pixel
 	 */
-	private void renderImage(int nX, int nY, int i, int j, BlackBoard randomBoard) {
-
-//		BlackBoard sampleBoard = BlackBoard.sempleSquare(1);
-//		BlackBoard randomBoard = BlackBoard.squareRandom(kA, 1);
+	private void renderImage(int nX, int nY, int i, int j) {
+		int randInt = ThreadLocalRandom.current().nextInt(0, rbbsSize);
 		if (kA > 4) {
 			//get sample of 5 colors
 			List<Ray> sampleRays = camera.constructBeamThroughPixel(sampleBoard, nX, nY, i, j);
@@ -283,7 +297,7 @@ public class Render {
 			if (calcVarianceColors(sampleColors, sampleAvg) < MAX_VARIANCE) {
 				imageWriter.writePixel(i, j, sampleAvg);
 			} else {
-				List<Ray> rays = camera.constructBeamThroughPixel(randomBoard, nX, nY, i, j);
+				List<Ray> rays = camera.constructBeamThroughPixel( rbbs[randInt], nX, nY, i, j);
 				List<Color> colors = new LinkedList<>();
 				for (Ray ray : rays) {
 					colors.add(rayTracer.traceRay(ray));
@@ -294,7 +308,7 @@ public class Render {
 			}
 		}
 		else{
-			List<Ray> rays = camera.constructBeamThroughPixel(randomBoard, nX, nY, i, j);
+			List<Ray> rays = camera.constructBeamThroughPixel( rbbs[randInt], nX, nY, i, j);
 			List<Color> colors = new LinkedList<>();
 			for (Ray ray : rays) {
 				colors.add(rayTracer.traceRay(ray));
@@ -385,11 +399,10 @@ public class Render {
 
 		final int nX = imageWriter.getNx();
 		final int nY = imageWriter.getNy();
-		BlackBoard randomBoard = BlackBoard.squareRandom(kA, 1);
 		if (threadsCount == 0)
 			for (int i = 0; i < nY; ++i)
 				for (int j = 0; j < nX; ++j)
-					renderImage(nX, nY, j, i, randomBoard);
+					renderImage(nX, nY, j, i);
 		else
 			renderImageThreaded();
 		}
