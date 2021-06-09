@@ -3,7 +3,10 @@
  */
 package elements;
 
+import java.util.List;
+
 import primitives.*;
+import renderer.BlackBoard;
 
 /**
  * represent light source with a wide range of light
@@ -47,4 +50,23 @@ public class SpotLight extends PointLight implements LightSource {
 		return this;
 	}
 
+	@Override
+	public List<Ray> getSampleBeam(Point3D p) {
+		Ray ray = new Ray(position, direction);
+		if (sampleBB == null)
+			sampleBB = BlackBoard.sampleCircle(radius);
+
+		Vector vRight = direction.getOrthogonal().normalize();
+		Vector vUp = direction.crossProduct(vRight).normalize();
+		return ray.createBeamThrough(sampleBB, vUp, vRight, p);
+	}
+
+	@Override
+	public List<Ray> getRandomBeam(Point3D p, int kSS) {
+		Ray ray = new Ray(position, direction);
+		randomBB = BlackBoard.circleRandom(kSS, radius);
+		Vector vRight = direction.getOrthogonal().normalize();
+		Vector vUp = direction.crossProduct(vRight).normalize();
+		return ray.createBeamThrough(randomBB, vUp, vRight, p);
+	}
 }

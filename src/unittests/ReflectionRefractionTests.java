@@ -106,16 +106,21 @@ public class ReflectionRefractionTests {
 						.setEmission(new Color(java.awt.Color.BLUE)) //
 						.setMaterial(new Material().setKd(0.2).setKs(0.2).setShininess(30).setkT(0.6)));
 
-		scene.lights.add(new SpotLight(new Color(700, 400, 400), new Point3D(60, 50, 0), new Vector(0, 0, -1)) //
+		scene.lights.add(new SpotLight(new Color(700, 400, 400), new Point3D(60, 50, 0), new Vector(0, 0, -1)).setRadius(5) //
 				.setKl(4E-5).setKq(2E-7));
+//		scene.lights.add(new PointLight(new Color(700, 400, 400), new Point3D(60, 50, 0)).setRadius(5) //
+//				.setKl(4E-5).setKq(2E-7));
 
 		ImageWriter imageWriter = new ImageWriter("refractionShadow", 600, 600);
 		Render render = new Render() //
 				.setImageWriter(imageWriter) //
 				.setCamera(camera) //
-				.setRayTracer(new BasicRayTracer(scene));
+				.setRayTracer(new RayTracerSS(scene).setKSS(100)) //
+				.setKA(4) //
+				.setDebugPrint().setMultithreading(3);
 
 		render.renderImage();
+		render.printGrid(30, new Color(255, 0, 0));
 		render.writeToImage();
 	}
 
@@ -132,11 +137,10 @@ public class ReflectionRefractionTests {
 						.setMaterial(new Material().setKd(0.2).setKs(0.7).setShininess(50)),
 				new Sphere(new Point3D(1000, 700, -100), 1000) //
 //						.setEmission(new Color(100, 100, 300))
-						.setMaterial(new Material().setKs(10).setShininess(1000).setkR(1)),// ,
-				new Tube(new Ray(new Point3D(0, 0, 60), new Vector(0, 0, -90)), 60/*, 120*/)
-						//.setEmission(new Color(0, 0, 100))
-						.setMaterial(new Material().setKd(0.2).setKs(0.2).setShininess(80).setkT(0.7))
-		);
+						.setMaterial(new Material().setKs(10).setShininess(1000).setkR(1)), // ,
+				new Tube(new Ray(new Point3D(0, 0, 60), new Vector(0, 0, -90)), 60/* , 120 */)
+						// .setEmission(new Color(0, 0, 100))
+						.setMaterial(new Material().setKd(0.2).setKs(0.2).setShininess(80).setkT(0.7)));
 
 		scene.lights.add(new PointLight(new Color(700, 300, 500), new Point3D(-150, -150, 120)) //
 				.setKl(4E-5).setKq(2E-7));
@@ -145,7 +149,7 @@ public class ReflectionRefractionTests {
 		Render render = new Render() //
 				.setImageWriter(imageWriter) //
 				.setCamera(camera) //
-				.setRayTracer(new BasicRayTracer(scene)).setKA(5);
+				.setRayTracer(new BasicRayTracer(scene)).setKA(5).setDebugPrint().setMultithreading(3);
 
 		render.renderImage();
 		render.writeToImage();

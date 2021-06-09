@@ -3,6 +3,8 @@
  */
 package elements;
 
+import java.util.List;
+
 import primitives.*;
 
 /**
@@ -36,6 +38,20 @@ public class DirectionalLight extends Light implements LightSource{
 	public double getDistance(Point3D point) {
 		return Double.POSITIVE_INFINITY;
 	}
-	
 
+	@Override
+	public double getRadius() {
+		return 0;
+	}
+
+	@Override
+	public List<Ray> getSampleBeam(Point3D p) {
+		return List.of(new Ray(p, direction));
+	}
+
+	@Override
+	public List<Ray> getRandomBeam(Point3D p, int kSS) {
+		return List.of(new Ray(p, direction));
+	}
+	
 }

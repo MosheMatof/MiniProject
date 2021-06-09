@@ -177,4 +177,18 @@ public final class Vector {
 	public String toString() {
 		return "-" + head.toString() + "->";
 	}
+
+	/**
+	 * get an orthogonal vector to this vector
+	 * 
+	 * @return
+	 */
+	public Vector getOrthogonal() {
+		double x = head.x.coord < 0 ? -head.x.coord : head.x.coord;
+		double y = head.y.coord < 0 ? -head.y.coord : head.y.coord;
+		double z = head.z.coord < 0 ? -head.z.coord : head.z.coord;
+		if (x <= y && x <= z)
+			return new Vector(0, -z, y);
+		return new Vector(-y, x, 0);
+	}
 }

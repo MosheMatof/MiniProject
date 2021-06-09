@@ -3,7 +3,6 @@ package renderer;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.MissingResourceException;
-import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 
 import elements.Camera;
@@ -18,26 +17,24 @@ public class Render {
 	private Camera camera;
 	private RayTracerBase rayTracer;
 	private int kA = 1;
-	private int rbbsSize = 100;
-	private final BlackBoard sampleBoard = BlackBoard.sempleSquare(1);	
 	private BlackBoard[] rbbs;
-
-	private static final String RESOURCE_ERROR = "Renderer resource not set";
-	private static final String RENDER_CLASS = "Render";
-	private static final String IMAGE_WRITER_COMPONENT = "Image writer";
-	private static final String CAMERA_COMPONENT = "Camera";
-	private static final String RAY_TRACER_COMPONENT = "Ray tracer";
+	private int rbbsSize = 100;
+	private final BlackBoard sampleBoard = BlackBoard.sempleSquare(1);
 
 	private int threadsCount = 0;
 	private static final int SPARE_THREADS = 2; // Spare threads if trying to use all the cores
 	private static final double MAX_VARIANCE = 2;
 	private boolean print = false; // printing progress percentage
 
+	/**
+	 * Render constructor, initialize an array of random black boards
+	 */
 	public Render() {
 		rbbs = new BlackBoard[rbbsSize];
-		for(int i = 0; i < rbbsSize; i++)
+		for (int i = 0; i < rbbsSize; i++)
 			rbbs[i] = BlackBoard.squareRandom(kA, 1);
 	}
+
 	/**
 	 * Set multi-threading <br>
 	 * - if the parameter is 0 - number of cores less 2 is taken
@@ -188,9 +185,9 @@ public class Render {
 		}
 	}
 
-
 	/**
 	 * set the imageWriter of the render
+	 * 
 	 * @param imageWriter the imageWriter for the render
 	 * @return instance of this scene
 	 */
@@ -201,6 +198,7 @@ public class Render {
 
 	/**
 	 * set the camera of the render
+	 * 
 	 * @param camera the camera for the render
 	 * @return instance of this scene
 	 */
@@ -211,6 +209,7 @@ public class Render {
 
 	/**
 	 * set the rayTracer of the render
+	 * 
 	 * @param rayTracer the rayTracer for the render
 	 * @return instance of this scene
 	 */
@@ -220,25 +219,31 @@ public class Render {
 	}
 
 	/**
-	 * setter for the antialising factor.
-	 *  the number determine the dimension of the sample rays metrix in each pixel (kA*kA)
+	 * setter for the antialising factor. the number determine the dimension of the
+	 * sample rays metrix in each pixel (kA*kA)
+	 * 
 	 * @param kA the antialising factor
 	 * @return instance of this scene
 	 */
 	public Render setKA(int kA) {
+		if (this.kA != kA) { //if the kA has changed, regenerates the array of random black boards.
+			for (int i = 0; i < rbbsSize; i++)
+				rbbs[i] = BlackBoard.squareRandom(kA, 1);
+		}
 		this.kA = kA;
 		return this;
 	}
 
 	/**
 	 * reset the size of the list of random blackBoards
+	 * 
 	 * @param size the new size
 	 * @return instance of this scene
 	 */
-	public Render setRbbsSize(int size){
+	public Render setRbbsSize(int size) {
 		rbbsSize = size;
 		rbbs = new BlackBoard[rbbsSize];
-		for(int i = 0; i < rbbsSize; i++)
+		for (int i = 0; i < rbbsSize; i++)
 			rbbs[i] = BlackBoard.squareRandom(kA, 1);
 		return this;
 	}
@@ -251,7 +256,7 @@ public class Render {
 		final int nX = imageWriter.getNx();
 		final int nY = imageWriter.getNy();
 		final Pixel thePixel = new Pixel(nY, nX);
-		
+
 		// Generate threads
 		Thread[] threads = new Thread[threadsCount];
 		for (int i = threadsCount - 1; i >= 0; --i) {
@@ -279,14 +284,16 @@ public class Render {
 		if (print)
 			System.out.print("\r100%");
 	}
-	/** 
-	 * Rendering the image by imageWriter according to the rayTracer and camera 
+
+	/**
+	 * Rendering the image by imageWriter according to the rayTracer and camera
+	 * 
 	 * @param rays the number of rays per pixel
 	 */
 	private void renderImage(int nX, int nY, int i, int j) {
 		int randInt = ThreadLocalRandom.current().nextInt(0, rbbsSize);
 		if (kA > 4) {
-			//get sample of 5 colors
+			// get sample of 5 colors
 			List<Ray> sampleRays = camera.constructBeamThroughPixel(sampleBoard, nX, nY, i, j);
 			List<Color> sampleColors = new LinkedList<>();
 			for (Ray ray : sampleRays) {
@@ -297,7 +304,7 @@ public class Render {
 			if (calcVarianceColors(sampleColors, sampleAvg) < MAX_VARIANCE) {
 				imageWriter.writePixel(i, j, sampleAvg);
 			} else {
-				List<Ray> rays = camera.constructBeamThroughPixel( rbbs[randInt], nX, nY, i, j);
+				List<Ray> rays = camera.constructBeamThroughPixel(rbbs[randInt], nX, nY, i, j);
 				List<Color> colors = new LinkedList<>();
 				for (Ray ray : rays) {
 					colors.add(rayTracer.traceRay(ray));
@@ -306,70 +313,43 @@ public class Render {
 				Color AvgColor = new Color(colors);
 				imageWriter.writePixel(i, j, AvgColor);
 			}
-		}
-		else{
-			List<Ray> rays = camera.constructBeamThroughPixel( rbbs[randInt], nX, nY, i, j);
+		} else {
+			List<Ray> rays = camera.constructBeamThroughPixel(rbbs[randInt], nX, nY, i, j);
 			List<Color> colors = new LinkedList<>();
 			for (Ray ray : rays) {
 				colors.add(rayTracer.traceRay(ray));
 			}
 			Color AvgColor = new Color(colors);
 			imageWriter.writePixel(i, j, AvgColor);
-		}		
+		}
 	}
 
-	
-	
-//	/**
-//	 * creates image by only 1 ray from each pixel
-//	 */
-//	private void renderImageByRandomRays(int i, int j, Color average) {
-//		List<Ray> randomRays = camera.constructRaysThroughPixel(imageWriter.getNx(), imageWriter.getNy(), j, i, kA);
-//		List<Color> colors = new LinkedList<>();
-//		if(average != null)
-//			colors.add(average);
-//		for (Ray ray : randomRays) {
-//			colors.add(rayTracer.traceRay(ray));
-//		}
-//		Color averageColor = new Color(colors);
-//		imageWriter.writePixel(j, i, averageColor);
-//	}
-
-	// /**
-	//  * calculate the average color from all the colors in the list 'colors'
-	//  * @param colors the list of colors to find the average from
-	//  * @return the average color from all the colors in the list 'colors'
-	//  */
-	// private Color averageColor(List<Color> colors) {
-	// 	Color sumColors = Color.BLACK;
-	// 	for (Color color : colors) {
-	// 		sumColors = sumColors.add(new Color(color.getColor()));
-	// 	}
-	// 	return sumColors.reduce(colors.size());
-	// }
 	/**
 	 * calculates the variance of list of color
-	 * @param colors list of colors
+	 * 
+	 * @param colors  list of colors
 	 * @param average the averade color
-	 * @return the variance 
+	 * @return the variance
 	 */
 	private double calcVarianceColors(List<Color> colors, Color average) {
 		int rAvg = average.getColor().getRed();
 		int gAvg = average.getColor().getGreen();
 		int bAvg = average.getColor().getBlue();
-		double r = 0,g = 0,b = 0;
+		double r = 0, g = 0, b = 0;
 		for (Color color : colors) {
 			r += Math.abs(color.getColor().getRed() - rAvg);
 			g += Math.abs(color.getColor().getGreen() - gAvg);
 			b += Math.abs(color.getColor().getBlue() - bAvg);
 		}
-		return (r+g+b)/colors.size();
+		return (r + g + b) / colors.size();
 	}
 
 	/**
-	 * prints a grid on the image. the spaces between the lines is the size of the "interval"
+	 * prints a grid on the image. the spaces between the lines is the size of the
+	 * "interval"
+	 * 
 	 * @param interval the space size between the lines
-	 * @param color the color of the grid
+	 * @param color    the color of the grid
 	 */
 	public void printGrid(int interval, Color color) {
 		int nX = imageWriter.getNx();
@@ -405,7 +385,8 @@ public class Render {
 					renderImage(nX, nY, j, i);
 		else
 			renderImageThreaded();
-		}
+	}
+
 	/**
 	 * Generates the image
 	 */

@@ -5,7 +5,6 @@ import static primitives.Util.*;
 
 import java.util.List;
 
-import geometries.Intersectable.GeoPoint;
 /**
  * represents an infinite tube in a 3d space
  */

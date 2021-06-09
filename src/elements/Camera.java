@@ -3,9 +3,7 @@
  */
 package elements;
 
-import java.util.LinkedList;
 import java.util.List;
-import java.util.concurrent.*;
 
 import primitives.*;
 import renderer.BlackBoard;
@@ -32,7 +30,6 @@ public class Camera {
 	 * @param vTo the direction vector of the camera
 	 */
 	public Camera(Point3D p0, Vector vTo, Vector vUp) {
-		super();
 		this.p0 = p0;
 		this.vUp = vUp.normalize();
 		this.vTo = vTo.normalize();
@@ -43,6 +40,25 @@ public class Camera {
 			throw new IllegalArgumentException("the vTo and vUp aren't orthogonal");
 		}
 
+	}
+	/**
+	 * camera constructor by position and target
+	 * 
+	 * @param p0  the location point of the camera
+	 * @param vUp the direction vector from the top of the camera
+	 * @param vTo the direction vector of the camera
+	 */
+	public Camera(Point3D pos, Point3D target) {
+		this.p0 = pos;
+		vTo = target.subtract(pos).normalize();
+		try {
+			vRight = vTo.crossProduct(Vector.Y).normalize();
+			vUp = vRight.crossProduct(vTo).normalize();
+		} catch (IllegalArgumentException e) {
+			// Camera is codirected with Y axis
+			vUp = Vector.Z;
+			vRight = vTo.crossProduct(vUp);
+		}
 	}
 
 	/**
@@ -69,9 +85,9 @@ public class Camera {
 		return this;
 	}
 
-	
 	/**
 	 * generate a beam of rays that start at p0 and goes through the pixel
+	 * 
 	 * @param bb the black board for the beam
 	 * @param nX number of pixels in the right-left axis
 	 * @param nY number of pixels in the up-down axis
@@ -80,20 +96,19 @@ public class Camera {
 	 * @return a beam of rays that start at p0 and goes through the pixel
 	 */
 	public List<Ray> constructBeamThroughPixel(BlackBoard bb, int nX, int nY, int i, int j) {
-		
+
 		double ry = height / nY; // the height of each pixel
 		double rx = width / nX; // the width of each pixel
 		bb.setHeight(ry).setWidth(rx);
 		Point3D center = calcCenter(nX, nY, i, j);
 		Ray mainRay = new Ray(p0, center.subtract(p0));
-		//calc distance
-		double a = (i + 0.5) * width;
-		double b = (j + 0.5) * height;
+		// calc distance
 		return mainRay.createBeam(bb, center, vUp, vRight);
 	}
-	
+
 	/**
 	 * calculates the center point in the pixel
+	 * 
 	 * @param nX number of pixels in the right-left axis
 	 * @param nY number of pixels in the up-down axis
 	 * @param j  the column of the desired pixel
@@ -133,7 +148,7 @@ public class Camera {
 			vRight = vTo.crossProduct(Vector.Y).normalize();
 			vUp = vRight.crossProduct(vTo).normalize();
 		} catch (IllegalArgumentException e) {
-			// Camera is codirected with Y axis
+			// Camera is co-directed with Y axis
 			vUp = Vector.Z;
 			vRight = vTo.crossProduct(vUp);
 		}
@@ -202,10 +217,11 @@ public class Camera {
 	public double getDis() {
 		return dis;
 	}
-	
+
 	/**
 	 * generate the ray that start from the camera and go trough the i,j pixel in
 	 * the view plane
+	 * 
 	 * @param nX number of pixels in the right-left axis
 	 * @param nY number of pixels in the up-down axis
 	 * @param j  the column of the desired pixel
@@ -213,24 +229,23 @@ public class Camera {
 	 * @return a ray from the camera that pass trough the desired pixel
 	 */
 	public Ray constructRayThroughPixel(int nX, int nY, int j, int i) {
-	 	double ry = height / nY; // the height of each pixel
-	 	double rx = width / nX; // the width of each pixel
+		double ry = height / nY; // the height of each pixel
+		double rx = width / nX; // the width of each pixel
 
-	 	Point3D pCenter = p0.add(vTo.scale(dis)); // the center of the view plane
-	 	double yi = ((nY - 1) / 2d - i) * ry; // the distance from the center of the view plane to the middle of the
+		Point3D pCenter = p0.add(vTo.scale(dis)); // the center of the view plane
+		double yi = ((nY - 1) / 2d - i) * ry; // the distance from the center of the view plane to the middle of the
 												// pixel in the y axis
-	 	double xj = (j - (nX - 1) / 2d) * rx; // the distance from the center of the view plane to the middle of the
-	 											// pixel in the y axis
+		double xj = (j - (nX - 1) / 2d) * rx; // the distance from the center of the view plane to the middle of the
+												// pixel in the y axis
 		Point3D pIJ = pCenter;
-	 	if (yi != 0) { // to prevent a creation of a zero vector
-	 		pIJ = pIJ.add(vUp.scale(yi));
+		if (yi != 0) { // to prevent a creation of a zero vector
+			pIJ = pIJ.add(vUp.scale(yi));
 		}
-	 	if (xj != 0) { // to prevent a creation of a zero vector
-	 		pIJ = pIJ.add(vRight.scale(xj));
-	 	}
-		
-	 	return new Ray(p0, pIJ.subtract(p0)); // create and return the ray
-	 }
+		if (xj != 0) { // to prevent a creation of a zero vector
+			pIJ = pIJ.add(vRight.scale(xj));
+		}
 
-	
+		return new Ray(p0, pIJ.subtract(p0)); // create and return the ray
+	}
+
 }

@@ -557,7 +557,7 @@ public class TeapotTest {
 	/**
 	 * Produce a scene with a 3D model and render it into a png image
 	 */
-	@Test
+	//@Test
 	public void teapot1() {
 		scene.geometries.add( //
 				new Triangle(pnts[7], pnts[6], pnts[1]).setEmission(color).setMaterial(mat), //
