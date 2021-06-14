@@ -5,9 +5,9 @@ package geometries;
 
 import java.util.List;
 import java.util.stream.Collectors;
-
 import primitives.Point3D;
 import primitives.Ray;
+import primitives.Util;
 import primitives.Vector;
 
 /**
@@ -88,7 +88,40 @@ public interface Intersectable {
 		}
 		
 		public boolean isIntersect(Ray r) {
-			return true;
+			double dx = r.getDir().getX();
+			double dy = r.getDir().getY();
+			double dz = r.getDir().getZ();
+			double x = r.getOrigin().getX();
+			double y = r.getOrigin().getY();
+			double z = r.getOrigin().getZ();
+			
+			//find the interval that the ray is between minX and maxX
+			double t1x = dx != 0? (minX - x) / dx: Double.POSITIVE_INFINITY * (minX - x);
+			double t2x = dx != 0? (maxX - x) / dx: Double.POSITIVE_INFINITY * (maxX - x);
+			//if t1x > t2x swap t1x and t2x
+			if (t1x > t2x) {double temp = t1x; t1x = t2x; t2x = temp;}
+			
+			//find the interval that the ray is between minY and maxY
+			double t1y = dy != 0? (minY - y) / dy: Double.POSITIVE_INFINITY * (minY - y);
+			double t2y = dy != 0? (maxY - y) / dy: Double.POSITIVE_INFINITY * (maxY - y);
+			//if t1y > t2y swap t1y and t2y
+			if (t1y > t2y) {double temp = t1y; t1y = t2y; t2y = temp;}
+			
+			//find the interval that the ray is between minZ and maxZ
+			double t1z = dz != 0? (minZ - z) / dz: Double.POSITIVE_INFINITY * (minZ - z);
+			double t2z = dz != 0? (maxZ - z) / dz: Double.POSITIVE_INFINITY * (maxZ - z);
+			//if t1z > t2z swap t1z and t2z
+			if (t1z > t2z) {double temp = t1z; t1z = t2z; t2z = temp;}
+			
+			//find the intersection between all the intervals
+			//max(t1x, t1y, t1z);
+			double tS = t1x > t1y? t1y > t1z? t1y : t1z : t1x > t1z? t1x: t1z; 
+			//min(t2x, t2y, t2z)
+			double tE = t2x < t2y? t2x < t2z? t2x : t2z : t2y < t2z? t2y: t2z; 
+			
+			//tE < 0 means that the ray start after the boundary
+			if(Util.alignZero(tE) <= 0) return false;
+			return  Util.alignZero(tE - tS) > 0;
 		}
 	}
 	

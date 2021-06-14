@@ -191,4 +191,28 @@ public final class Vector {
 			return new Vector(0, -z, y);
 		return new Vector(-y, x, 0);
 	}
+	
+	/**
+	 * getter for the x coordinate of the vector
+	 * @return the x coordinate of the vector
+	 */
+	public double getX() {
+		return head.getX();
+	}
+	
+	/**
+	 * getter for the y coordinate of the vector
+	 * @return the y coordinate of the vector
+	 */
+	public double getY() {
+		return head.getY();
+	}
+	
+	/**
+	 * getter for the z coordinate of the vector
+	 * @return the z coordinate of the vector
+	 */
+	public double getZ() {
+		return head.getZ();
+	}
 }

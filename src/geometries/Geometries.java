@@ -1,7 +1,10 @@
 package geometries;
 
+import java.lang.invoke.LambdaConversionException;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.function.BiPredicate;
+import java.util.function.Predicate;
 
 import geometries.Intersectable.Boundary;
 import primitives.Ray;
@@ -10,6 +13,9 @@ import primitives.Ray;
  * list of Intersectable objects as a composite object
  */
 public class Geometries implements Intersectable{
+	
+	static final int MAX_BRANCH = 3;
+	
 	private LinkedList<Intersectable> components = new LinkedList<Intersectable>();
 	private Boundary boundary;
 
@@ -54,4 +60,15 @@ public class Geometries implements Intersectable{
 		return intrsctPnts;
 	}
 
+	@Override
+	public Boundary getBoundary() {
+		return boundary;
+	}
+
+	public void constructHeirarchy() {
+		if(components.size() > MAX_BRANCH) {
+			BiPredicate<Intersectable, Intersectable> sort;
+			if(true) {}
+		}
+	}
 }
