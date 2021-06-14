@@ -194,5 +194,21 @@ public class Color {
 			throw new IllegalArgumentException("Can't scale a color by a by a number lower than 1");
 		return new Color(r / k, g / k, b / k);
 	}
+	
+	/**
+	 * calculates the variance between this color and the given list of colors
+	 * 
+	 * @param colors  list of colors
+	 * @return the variance
+	 */
+	public double getVariance(List<Color> colors) {
+		double r = 0, g = 0, b = 0;
+		for (Color color : colors) {
+			r += Math.abs((color.r < 255 ? color.r : 255) - this.r);
+			g += Math.abs((color.g < 255 ? color.g : 255) - this.g);
+			b += Math.abs((color.b < 255 ? color.b : 255) - this.b);
+		}
+		return (r + g + b) / colors.size();
+	}
 
 }

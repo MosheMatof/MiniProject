@@ -95,12 +95,12 @@ public class Camera {
 	 * @param i  the row of the desired pixel
 	 * @return a beam of rays that start at p0 and goes through the pixel
 	 */
-	public List<Ray> constructBeamThroughPixel(BlackBoard bb, int nX, int nY, int i, int j) {
+	public List<Ray> constructBeamThroughPixel(BlackBoard bb, int nX, int nY, int j, int i) {
 
 		double ry = height / nY; // the height of each pixel
 		double rx = width / nX; // the width of each pixel
 		bb.setHeight(ry).setWidth(rx);
-		Point3D center = calcCenter(nX, nY, i, j);
+		Point3D center = calcCenter(nX, nY, j, i);
 		Ray mainRay = new Ray(p0, center.subtract(p0));
 		// calc distance
 		return mainRay.createBeam(bb, center, vUp, vRight);

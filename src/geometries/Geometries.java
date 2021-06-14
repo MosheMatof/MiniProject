@@ -3,6 +3,7 @@ package geometries;
 import java.util.LinkedList;
 import java.util.List;
 
+import geometries.Intersectable.Boundary;
 import primitives.Ray;
 
 /**
@@ -10,6 +11,7 @@ import primitives.Ray;
  */
 public class Geometries implements Intersectable{
 	private LinkedList<Intersectable> components = new LinkedList<Intersectable>();
+	private Boundary boundary;
 
 	/**
 	 * Default constructor: initialize the class's components list to be an empty list

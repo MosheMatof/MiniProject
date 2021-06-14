@@ -74,11 +74,11 @@ public class MP1 {
 //            	.setKB(40).setKl(0.0001).setKq(0.00005))
 		);
 
-		ImageWriter imageWriter = new ImageWriter("mini project 1", 800, 450);
+		ImageWriter imageWriter = new ImageWriter("mini project 1", 1024, 576);
 		Render render = new Render() //
 				.setImageWriter(imageWriter) //
 				.setCamera(camera) //
-				.setRayTracer(new BasicRayTracer(scene)).setMultithreading(3).setDebugPrint();
+				.setRayTracer(new BasicRayTracer(scene)).setMultithreading(3).setDebugPrint().setKA(4);
 
 		render.renderImage();
 		render.writeToImage();
@@ -95,15 +95,19 @@ public class MP1 {
 		scene.setAmbientLight(new AmbientLight(new Color(255, 255, 255), 0.1));
 
 		Geometry sun = new Sphere(new Point3D(0, 30, 0), 4).setEmission(new Color(255, 255, 180))
-				.setMaterial(new Material().setKs(1).setShininess(1000));
+				.setMaterial(new Material().setkT(1));
 		Geometry floor = new Plane(Point3D.ZERO, new Vector(0, 1, 0)).setEmission(new Color(2, 2, 20))
 				.setMaterial(new Material().setKd(0.8).setkR(0.2).setKs(1).setShininess(1));			
 
 		scene.geometries.add( floor, sun
 				,new Cylinder(new Ray(new Point3D(-20, 0, 0), Vector.Y), 2, 15)
+				.setMaterial(new Material().setKd(0.8).setkR(0.2).setKs(1).setShininess(1))
 				,new Cylinder(new Ray(new Point3D(20, 0, 0), Vector.Y), 2, 15)
+				.setMaterial(new Material().setKd(0.8).setkR(0.2).setKs(1).setShininess(1))
 				,new Cylinder(new Ray(new Point3D(0, 0, 20), Vector.Y), 2, 15)
+				.setMaterial(new Material().setKd(0.8).setkR(0.2).setKs(1).setShininess(1))
 				,new Cylinder(new Ray(new Point3D(0, 0, -20), Vector.Y), 2, 15)
+				.setMaterial(new Material().setKd(0.8).setkR(0.2).setKs(1).setShininess(1))
 				);
 
 
@@ -114,7 +118,7 @@ public class MP1 {
 		Render render = new Render() //
 				.setImageWriter(imageWriter) //
 				.setCamera(camera) //
-				.setRayTracer(new RayTracerSS(scene).setKSS(50)).setMultithreading(3).setDebugPrint();
+				.setRayTracer(new RayTracerSS(scene).setKSS(50)).setMultithreading(3).setDebugPrint().setKA(4);
 
 		render.renderImage();
 		render.writeToImage();

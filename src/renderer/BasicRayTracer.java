@@ -166,11 +166,12 @@ public class BasicRayTracer extends RayTracerBase {
 	 */
 	/**
 	 * 
-	 * @param ls  the light source
+	 * @param ls           the light source
 	 * @param intersection
-	 * @param l the ray direction from the light to the intersection point
-	 * @param n normal of the intersection point
-	 * @param nv n*v dot-product
+	 * @param l            the ray direction from the light to the intersection
+	 *                     point
+	 * @param n            normal of the intersection point
+	 * @param nv           n*v dot-product
 	 * @return the level of transparency
 	 */
 	protected double transparency(LightSource ls, GeoPoint intersection, Vector l, Vector n, double nv) {
@@ -180,7 +181,7 @@ public class BasicRayTracer extends RayTracerBase {
 		// return 1 if there wasn't any intersections with (gp to light)'s ray that
 		// aren't clear
 		double kTvalue = l.dotProduct(n) * nv > 0 ? 1 : 0; // : intersection.geometry.getMaterial().kT;
-		if (intersections != null && kTvalue >=  MIN_CALC_COLOR_K) {
+		if (intersections != null && kTvalue >= MIN_CALC_COLOR_K) {
 			for (GeoPoint geoPoint : intersections) {
 				kTvalue *= geoPoint.geometry.getMaterial().kT;
 				if (kTvalue < MIN_CALC_COLOR_K)

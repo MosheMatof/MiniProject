@@ -29,7 +29,6 @@ public class BlackBoard {
 			this.x = x;
 			this.y = y;
 		}
-
 	}
 
 	/**
@@ -215,9 +214,9 @@ public class BlackBoard {
 		for (Point2D point2d : points) {
 			Point3D point3d = center;
 			if (!isZero(point2d.x))
-				point3d = point3d.add(right.scale(point2d.x * scaleWidth/2));
+				point3d = point3d.add(right.scale(point2d.x * scaleWidth));
 			if (!isZero(point2d.y))
-				point3d = point3d.add(up.scale(point2d.y * scaleHeight/2));
+				point3d = point3d.add(up.scale(point2d.y * scaleHeight));
 			points3d.add(point3d);
 		}
 		return points3d;
@@ -230,8 +229,11 @@ public class BlackBoard {
 	 * @return it self
 	 */
 	public BlackBoard setWidth(double w) {
-		scaleWidth *= w / width;
-		width = w;
+		if (w != width) {
+			//scaleWidth *= w / width;
+			scaleWidth = w / 2;
+			width = w;
+		}
 		return this;
 	}
 
@@ -242,8 +244,11 @@ public class BlackBoard {
 	 * @return it self
 	 */
 	public BlackBoard setHeight(double h) {
-		scaleHeight *= h / height;
-		height = h;
+		if (h != height) {
+			//scaleHeight *= h / height;
+			scaleHeight = h / 2;
+			height = h;
+		}		
 		return this;
 	}
 

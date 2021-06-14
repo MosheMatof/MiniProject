@@ -103,4 +103,11 @@ public class Sphere extends Geometry {
 		return List.of(new GeoPoint(this, ray.getPoint(t1)), new GeoPoint(this, p2));
 	}
 
+	@Override
+	public Boundary getBoundary() {
+		if (this.b) {
+			
+		}
+	}
+
 }

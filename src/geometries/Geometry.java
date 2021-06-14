@@ -9,6 +9,7 @@ public abstract class Geometry implements Intersectable {
 
 	private Color emission = Color.BLACK;
 	private Material material = new Material();
+	protected Boundary boundary;
 	
 	/**
 	 * get the orthogonal vector in length 1 from a point on a geometry object

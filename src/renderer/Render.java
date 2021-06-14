@@ -290,59 +290,40 @@ public class Render {
 	 * 
 	 * @param rays the number of rays per pixel
 	 */
-	private void renderImage(int nX, int nY, int i, int j) {
+	private void renderImage(int nX, int nY, int j, int i) {
 		int randInt = ThreadLocalRandom.current().nextInt(0, rbbsSize);
 		if (kA > 4) {
 			// get sample of 5 colors
-			List<Ray> sampleRays = camera.constructBeamThroughPixel(sampleBoard, nX, nY, i, j);
+			List<Ray> sampleRays = camera.constructBeamThroughPixel(sampleBoard, nX, nY, j, i);
 			List<Color> sampleColors = new LinkedList<>();
 			for (Ray ray : sampleRays) {
 				sampleColors.add(rayTracer.traceRay(ray));
 			}
 			Color sampleAvg = new Color(sampleColors);
 
-			if (calcVarianceColors(sampleColors, sampleAvg) < MAX_VARIANCE) {
-				imageWriter.writePixel(i, j, sampleAvg);
+			if (sampleAvg.getVariance(sampleColors) < MAX_VARIANCE) {
+				imageWriter.writePixel(j, i, sampleAvg);
 			} else {
-				List<Ray> rays = camera.constructBeamThroughPixel(rbbs[randInt], nX, nY, i, j);
+				List<Ray> rays = camera.constructBeamThroughPixel(rbbs[randInt], nX, nY, j, i);
 				List<Color> colors = new LinkedList<>();
 				for (Ray ray : rays) {
 					colors.add(rayTracer.traceRay(ray));
 				}
 				colors.add(sampleAvg);
 				Color AvgColor = new Color(colors);
-				imageWriter.writePixel(i, j, AvgColor);
+				imageWriter.writePixel(j, i, AvgColor);
 			}
 		} else {
-			List<Ray> rays = camera.constructBeamThroughPixel(rbbs[randInt], nX, nY, i, j);
+			List<Ray> rays = camera.constructBeamThroughPixel(rbbs[randInt], nX, nY, j, i);
 			List<Color> colors = new LinkedList<>();
 			for (Ray ray : rays) {
 				colors.add(rayTracer.traceRay(ray));
 			}
 			Color AvgColor = new Color(colors);
-			imageWriter.writePixel(i, j, AvgColor);
+			imageWriter.writePixel(j, i, AvgColor);
 		}
 	}
 
-	/**
-	 * calculates the variance of list of color
-	 * 
-	 * @param colors  list of colors
-	 * @param average the averade color
-	 * @return the variance
-	 */
-	private double calcVarianceColors(List<Color> colors, Color average) {
-		int rAvg = average.getColor().getRed();
-		int gAvg = average.getColor().getGreen();
-		int bAvg = average.getColor().getBlue();
-		double r = 0, g = 0, b = 0;
-		for (Color color : colors) {
-			r += Math.abs(color.getColor().getRed() - rAvg);
-			g += Math.abs(color.getColor().getGreen() - gAvg);
-			b += Math.abs(color.getColor().getBlue() - bAvg);
-		}
-		return (r + g + b) / colors.size();
-	}
 
 	/**
 	 * prints a grid on the image. the spaces between the lines is the size of the
@@ -382,7 +363,7 @@ public class Render {
 		if (threadsCount == 0)
 			for (int i = 0; i < nY; ++i)
 				for (int j = 0; j < nX; ++j)
-					renderImage(nX, nY, j, i);
+					renderImage(nX, nY,j, i);
 		else
 			renderImageThreaded();
 	}

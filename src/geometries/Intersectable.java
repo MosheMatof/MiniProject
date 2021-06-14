@@ -51,6 +51,7 @@ public interface Intersectable {
 			return this.point.equals(other.point) && this.geometry.equals(other.geometry);
 		}
 		
+		
 		/**
 		 * get the normal of the geometry at this point
 		 * @return the normal of the geometry at this point
@@ -65,6 +66,31 @@ public interface Intersectable {
 		}
 		
 	}
+	/**
+	 * a region in space
+	 */
+	public static class Boundary {
+
+		final double maxX, minX;
+		final double maxY, minY;
+		final double maxZ, minZ;
+		
+		/**
+		 * full constructor for {@link Boundary}
+		 */
+		public Boundary(double maxX, double minX, double maxY, double minY, double maxZ, double minZ) {
+			this.maxX = maxX;
+			this.minX = minX;
+			this.maxY = maxY;
+			this.minY = minY;
+			this.maxZ = maxZ;
+			this.minZ = minZ;
+		}
+		
+		public boolean isIntersect(Ray r) {
+			return true;
+		}
+	}
 	
 	/**
 	 * computes the intersection points between this object and the ray
@@ -75,7 +101,6 @@ public interface Intersectable {
 		var geoList = findGeoIntersections(ray, Double.POSITIVE_INFINITY);
 	    return geoList == null ? null
 	                           : geoList.stream().map(gp -> gp.point).collect(Collectors.toList());
-
 	}
 	
 	/**
@@ -85,4 +110,6 @@ public interface Intersectable {
 	 * @return a list of {@link GeoPoint} of the intersection points
 	 */
 	List<GeoPoint> findGeoIntersections(Ray ray, double maxDist);
+	
+	public Boundary getBoundary();
 }
