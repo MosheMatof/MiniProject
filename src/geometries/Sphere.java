@@ -87,7 +87,7 @@ public class Sphere extends Geometry {
 		// the distance between the origin of the ray and the most negative intersection
 		// point
 		double t1 = alignZero(tm - th);
-		if (t1 > maxDist) {
+		if (t1 >= maxDist) {
 			return null;
 		}
 
@@ -98,7 +98,7 @@ public class Sphere extends Geometry {
 		}
 
 		if (t2 >= maxDist) {
-			return t1 < maxDist ? List.of(new GeoPoint(this, ray.getPoint(t1))) : null;
+			return List.of(new GeoPoint(this, ray.getPoint(t1)));
 		}
 		return List.of(new GeoPoint(this, ray.getPoint(t1)), new GeoPoint(this, p2));
 	}

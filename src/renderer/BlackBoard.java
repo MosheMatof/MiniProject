@@ -215,9 +215,9 @@ public class BlackBoard {
 		for (Point2D point2d : points) {
 			Point3D point3d = center;
 			if (!isZero(point2d.x))
-				point3d = point3d.add(right.scale(point2d.x * scaleWidth));
+				point3d = point3d.add(right.scale(point2d.x * scaleWidth/2));
 			if (!isZero(point2d.y))
-				point3d = point3d.add(up.scale(point2d.y * scaleHeight));
+				point3d = point3d.add(up.scale(point2d.y * scaleHeight/2));
 			points3d.add(point3d);
 		}
 		return points3d;
