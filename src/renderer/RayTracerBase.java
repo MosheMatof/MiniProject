@@ -17,6 +17,7 @@ public abstract class RayTracerBase {
 	 */
 	public RayTracerBase(Scene scene) {
 		this.scene = scene;
+		scene.geometries.initConstructHeirarchy();
 	}
 	/**
 	 * find the closet intersection point and it's color

@@ -161,11 +161,11 @@ public class Polygon extends Geometry {
 				maxZ = Double.NEGATIVE_INFINITY, minZ = Double.POSITIVE_INFINITY;
 		for (Point3D p : vertices) {
 			maxX = p.getX() < maxX ? maxX : p.getX(); 
-			minX = p.getX() < minX ? minX : p.getX(); 
+			minX = p.getX() > minX ? minX : p.getX(); 
 			maxY = p.getY() < maxY ? maxY : p.getY(); 
-			minY = p.getY() < minY ? minY : p.getY(); 
+			minY = p.getY() > minY ? minY : p.getY(); 
 			maxZ = p.getZ() < maxZ ? maxZ : p.getZ(); 
-			minZ = p.getZ() < minZ ? minZ : p.getZ(); 
+			minZ = p.getZ() > minZ ? minZ : p.getZ(); 
 		}
 		this.boundary = new Boundary(maxX, minX, maxY, minY, maxZ, minZ);
 	}

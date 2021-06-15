@@ -74,6 +74,8 @@ public interface Intersectable {
 		public final double maxX, minX;
 		public final double maxY, minY;
 		public final double maxZ, minZ;
+		public final Point3D center;
+		public final double volume;
 		
 		/**
 		 * full constructor for {@link Boundary}
@@ -85,6 +87,8 @@ public interface Intersectable {
 			this.minY = minY;
 			this.maxZ = maxZ;
 			this.minZ = minZ;
+			center = new Point3D((maxX + minX) * 0.5, (maxY + minY) * 0.5, (maxZ + minZ) * 0.5);
+			volume = (maxX - minX)*(maxY - minY)*(maxZ - minZ);
 		}
 		/**
 		 * check if the ray is intersects the boundary of intersectable
@@ -128,6 +132,28 @@ public interface Intersectable {
 			if(Util.alignZero(tE) <= 0 || tS < maxDist) return false;
 			return  Util.alignZero(tE - tS) > 0;
 		}
+
+		/**
+		 * calculates the length of the boundary along the x axis
+		 * @return the length of the boundary along the x axis
+		 */
+		public double lenX() {
+			return maxX - minX;
+		}
+		/**
+		 * calculates the length of the boundary along the y axis
+		 * @return the length of the boundary along the y axis
+		 */
+		public double lenY() {
+			return maxY - minY;
+		}
+		/**
+		 * calculates the length of the boundary along the z axis
+		 * @return the length of the boundary along the z axis
+		 */
+		public double lenZ() {
+			return maxZ - minZ;
+		}
 	}
 	
 	/**
@@ -160,4 +186,5 @@ public interface Intersectable {
 	 * @return if the boundary of the Intersectable is infinite true otherwise false
 	 */
 	public boolean isInfinite();
+
 }
