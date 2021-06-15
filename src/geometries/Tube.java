@@ -183,4 +183,9 @@ public class Tube extends Geometry {
 	public Boundary getBoundary() {
 		return boundary;
 	}
+
+	@Override
+	public boolean isInfinite() {
+		return true;
+	}
 }

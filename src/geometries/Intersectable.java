@@ -87,7 +87,7 @@ public interface Intersectable {
 			this.minZ = minZ;
 		}
 		
-		public boolean isIntersect(Ray r) {
+		public boolean isIntersect(Ray r, double maxDist) {
 			double dx = r.getDir().getX();
 			double dy = r.getDir().getY();
 			double dz = r.getDir().getZ();
@@ -149,4 +149,10 @@ public interface Intersectable {
 	 * @return the boundary
 	 */
 	public Boundary getBoundary();
+	
+	/**
+	 * check if the boundary of the Intersectable is infinite
+	 * @return if the boundary of the Intersectable is infinite true otherwise false
+	 */
+	public boolean isInfinite();
 }

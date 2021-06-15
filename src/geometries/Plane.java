@@ -107,4 +107,9 @@ public class Plane extends Geometry {
 		return this.boundary;
 	}
 
+	@Override
+	public boolean isInfinite() {
+		return true;
+	}
+
 }

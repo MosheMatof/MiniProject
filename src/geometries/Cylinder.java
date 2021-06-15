@@ -174,4 +174,8 @@ public class Cylinder extends Tube {
 		return a < b ? List.of(a, b) : List.of(b, a);
 	}
 
+	@Override
+	public boolean isInfinite() {
+		return false;
+	}
 }

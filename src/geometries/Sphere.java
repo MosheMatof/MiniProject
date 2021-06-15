@@ -117,4 +117,9 @@ public class Sphere extends Geometry {
 	public Boundary getBoundary() {		
 		return this.boundary;
 	}
+
+	@Override
+	public boolean isInfinite() {
+		return false;
+	}
 }

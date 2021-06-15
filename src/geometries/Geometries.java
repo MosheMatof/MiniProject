@@ -32,6 +32,14 @@ public class Geometries implements Intersectable{
 	}
 
 	/**
+	 * construct a new Geometries by list
+	 * @param components the list of components of the new geometry
+	 */
+	public Geometries(LinkedList<Intersectable> components) {
+		this.components = components;
+	}
+
+	/**
 	 * adds a collection of geometries to the components list
 	 * 
 	 * @param geometries geometries to add to the components list
@@ -43,6 +51,7 @@ public class Geometries implements Intersectable{
 
 	@Override
 	public List<GeoPoint> findGeoIntersections(Ray ray, double maxDist) {
+		if(!boundary.isIntersect(ray, maxDist)) return null;
 		List<GeoPoint> intrsctPnts = null;
 		for (Intersectable component : components) {
 			List<GeoPoint> fi = component.findGeoIntersections(ray, maxDist);
@@ -61,11 +70,36 @@ public class Geometries implements Intersectable{
 	public Boundary getBoundary() {
 		return boundary;
 	}
-
-	public void constructHeirarchy() {
-		if(components.size() > MAX_BRANCH) {
-			BiPredicate<Intersectable, Intersectable> sort;
-			if(true) {}
+	
+	/**
+	 * Arrange the geometries in of in an efficient hierarchy for ray tracing
+	 */
+	public void initConstructHeirarchy() {
+		Geometries infinit = new Geometries();
+		Geometries finite = new Geometries();
+		
+		for(Intersectable c : components) {
+			if(c.isInfinite()) infinit.add(c);
+			else finite.add(c);
 		}
+
+		this.components = new LinkedList<Intersectable>(List.of(infinit, finite));
+		finite.constructHeirarchy();
+	}
+	
+	
+	private void constructHeirarchy() {
+		if (components.size() <= MAX_BRANCH) {
+			return;
+		}
+		BiPredicate<Intersectable, Intersectable> sort;
+		if(true) {
+			
+		}
+	}
+
+	@Override
+	public boolean isInfinite() {
+		return !components.stream().anyMatch(x -> x.isInfinite());
 	}
 }
