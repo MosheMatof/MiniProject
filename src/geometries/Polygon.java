@@ -150,19 +150,24 @@ public class Polygon extends Geometry {
 	 */
 	private void initBoundary() {
 //		this.boundary = new Boundary
-//				(vers.max(Comparator.comparingDouble(x -> x.getX())).get().getX()
-//				,vers.min(Comparator.comparing(Point3D::getX)).get().getX()
-//				,vers.max(Comparator.comparingDouble(x -> x.getY())).get().getY()
-//				,vers.min(Comparator.comparing(Point3D::getY)).get().getY()
-//				,vers.max(Comparator.comparingDouble(x -> x.getZ())).get().getZ()
-//				,vers.min(Comparator.comparing(Point3D::getZ)).get().getZ());
-		this.boundary = new Boundary
-				(vertices.stream().max(Comparator.comparingDouble(x -> x.getX())).get().getX()
-						,vertices.stream().min(Comparator.comparingDouble(x -> x.getX())).get().getX()
-						,vertices.stream().max(Comparator.comparingDouble(x -> x.getY())).get().getY()
-						,vertices.stream().min(Comparator.comparingDouble(x -> x.getY())).get().getY()
-						,vertices.stream().max(Comparator.comparingDouble(x -> x.getZ())).get().getZ()
-						,vertices.stream().min(Comparator.comparingDouble(x -> x.getZ())).get().getZ());
+//				(vertices.stream().max(Comparator.comparingDouble(x -> x.getX())).get().getX()
+//						,vertices.stream().min(Comparator.comparingDouble(x -> x.getX())).get().getX()
+//						,vertices.stream().max(Comparator.comparingDouble(x -> x.getY())).get().getY()
+//						,vertices.stream().min(Comparator.comparingDouble(x -> x.getY())).get().getY()
+//						,vertices.stream().max(Comparator.comparingDouble(x -> x.getZ())).get().getZ()
+//						,vertices.stream().min(Comparator.comparingDouble(x -> x.getZ())).get().getZ());
+		double maxX = Double.NEGATIVE_INFINITY, minX = Double.POSITIVE_INFINITY,
+				maxY =Double.NEGATIVE_INFINITY, minY = Double.POSITIVE_INFINITY,
+				maxZ = Double.NEGATIVE_INFINITY, minZ = Double.POSITIVE_INFINITY;
+		for (Point3D p : vertices) {
+			maxX = p.getX() < maxX ? maxX : p.getX(); 
+			minX = p.getX() < minX ? minX : p.getX(); 
+			maxY = p.getY() < maxY ? maxY : p.getY(); 
+			minY = p.getY() < minY ? minY : p.getY(); 
+			maxZ = p.getZ() < maxZ ? maxZ : p.getZ(); 
+			minZ = p.getZ() < minZ ? minZ : p.getZ(); 
+		}
+		this.boundary = new Boundary(maxX, minX, maxY, minY, maxZ, minZ);
 	}
 	
 	@Override

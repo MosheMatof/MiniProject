@@ -86,7 +86,12 @@ public interface Intersectable {
 			this.maxZ = maxZ;
 			this.minZ = minZ;
 		}
-		
+		/**
+		 * check if the ray is intersects the boundary of intersectable
+		 * @param r the ray 
+		 * @param maxDist the max distance for checking the intersection
+		 * @return true if there is an intersection otherwise fales
+		 */
 		public boolean isIntersect(Ray r, double maxDist) {
 			double dx = r.getDir().getX();
 			double dy = r.getDir().getY();
@@ -120,7 +125,7 @@ public interface Intersectable {
 			double tE = t2x < t2y? t2x < t2z? t2x : t2z : t2y < t2z? t2y: t2z; 
 			
 			//tE < 0 means that the ray start after the boundary
-			if(Util.alignZero(tE) <= 0) return false;
+			if(Util.alignZero(tE) <= 0 || tS < maxDist) return false;
 			return  Util.alignZero(tE - tS) > 0;
 		}
 	}
