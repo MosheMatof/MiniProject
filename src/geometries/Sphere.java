@@ -24,6 +24,7 @@ public class Sphere extends Geometry {
 		this.radius = radius;
 		this.radiusSquared = radius * radius;
 		this.center = center;
+		initBoundary();
 	}
 
 	@Override
@@ -102,12 +103,18 @@ public class Sphere extends Geometry {
 		}
 		return List.of(new GeoPoint(this, ray.getPoint(t1)), new GeoPoint(this, p2));
 	}
-
-	@Override
-	public Boundary getBoundary() {
-		if (this.b) {
-			
-		}
+	/**
+	 * Initialize the boundary of the sphere
+	 */
+	private void initBoundary() {
+		this.boundary = new Boundary
+				(center.getX() + radius,center.getX() - radius
+				,center.getY() + radius,center.getY() - radius
+				,center.getZ() + radius,center.getZ() - radius);
 	}
 
+	@Override
+	public Boundary getBoundary() {		
+		return this.boundary;
+	}
 }

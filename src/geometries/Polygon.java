@@ -1,11 +1,12 @@
 package geometries;
 
+import static primitives.Util.isZero;
+
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 import primitives.*;
-
-import static primitives.Util.*;
 
 /**
  * Polygon class represents two-dimensional polygon in 3D Cartesian coordinate
@@ -52,8 +53,10 @@ public class Polygon extends Geometry {
 		// polygon with this plane.
 		// The plane holds the invariant normal (orthogonal unit) vector to the polygon
 		plane = new Plane(vertices[0], vertices[1], vertices[2]);
-		if (vertices.length == 3)
+		if (vertices.length == 3) {
+			initBoundary();
 			return; // no need for more tests for a Triangle
+		}
 
 		Vector n = plane.getNormal();
 
@@ -82,6 +85,7 @@ public class Polygon extends Geometry {
 			if (positive != (edge1.crossProduct(edge2).dotProduct(n) > 0))
 				throw new IllegalArgumentException("All vertices must be ordered and the polygon must be convex");
 		}
+		initBoundary();
 	}
 
 	@Override
@@ -139,5 +143,30 @@ public class Polygon extends Geometry {
 			return interPoint;
 		}
 		return null;
+	}
+
+	/**
+	 * Initialize the boundary of the Polygon
+	 */
+	private void initBoundary() {
+//		this.boundary = new Boundary
+//				(vers.max(Comparator.comparingDouble(x -> x.getX())).get().getX()
+//				,vers.min(Comparator.comparing(Point3D::getX)).get().getX()
+//				,vers.max(Comparator.comparingDouble(x -> x.getY())).get().getY()
+//				,vers.min(Comparator.comparing(Point3D::getY)).get().getY()
+//				,vers.max(Comparator.comparingDouble(x -> x.getZ())).get().getZ()
+//				,vers.min(Comparator.comparing(Point3D::getZ)).get().getZ());
+		this.boundary = new Boundary
+				(vertices.stream().max(Comparator.comparingDouble(x -> x.getX())).get().getX()
+						,vertices.stream().min(Comparator.comparingDouble(x -> x.getX())).get().getX()
+						,vertices.stream().max(Comparator.comparingDouble(x -> x.getY())).get().getY()
+						,vertices.stream().min(Comparator.comparingDouble(x -> x.getY())).get().getY()
+						,vertices.stream().max(Comparator.comparingDouble(x -> x.getZ())).get().getZ()
+						,vertices.stream().min(Comparator.comparingDouble(x -> x.getZ())).get().getZ());
+	}
+	
+	@Override
+	public Boundary getBoundary() {
+		return boundary;
 	}
 }

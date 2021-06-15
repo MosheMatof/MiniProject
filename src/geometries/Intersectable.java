@@ -71,9 +71,9 @@ public interface Intersectable {
 	 */
 	public static class Boundary {
 
-		final double maxX, minX;
-		final double maxY, minY;
-		final double maxZ, minZ;
+		public final double maxX, minX;
+		public final double maxY, minY;
+		public final double maxZ, minZ;
 		
 		/**
 		 * full constructor for {@link Boundary}
@@ -144,5 +144,9 @@ public interface Intersectable {
 	 */
 	List<GeoPoint> findGeoIntersections(Ray ray, double maxDist);
 	
+	/**
+	 * getter for the boundary of geometry
+	 * @return the boundary
+	 */
 	public Boundary getBoundary();
 }

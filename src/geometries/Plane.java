@@ -2,6 +2,7 @@ package geometries;
 
 import java.util.List;
 
+import geometries.Intersectable.Boundary;
 import primitives.*;
 import static primitives.Util.*;
 
@@ -22,6 +23,7 @@ public class Plane extends Geometry {
 	public Plane(Point3D pivot, Vector normal) {
 		this.pivot = pivot;
 		this.normal = normal.normalize();
+		initBoundary();
 	}
 
 	/**
@@ -85,6 +87,24 @@ public class Plane extends Geometry {
 
 		double scalar = alignZero(num / denom);
 		return scalar <= 0 || alignZero(scalar - maxDist) >= 0 ? null : List.of(new GeoPoint(this, ray.getPoint(scalar)));
+	}
+
+	/**
+	 * Initialize the boundary of the plane
+	 */
+	private void initBoundary() {
+		this.boundary = new Boundary
+				(Double.POSITIVE_INFINITY,Double.NEGATIVE_INFINITY
+				,Double.POSITIVE_INFINITY,Double.NEGATIVE_INFINITY
+				,Double.POSITIVE_INFINITY,Double.NEGATIVE_INFINITY);
+//		if (normal == Vector.X) {
+//			boundary.maxX = pivot.getX();
+//			boundary.minX = pivot.getX();
+//		}
+	}
+	@Override
+	public Boundary getBoundary() {
+		return this.boundary;
 	}
 
 }

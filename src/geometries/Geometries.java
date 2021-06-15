@@ -1,12 +1,9 @@
 package geometries;
 
-import java.lang.invoke.LambdaConversionException;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.function.BiPredicate;
-import java.util.function.Predicate;
 
-import geometries.Intersectable.Boundary;
 import primitives.Ray;
 
 /**

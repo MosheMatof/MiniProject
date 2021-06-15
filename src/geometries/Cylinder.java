@@ -3,7 +3,10 @@ package geometries;
 import java.util.LinkedList;
 import java.util.List;
 
-import primitives.*;
+import primitives.Point3D;
+import primitives.Ray;
+import primitives.Util;
+import primitives.Vector;
 
 /**
  * 
@@ -24,6 +27,7 @@ public class Cylinder extends Tube {
 	public Cylinder(Ray axis, double radius, double height) {
 		super(axis, radius);
 		this.height = height;
+		initBoundary();
 	}
 
 	@Override
@@ -78,7 +82,7 @@ public class Cylinder extends Tube {
 
 		// check the intersections with the caps
 		double sqrRadius = this.radius * this.radius;
-		
+
 		// the upper cap
 		Plane topPlane = new Plane(topPoint, axisVec);
 		List<GeoPoint> planePoint = topPlane.findGeoIntersections(ray, maxDist);
@@ -110,7 +114,7 @@ public class Cylinder extends Tube {
 		}
 		return null;
 	}
-	
+
 	/**
 	 * get the height of the Cylinder
 	 * 
@@ -118,6 +122,56 @@ public class Cylinder extends Tube {
 	 */
 	public double getHeight() {
 		return height;
+	}
+
+	private void initBoundary() {
+		List<Double> xValues = minMaxByAxis("x");
+		List<Double> yValues = minMaxByAxis("y");
+		List<Double> zValues = minMaxByAxis("z");
+		this.boundary = new Boundary(xValues.get(1), xValues.get(0), //
+									yValues.get(1), yValues.get(0), //
+									zValues.get(1), zValues.get(0));//
+	}
+
+	/**
+	 * help method to calculate minimum and maximum points along a given axis
+	 * 
+	 * @param axis the axis name, the value should be either 'x','y','z'
+	 * @return ordered list of 2 doubles (min, max)
+	 */
+	private List<Double> minMaxByAxis(String axis) {
+		Point3D p1 = null, p2 = null;
+		double a = 0, b = 0;
+		Vector dir = this.axis.getDir();
+		Point3D origin = this.axis.getOrigin();
+		try {
+			Vector vAxis = (Vector) Vector.class.getField(axis.toUpperCase()).get(null);
+			if(dir == vAxis || dir == vAxis.scale(-1)) {
+				p1 = origin;
+				p2 = this.axis.getPoint(height);
+			}
+			double vd = Util.alignZero(vAxis.dotProduct(dir));
+			if (vd != 0) {
+				if(vd < 0)
+					vAxis = vAxis.scale(-1);
+				Vector temp = dir.crossProduct(vAxis);
+				Vector vDown = temp.crossProduct(dir).normalize();
+				if (vDown.dotProduct(vAxis) > 0)
+					vDown = vDown.scale(-1);
+				p1 = origin.add(vDown.scale(radius));
+				p2 = origin.add(vDown.scale(-radius).add(dir.scale(height)));
+			} 
+			else {
+				p1 = origin.add(vAxis.scale(radius));
+				p2 = origin.add(vAxis.scale(-radius));
+			}
+
+			a = (double) p1.getClass().getMethod("get" + axis.toUpperCase()).invoke(p1);
+			b = (double) p1.getClass().getMethod("get" + axis.toUpperCase()).invoke(p2);
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+		return a < b ? List.of(a, b) : List.of(b, a);
 	}
 
 }
