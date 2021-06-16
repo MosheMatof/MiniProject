@@ -52,7 +52,7 @@ public class bounderyTest {
 
 	@Test
 	public void generatesBoundary() {
-		Scene scene = new Scene("Boundary test").setBackground(new Color(50, 120, 255));
+		Scene scene = new Scene("Boundary test");
 
 		Camera camera = new Camera(new Point3D(40, 20, -120), new Point3D(0, 2, 0)).setViewPlaneSize(3200, 1800)
 				.setDistance(10000); //

@@ -129,7 +129,8 @@ public interface Intersectable {
 			double tE = t2x < t2y? t2x < t2z? t2x : t2z : t2y < t2z? t2y: t2z; 
 			
 			//tE < 0 means that the ray start after the boundary
-			if(Util.alignZero(tE) <= 0 || tS < maxDist) return false;
+			if(Util.alignZero(tE) <= 0 || tS > maxDist) 
+				return false;
 			return  Util.alignZero(tE - tS) > 0;
 		}
 

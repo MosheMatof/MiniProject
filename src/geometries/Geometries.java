@@ -3,10 +3,8 @@ package geometries;
 import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.function.BiPredicate;
 
-import geometries.Intersectable.Boundary;
-import primitives.Point3D;
+
 import primitives.Ray;
 
 /**
@@ -14,7 +12,7 @@ import primitives.Ray;
  */
 public class Geometries implements Intersectable{
 	
-	static final int MAX_BRANCH = 3;
+	static final int MAX_BRANCH = 10;
 	
 	private List<Intersectable> components = new LinkedList<Intersectable>();
 	private Boundary boundary;
@@ -23,7 +21,7 @@ public class Geometries implements Intersectable{
 	 * Default constructor: initialize the class's components list to be an empty list
 	 */
 	public Geometries() {
-		initBoundary();
+		//initBoundary();
 	}
 
 	/**
@@ -33,7 +31,7 @@ public class Geometries implements Intersectable{
 	 */
 	public Geometries(Intersectable... geometries) {
 		add(geometries);
-		initBoundary();
+		//initBoundary();
 	}
 
 	/**
@@ -42,7 +40,7 @@ public class Geometries implements Intersectable{
 	 */
 	public Geometries(List<Intersectable> components) {
 		this.components = components;
-		initBoundary();
+		//initBoundary();
 	}
 
 	/**
@@ -51,25 +49,26 @@ public class Geometries implements Intersectable{
 	 * @param geometries geometries to add to the components list
 	 */
 	public void add(Intersectable... geometries) {
-		double maxX = boundary.maxX, minX = boundary.minX,
-				maxY = boundary.maxX, minY = boundary.minX,
-				maxZ = boundary.maxX, minZ = boundary.minX;
+//		double maxX = boundary.maxX, minX = boundary.minX,
+//				maxY = boundary.maxX, minY = boundary.minX,
+//				maxZ = boundary.maxX, minZ = boundary.minX;
 		for (Intersectable intersectable : geometries) {
 			components.add(intersectable);
-			Boundary b = intersectable.getBoundary();
-			maxX = b.maxX < maxX ? maxX : b.maxX; 
-			minX = b.minX > minX ? minX : b.minX; 
-			maxY = b.maxY < maxY ? maxY : b.maxY; 
-			minY = b.minY > minY ? minY : b.minY;
-			maxZ = b.maxZ < maxZ ? maxZ : b.maxZ; 
-			minZ = b.minZ > minZ ? minZ : b.minZ; 
+//			Boundary b = intersectable.getBoundary();
+//			maxX = b.maxX < maxX ? maxX : b.maxX; 
+//			minX = b.minX > minX ? minX : b.minX; 
+//			maxY = b.maxY < maxY ? maxY : b.maxY; 
+//			minY = b.minY > minY ? minY : b.minY;
+//			maxZ = b.maxZ < maxZ ? maxZ : b.maxZ; 
+//			minZ = b.minZ > minZ ? minZ : b.minZ; 
 		}
-		this.boundary = new Boundary(maxX, minX, maxY, minY, maxZ, minZ);
+//		this.boundary = new Boundary(maxX, minX, maxY, minY, maxZ, minZ);
 	}
 
 	@Override
 	public List<GeoPoint> findGeoIntersections(Ray ray, double maxDist) {
-		if(boundary == null || boundary.isIntersect(ray, maxDist)) return null;
+		if(!boundary.isIntersect(ray, maxDist))
+			return null;
 		List<GeoPoint> intrsctPnts = null;
 		for (Intersectable component : components) {
 			List<GeoPoint> fi = component.findGeoIntersections(ray, maxDist);
@@ -93,6 +92,10 @@ public class Geometries implements Intersectable{
 	 * Arrange the geometries in of in an efficient hierarchy for ray tracing
 	 */
 	public void initConstructHeirarchy() {
+		initBoundary();
+		if (components.size() <= MAX_BRANCH) {
+			return;
+		}
 		Geometries infinit = new Geometries();
 		Geometries finite = new Geometries();
 		
@@ -104,6 +107,7 @@ public class Geometries implements Intersectable{
 
 		this.components = new LinkedList<Intersectable>(List.of(infinit, finite));
 		finite.constructHeirarchy();
+		infinit.initBoundary();
 	}
 	
 	private void classifyBysize() {
@@ -116,6 +120,7 @@ public class Geometries implements Intersectable{
 	}
 	
 	private void constructHeirarchy() {
+		initBoundary();
 		if (components.size() <= MAX_BRANCH) {
 			return;
 		}
@@ -148,6 +153,14 @@ public class Geometries implements Intersectable{
 	 * Initialize the boundary of the Geometries
 	 */
 	private void initBoundary() {
+		//if(Double.isInfinite(maxX + maxY + maxZ) || Double.isInfinite(minX + minY + minZ)) {
+		if(isInfinite()) {
+			this.boundary = new Boundary
+					(Double.POSITIVE_INFINITY,Double.NEGATIVE_INFINITY
+					,Double.POSITIVE_INFINITY,Double.NEGATIVE_INFINITY
+					,Double.POSITIVE_INFINITY,Double.NEGATIVE_INFINITY);
+			return;
+		}
 		double maxX = Double.NEGATIVE_INFINITY, minX = Double.POSITIVE_INFINITY,
 				maxY =Double.NEGATIVE_INFINITY, minY = Double.POSITIVE_INFINITY,
 				maxZ = Double.NEGATIVE_INFINITY, minZ = Double.POSITIVE_INFINITY;
@@ -159,13 +172,6 @@ public class Geometries implements Intersectable{
 			minY = b.minY > minY ? minY : b.minY;
 			maxZ = b.maxZ < maxZ ? maxZ : b.maxZ; 
 			minZ = b.minZ > minZ ? minZ : b.minZ; 
-			if(Double.isInfinite(maxX + maxY + maxZ) || Double.isInfinite(minX + minY + minZ)) {
-				this.boundary = new Boundary
-						(Double.POSITIVE_INFINITY,Double.NEGATIVE_INFINITY
-						,Double.POSITIVE_INFINITY,Double.NEGATIVE_INFINITY
-						,Double.POSITIVE_INFINITY,Double.NEGATIVE_INFINITY);
-				return;
-			}
 		}
 		this.boundary = new Boundary(maxX, minX, maxY, minY, maxZ, minZ);
 	}
@@ -173,6 +179,16 @@ public class Geometries implements Intersectable{
 	
 	@Override
 	public boolean isInfinite() {
-		return !components.stream().anyMatch(x -> x.isInfinite());
+		return components.stream().anyMatch(x -> x.isInfinite());
+	}
+	
+	@Override
+	public String toString() {
+		StringBuilder str = new StringBuilder("size: " + components.size() + "\n");
+		components.forEach(s -> {
+		if(s instanceof Geometries)
+			str.append(s.toString());
+		});
+		return str.toString();
 	}
 }
