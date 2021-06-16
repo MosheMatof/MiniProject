@@ -53,7 +53,7 @@ public class Snow {
 		
 		scene.geometries.add(planet,moon);
 		scene.geometries.add(snowMan);
-		scene.geometries.add(produceSonw(500, new Boundary(50,-50,30,0,50,-50)));
+		scene.geometries.add(produceSonw(1000, new Boundary(50,-50,30,0,50,-50)));
 		//scene.geometries.add(produceTree(100, new Boundary(30,20,20,4,30,20)));
 		scene.lights.add(new DirectionalLight(new Color(200,200,100), new Vector(1,-1,3)));
 		scene.setAmbientLight(new AmbientLight(new Color(255, 255, 255), 0.1));
