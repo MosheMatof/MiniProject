@@ -58,7 +58,9 @@ public class Geometries implements Intersectable{
 		for (Intersectable intersectable : geometries)
 			components.add(intersectable);
 	}
-
+	public void add(LinkedList<Intersectable> components) {
+		this.components.addAll(components);
+	}
 	@Override
 	public List<GeoPoint> findGeoIntersections(Ray ray, double maxDist) {
 		if(boundary == null)
