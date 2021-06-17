@@ -24,9 +24,13 @@ public class Material {
 	 * shininess level
 	 */
 	public int nShinines = 1;
+	/**
+	 * snow effect
+	 */
+	public boolean isSnow = false;
 	
 	/**
-	 * seter for kS (diffuse factor)
+	 * setter for kS (diffuse factor)
 	 * @param kD the kD to set
 	 * @return it self
 	 */
@@ -37,7 +41,7 @@ public class Material {
 	}
 
 	/**
-	 * seter for kS (specular factor)
+	 * setter for kS (specular factor)
 	 * @param kS the kS to set
 	 * @return it self
 	 */
@@ -47,7 +51,7 @@ public class Material {
 	}
 
 	/**
-	 * seter for kT (transparency level)
+	 * setter for kT (transparency level)
 	 * @param kT the kT to set
 	 * @return it self 
 	 */
@@ -57,7 +61,7 @@ public class Material {
 	}
 	
 	/**
-	 * seter for kR (reflection level)
+	 * setter for kR (reflection level)
 	 * @param kR the kR to set
 	 * @return it self
 	 */
@@ -75,5 +79,12 @@ public class Material {
 		this.nShinines = nShinines;
 		return this;
 	}
-	
+	/**
+	 * setter for isSnow (snow effect)
+	 * @return it self
+	 */
+	public Material setSnow() {
+		this.isSnow = true;
+		return this;
+	}
 }

@@ -1,6 +1,7 @@
 package renderer;
 
 import java.util.List;
+import java.util.concurrent.ThreadLocalRandom;
 
 import elements.LightSource;
 import geometries.Intersectable.GeoPoint;
@@ -89,6 +90,8 @@ public class BasicRayTracer extends RayTracerBase {
 	 */
 	private Color calcLocalEffects(GeoPoint intersection, Vector v, double k) {
 		Vector n = intersection.getNormal();
+		if (intersection.geometry.getMaterial().isSnow)
+			n = snowEffect(n);
 		double nv = alignZero(n.dotProduct(v));
 		if (nv == 0)
 			return Color.BLACK;
@@ -126,7 +129,8 @@ public class BasicRayTracer extends RayTracerBase {
 	 * @return the specular component of the final color
 	 */
 	private Color calcSpecular(double ks, Vector l, Vector n, Vector v, int nShininess, Color lightIntensity) {
-		Vector r = l.subtract(n.scale(2 * n.dotProduct(l)));
+		double nl = alignZero(n.dotProduct(l));
+		Vector r = nl == 0? l.subtract(n) : l.subtract(n.scale(2 * n.dotProduct(l)));
 		double vr = alignZero(v.dotProduct(r));
 		if (vr >= 0)
 			return Color.BLACK;
@@ -270,5 +274,20 @@ public class BasicRayTracer extends RayTracerBase {
 	 */
 	private Ray getTransparencyRay(Vector v, Vector n, GeoPoint gp) {
 		return new Ray(gp.point, v, n);
+	}
+	/**
+	 * change the direction of the normal randomly, in the range of 180 degrees
+	 * @param n the old normal
+	 * @return a new random normal
+	 */
+	public Vector snowEffect(Vector n) {
+		Vector temp;
+		do {
+			double x = ThreadLocalRandom.current().nextDouble(1);
+			double y = ThreadLocalRandom.current().nextDouble(1);
+			double z = ThreadLocalRandom.current().nextDouble(1);
+			temp = new Vector(x,y,z);
+		} while (n.dotProduct(temp) < 0);
+		return temp.add(n).normalize();
 	}
 }

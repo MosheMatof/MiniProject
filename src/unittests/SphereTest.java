@@ -5,13 +5,10 @@ package unittests;
 
 import static org.junit.Assert.*;
 
-import java.util.LinkedList;
 import java.util.List;
-import java.util.PrimitiveIterator.OfDouble;
 
 import org.junit.Test;
 
-import geometries.Plane;
 import geometries.Sphere;
 import primitives.*;
 

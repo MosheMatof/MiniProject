@@ -1,6 +1,5 @@
 package unittests;
 
-import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -12,7 +11,6 @@ import elements.DirectionalLight;
 import geometries.Cylinder;
 import geometries.Geometries;
 import geometries.Geometry;
-import geometries.Intersectable;
 import geometries.Intersectable.Boundary;
 import geometries.Polygon;
 import geometries.Sphere;
@@ -60,37 +58,30 @@ public class Snow {
 				));
 //		Geometry check = new Polygon(new Point3D(0, 10, 0),new Point3D(100, 10, 0)
 //				,new Point3D(100, 10, 100),new Point3D(0, 10, 100)).setEmission(Color.BLACK);
-		List<Intersectable> snow = produceSonw(2000, new Boundary(100,-500,40,-10,100,-50));
-		Geometries Tree1 = produceTree(200,new Point3D(40, 10, -10),10,40);
-		Geometries Tree2= produceTree(200,new Point3D(-50, -25, -40),10,40);
-		Geometries Tree3= produceTree(200,new Point3D(-120, -20, -20),10,40);
+		
 		scene.geometries.add(planet1,planet2,planet3,planet4);
 		scene.geometries.add(snowMan);
-		scene.geometries.add(snow);
-		scene.geometries.add(Tree1);
-		scene.geometries.add(Tree2);
-		scene.geometries.add(Tree3);
+		scene.geometries.add(produceSonw(2000, new Boundary(100,-500,40,-10,100,-50)));
+		scene.geometries.add(produceTree(200,new Point3D(40, 10, -10),10,40));
+		scene.geometries.add(produceTree(200,new Point3D(-50, -25, -40),10,40));
+		scene.geometries.add(produceTree(200,new Point3D(-120, -20, -20),10,40));
 		scene.lights = List.of(new DirectionalLight(new Color(400,400,400), new Vector(1,-1,-3))
 				,new DirectionalLight(new Color(100,100,100), new Vector(0,-1,0)));
 		scene.setAmbientLight(new AmbientLight(new Color(255, 255, 255), 0.1));
 
-		for (int i = 0,j=-30; i < 30; i++,j--) {
-			ImageWriter imageWriter = new ImageWriter("Snow" + i, 1024, 576);
-			camera.setPositionAndTarget(new Point3D(350 +j, 50 + 2*i, 350+i), new Point3D(0, 0, 0));
-			Render render = new Render() //
-					.setImageWriter(imageWriter) //
-					.setCamera(camera) //
-					.setRayTracer(new BasicRayTracer(scene)).setMultithreading(3).setDebugPrint();
+		
+		ImageWriter imageWriter = new ImageWriter("Snow", 1024, 576);
+		Render render = new Render() //
+				.setImageWriter(imageWriter) //
+				.setCamera(camera) //
+				.setRayTracer(new BasicRayTracer(scene)).setMultithreading(3).setDebugPrint();
 
-			render.renderImage();
-			render.writeToImage();
-		}	
+		render.renderImage();
+		render.writeToImage();
 	}
 	
-	
-	
-	private List<Intersectable> produceSonw(int num,Boundary bound) {
-		List<Intersectable> snow = new LinkedList<Intersectable>();
+	private Geometries produceSonw(int num,Boundary bound) {
+		Geometries snow = new Geometries();
 		for (int i = 0; i < num; i++) {
 				double x = ThreadLocalRandom.current().nextDouble(bound.minX,bound.maxX);
 				double y = ThreadLocalRandom.current().nextDouble(bound.minY,bound.maxY);
