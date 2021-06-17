@@ -18,7 +18,7 @@ import primitives.Ray;
  */
 public class Geometries implements Intersectable{
 	
-	static final int MAX_BRANCH = 8;
+	static final int MAX_BRANCH = 4;
 	static final int KNN_ITERATION = 4;
 	static final int MAX_DIFRENCE = 5;
 	
@@ -205,7 +205,6 @@ public class Geometries implements Intersectable{
 			else//z is the longest dimension
 				components.sort(Comparator.comparingDouble(a -> a.getBoundary().center.getZ()));
 		}
-		
 		LinkedList<Intersectable> groups = new LinkedList<>();
 		int interval = components.size()/MAX_BRANCH;
 		for(int i = 0, j = interval; i < components.size(); i = j, j = i + interval) {
