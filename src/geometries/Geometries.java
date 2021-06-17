@@ -18,7 +18,8 @@ import primitives.Ray;
  */
 public class Geometries implements Intersectable{
 	
-	static final int N_SPLITS = 5;
+	static final int N_SPLITS = 8;
+	static final int MAX_BRANCH = 6;
 	static final int KNN_ITERATION = 4;
 	static final int MAX_DIFRENCE = 5;
 	
@@ -29,7 +30,6 @@ public class Geometries implements Intersectable{
 	 * Default constructor: initialize the class's components list to be an empty list
 	 */
 	public Geometries() {
-		//initBoundary();
 	}
 
 	/**
@@ -39,7 +39,6 @@ public class Geometries implements Intersectable{
 	 */
 	public Geometries(Intersectable... geometries) {
 		add(geometries);
-		//initBoundary();
 	}
 
 	/**
@@ -116,8 +115,8 @@ public class Geometries implements Intersectable{
 	 * @param comps list of the objects to split
 	 * @return a list of groups of intersectable
 	 */
-	private ArrayList<LinkedList<Intersectable>> knn(int k, List<Intersectable> comps){
-		ArrayList<LinkedList<Intersectable>> groups = new ArrayList<>(k);	
+	private List<List<Intersectable>> knn(int k, List<Intersectable> comps){
+		List<List<Intersectable>> groups = new ArrayList<>(k);	
 		for (int i = 0; i < k; i++)
 			groups.add(new LinkedList<Intersectable>());
 		int s = comps.size();
@@ -162,7 +161,7 @@ public class Geometries implements Intersectable{
 	 * @param groups a list of the groups to find the represent point of each group
 	 * @return an array of the represents points of all the groups in the same order of the groups 
 	 */
-	private Point3D[] knnHelper(ArrayList<LinkedList<Intersectable>> groups) {
+	private Point3D[] knnHelper(List<List<Intersectable>> groups) {
 		int k = groups.size();
 		Point3D represents[] = new Point3D[k];
 		for (int j = 0; j < k; j++) {
@@ -189,32 +188,17 @@ public class Geometries implements Intersectable{
 	 */
 	private void constructHeirarchy() {
 		initBoundary();
-		int branch = (int)Math.pow(2, N_SPLITS);
-		if (components.size() <= branch) {
+		if (components.size() <= MAX_BRANCH) {
 			return;
 		}
 		
-//			//sort the components list according to the longest axis
-//			if(boundary.lenX() > boundary.lenY()) {
-//				if(boundary.lenX() > boundary.lenZ()) //x is the longest dimension
-//					components.sort(Comparator.comparingDouble(a -> a.getBoundary().center.getX()));
-//				else//z is the longest dimension
-//					components.sort(Comparator.comparingDouble(a -> a.getBoundary().center.getZ()));
-//			}
-//			else {
-//				if(boundary.lenY() > boundary.lenZ()) //y is the longest dimension
-//					components.sort(Comparator.comparingDouble(a -> a.getBoundary().center.getY()));
-//				else//z is the longest dimension
-//					components.sort(Comparator.comparingDouble(a -> a.getBoundary().center.getZ()));
-//			}
-		
-		LinkedList<LinkedList<Intersectable>> groups = new LinkedList<>();
+		List<List<Intersectable>> groups = new LinkedList<>();
 		groups.add(new LinkedList<>(components));
 		boolean flag = true;
 		for (int i = 0; i < N_SPLITS && flag; i++) {
-			LinkedList<LinkedList<Intersectable>> newGroups = new LinkedList<>();
-			for (LinkedList<Intersectable> group : groups) {
-				if(group.size() > branch) {
+			List<List<Intersectable>> newGroups = new LinkedList<>();
+			for (List<Intersectable> group : groups) {
+				if(group.size() > MAX_BRANCH) {
 					newGroups.addAll(splitByLongestAxis(group, 2));
 				}
 				else {
@@ -235,7 +219,7 @@ public class Geometries implements Intersectable{
 	 * @param k the number of groups to split to
 	 * @return a list of the groups that created from the split
 	 */
-	private LinkedList<LinkedList<Intersectable>> splitByLongestAxis(LinkedList<Intersectable> comps, int k){
+	private List<List<Intersectable>> splitByLongestAxis(List<Intersectable> comps, int k){
 		Boundary b = calcBoundary(comps);
 //		//sort the components list according to the longest axis
 //		if(b.lenX() > b.lenY()) {
@@ -251,7 +235,7 @@ public class Geometries implements Intersectable{
 //				comps.sort(Comparator.comparingDouble(a -> a.getBoundary().center.getZ()));
 //		}
 				
-		LinkedList<LinkedList<Intersectable>> groups = new LinkedList<>();
+		List<List<Intersectable>> groups = new LinkedList<>();
 
 		int interval = comps.size()/k;
 		for(int i = 0, j = interval; i < comps.size(); i = j, j = i + interval) {
@@ -288,8 +272,8 @@ public class Geometries implements Intersectable{
 	 * Divide the geometries to groups according to there volume of the  
 	 */
 	private void splitByVolume() {
-		Hashtable<Double, LinkedList<Intersectable>> groups = new Hashtable<>();
-		LinkedList<Double> volums = new LinkedList<Double>();
+		Hashtable<Double, List<Intersectable>> groups = new Hashtable<>();
+		List<Double> volums = new LinkedList<Double>();
 		for(Intersectable c : components) {
 			boolean flag = true;
 			for(double v : groups.keySet()) {
@@ -303,7 +287,7 @@ public class Geometries implements Intersectable{
 				groups.put(c.getBoundary().volume, new LinkedList<>(List.of(c)));
 		}
 		components = new LinkedList<Intersectable>();
-		for(LinkedList<Intersectable> group : groups.values()) {
+		for(List<Intersectable> group : groups.values()) {
 			Geometries geo = new Geometries(group);
 			geo.constructHeirarchy();
 			components.add(geo);
