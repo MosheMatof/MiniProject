@@ -5,6 +5,8 @@ package geometries;
 
 import java.util.List;
 import java.util.stream.Collectors;
+
+import geometries.Intersectable.Boundary;
 import primitives.Point3D;
 import primitives.Ray;
 import primitives.Util;
@@ -13,7 +15,10 @@ import primitives.Vector;
 /**
  * the interface provide the function findIntersections for any object in space, used to find intersections between objects and rays  
  */
-public interface Intersectable {
+public abstract class Intersectable {
+	static final boolean BVH = true;
+	
+	protected Boundary boundary;
 	/**
 	 *represent an intersection point between a ray
 	 *and some geometry object
@@ -162,10 +167,25 @@ public interface Intersectable {
 	 * @param ray the intersect ray
 	 * @return list of the intersection points
 	 */
-	default List<Point3D> findIntersections(Ray ray){
+	public List<Point3D> findIntersections(Ray ray){
 		var geoList = findGeoIntersections(ray, Double.POSITIVE_INFINITY);
 	    return geoList == null ? null
 	                           : geoList.stream().map(gp -> gp.point).collect(Collectors.toList());
+	}
+	
+	public final List<GeoPoint> findGeoIntersectionsMain(Ray ray, double maxDist){
+		if(BVH) {
+			synchronized (this) {
+				if(boundary == null) {
+					initBoundary();
+				}
+			}
+			if(!boundary.isIntersect(ray, maxDist)) {
+					return null;
+			}
+			return findGeoIntersections(ray, maxDist);
+		}
+		return findGeoIntersections(ray, maxDist);
 	}
 	
 	/**
@@ -174,18 +194,18 @@ public interface Intersectable {
 	 * @param maxDist the max distance to look for intersections
 	 * @return a list of {@link GeoPoint} of the intersection points
 	 */
-	List<GeoPoint> findGeoIntersections(Ray ray, double maxDist);
-	
-	/**
-	 * getter for the boundary of geometry
-	 * @return the boundary
-	 */
-	public Boundary getBoundary();
+	protected abstract List<GeoPoint> findGeoIntersections(Ray ray, double maxDist);
 	
 	/**
 	 * check if the boundary of the Intersectable is infinite
 	 * @return if the boundary of the Intersectable is infinite true otherwise false
 	 */
-	public boolean isInfinite();
+	public abstract boolean isInfinite();
+	
+	protected abstract void initBoundary();
+	
+	public Boundary getBoundary() {
+		return boundary;
+	}
 
 }

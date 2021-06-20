@@ -181,7 +181,7 @@ public class BasicRayTracer extends RayTracerBase {
 	protected double transparency(LightSource ls, GeoPoint intersection, Vector l, Vector n, double nv) {
 		Ray ray = new Ray(intersection.point, l.scale(-1), n);
 		// search for intersections with the ray
-		List<GeoPoint> intersections = scene.geometries.findGeoIntersections(ray, ls.getDistance(intersection.point));
+		List<GeoPoint> intersections = scene.geometries.findGeoIntersectionsMain(ray, ls.getDistance(intersection.point));
 		// return 1 if there wasn't any intersections with (gp to light)'s ray that
 		// aren't clear
 		double kTvalue = l.dotProduct(n) * nv > 0 ? 1 : 0; // : intersection.geometry.getMaterial().kT;
@@ -204,7 +204,7 @@ public class BasicRayTracer extends RayTracerBase {
 	 *         start of the ray (if there is no intersections then return null)
 	 */
 	private GeoPoint findClosestIntersection(Ray ray) {
-		return ray.findClosestGeoPoint(scene.geometries.findGeoIntersections(ray, Double.POSITIVE_INFINITY));
+		return ray.findClosestGeoPoint(scene.geometries.findGeoIntersectionsMain(ray, Double.POSITIVE_INFINITY));
 	}
 
 	/**

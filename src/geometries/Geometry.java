@@ -5,11 +5,10 @@ import primitives.*;
 /**
  * the abstract class provide the getNormal function for any geometries, used for reflection proposes.
  */
-public abstract class Geometry implements Intersectable {
+public abstract class Geometry extends Intersectable {
 
 	private Color emission = Color.BLACK;
 	private Material material = new Material();
-	protected Boundary boundary;
 	
 	/**
 	 * get the orthogonal vector in length 1 from a point on a geometry object

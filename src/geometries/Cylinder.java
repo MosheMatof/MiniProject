@@ -124,7 +124,8 @@ public class Cylinder extends Tube {
 		return height;
 	}
 
-	private void initBoundary() {
+	@Override
+	protected void initBoundary() {
 		List<Double> xValues = minMaxByAxis("x");
 		List<Double> yValues = minMaxByAxis("y");
 		List<Double> zValues = minMaxByAxis("z");

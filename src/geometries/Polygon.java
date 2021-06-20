@@ -148,7 +148,8 @@ public class Polygon extends Geometry {
 	/**
 	 * Initialize the boundary of the Polygon
 	 */
-	private void initBoundary() {
+	@Override
+	protected void initBoundary() {
 //		this.boundary = new Boundary
 //				(vertices.stream().max(Comparator.comparingDouble(x -> x.getX())).get().getX()
 //						,vertices.stream().min(Comparator.comparingDouble(x -> x.getX())).get().getX()
@@ -168,11 +169,6 @@ public class Polygon extends Geometry {
 			minZ = p.getZ() > minZ ? minZ : p.getZ(); 
 		}
 		this.boundary = new Boundary(maxX, minX, maxY, minY, maxZ, minZ);
-	}
-	
-	@Override
-	public Boundary getBoundary() {
-		return boundary;
 	}
 
 	@Override

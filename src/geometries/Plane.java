@@ -92,7 +92,8 @@ public class Plane extends Geometry {
 	/**
 	 * Initialize the boundary of the plane
 	 */
-	private void initBoundary() {
+	@Override
+	protected void initBoundary() {
 		this.boundary = new Boundary
 				(Double.POSITIVE_INFINITY,Double.NEGATIVE_INFINITY
 				,Double.POSITIVE_INFINITY,Double.NEGATIVE_INFINITY
@@ -101,10 +102,6 @@ public class Plane extends Geometry {
 //			boundary.maxX = pivot.getX();
 //			boundary.minX = pivot.getX();
 //		}
-	}
-	@Override
-	public Boundary getBoundary() {
-		return this.boundary;
 	}
 
 	@Override

@@ -153,7 +153,8 @@ public class Tube extends Geometry {
 	/**
 	 * Initialize the boundary of the Tube
 	 */
-	private void initBoundary() {
+	@Override
+	protected void initBoundary() {
 		// Parallel to the x axis
 		if (axis.getDir() == Vector.X || axis.getDir() == Vector.X.scale(-1)) {
 			this.boundary = new Boundary(Double.POSITIVE_INFINITY, Double.NEGATIVE_INFINITY,
@@ -177,11 +178,6 @@ public class Tube extends Geometry {
 		}
 		this.boundary = new Boundary(Double.POSITIVE_INFINITY, Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY,
 				Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY, Double.NEGATIVE_INFINITY);
-	}
-
-	@Override
-	public Boundary getBoundary() {
-		return boundary;
 	}
 
 	@Override
