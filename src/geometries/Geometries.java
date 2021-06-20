@@ -28,25 +28,25 @@ public class Geometries extends Intersectable{
 	 * the max number of {@link Geometry}'s that can be in one boundary
 	 */
 	static final int MAX_BRANCH = 17;//17 - 2.232
-	
-	
-	/**
-	 * if true then the components will be classified by scale of volume
-	 */
-	static final boolean SPLIT_BY_VOLUME = false;
 	/**
 	 * the max ratio that can be between volumes of two components that in the same scale of volume
 	 * (relevant only if SPLIT_BY_VOLUME = true)
 	 */
 	static final int MAX_DIFRENCE = 5;
+	
+	
+	/**
+	 * if true then the components will be classified by scale of volume
+	 */
+	boolean splitByVolume = true;
 	/**
 	 * if true then every split the components will be sorted by the longest axis and then split
 	 */
-	static final boolean SPLIT_THE_LONGEST_AXIS = true;//36
+	boolean splitByLongesAxis = true;//36
 	/**
 	 * if true then every iteration the components will be sorted by the longest axis and then split N_SPLITS times
 	 */
-	static final boolean SPLIT_THE_LONGEST_AXIS_ONCE = false;//26.122
+	boolean splitByLongestAxisOnce = false;//26.122
 	
 	private List<Intersectable> components = new LinkedList<Intersectable>();
 
@@ -110,11 +110,15 @@ public class Geometries extends Intersectable{
 	 */
 	public void initConstructHeirarchy() {
 		initBoundary();
+		for(Intersectable i : components) {
+			if(i instanceof Geometries)
+				((Geometries) i).initConstructHeirarchy();
+		}
 		if (components.size() <= N_SPLITS) {
 			return;
 		}
 		
-		if(SPLIT_BY_VOLUME) {
+		if(splitByVolume) {
 			splitByVolume();
 			return;
 		}
@@ -213,7 +217,7 @@ public class Geometries extends Intersectable{
 		if (components.size() <= MAX_BRANCH) {
 			return;
 		}
-		if(SPLIT_THE_LONGEST_AXIS_ONCE) {
+		if(splitByLongestAxisOnce) {
 			//sort the components list according to the longest axis
 			if(boundary.lenX() > boundary.lenY()) {
 				if(boundary.lenX() > boundary.lenZ()) //x is the longest dimension
@@ -261,7 +265,7 @@ public class Geometries extends Intersectable{
 	 * @return a list of the groups that created from the split
 	 */
 	private List<List<Intersectable>> split(List<Intersectable> comps, int k){
-		if(SPLIT_THE_LONGEST_AXIS) {
+		if(splitByLongesAxis) {
 			Boundary b = calcBoundary(comps);
 			//sort the components list according to the longest axis
 			if(b.lenX() > b.lenY()) {
@@ -300,8 +304,6 @@ public class Geometries extends Intersectable{
 						,Double.POSITIVE_INFINITY,Double.NEGATIVE_INFINITY
 						,Double.POSITIVE_INFINITY,Double.NEGATIVE_INFINITY);
 			}
-			if(i.boundary == null)
-				i.initBoundary();
 			Boundary b = i.boundary;
 			maxX = b.maxX < maxX ? maxX : b.maxX; 
 			minX = b.minX > minX ? minX : b.minX; 
@@ -344,6 +346,10 @@ public class Geometries extends Intersectable{
 	 */
 	@Override
 	protected void initBoundary() {
+		if(boundary != null)
+			return;
+		for(Intersectable i: components)
+			i.initBoundary();
 		this.boundary = calcBoundary(this.components);
 	}
 	
@@ -363,5 +369,47 @@ public class Geometries extends Intersectable{
 		return str.toString();
 	}
 	
-
+	
+//	/**
+//	 * if true then the components will be classified by scale of volume
+//	 */
+//	boolean splitByVolume = true;
+//	/**
+//	 * if true then every split the components will be sorted by the longest axis and then split
+//	 */
+//	boolean splitByLongesAxis = true;//36
+//	/**
+//	 * if true then every iteration the components will be sorted by the longest axis and then split N_SPLITS times
+//	 */
+//	boolean splitByLongestAxisOnce = false;//26.122
+//	
+	/**
+	 * if true then every split the components will be sorted by the longest axis and then split
+	 * @param splitByLongesAxis the splitByLongesAxis to set
+	 * @return it self
+	 */
+	public Geometries setSplitByLongesAxis(boolean splitByLongesAxis) {
+		this.splitByLongesAxis = splitByLongesAxis;
+		return this;
+	}
+	
+	/**
+	 * if true then every iteration the components will be sorted
+	 * by the longest axis and then split N_SPLITS times
+	 * @param splitByLongestAxisOnce the splitByLongestAxisOnce to set
+	 */
+	public Geometries setSplitByLongestAxisOnce(boolean splitByLongestAxisOnce) {
+		this.splitByLongestAxisOnce = splitByLongestAxisOnce;
+		return this;
+	}
+	
+	/**
+	 * if true then the components will be classified by scale of volume
+	 * @param splitByVolume the splitByVolume to set
+	 * @return it self
+	 */
+	public Geometries setSplitByVolume(boolean splitByVolume) {
+		this.splitByVolume = splitByVolume;
+		return this;
+	}
 }
