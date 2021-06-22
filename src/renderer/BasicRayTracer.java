@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
 import elements.LightSource;
+import geometries.Intersectable;
 import geometries.Intersectable.GeoPoint;
 import primitives.*;
 import static primitives.Util.*;
@@ -296,5 +297,11 @@ public class BasicRayTracer extends RayTracerBase {
 		} catch (Exception e) {
 		}
 		return n;
+	}
+
+	@Override
+	public RayTracerBase setBVH() {
+		Intersectable.BVH = true;
+		return this;
 	}
 }

@@ -70,13 +70,13 @@ public class Geometries extends Intersectable{
 	 * construct a new Geometries by list
 	 * @param components the list of components of the new geometry
 	 */
-	public Geometries(List<Intersectable> components) {
-		this.components = components;
+	public Geometries(List<Intersectable> Intersectables) {
+		this.components = Intersectables;
 		initBoundary();
 	}
 
-	public void add(LinkedList<Intersectable> components) {
-		this.components.addAll(components);
+	public void add(List<Intersectable> Intersectables) {
+		this.components.addAll(Intersectables);
 	}
 
 	/**

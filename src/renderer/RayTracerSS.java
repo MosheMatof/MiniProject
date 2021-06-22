@@ -3,6 +3,7 @@ package renderer;
 import java.util.List;
 
 import elements.LightSource;
+import geometries.Intersectable;
 import geometries.Intersectable.GeoPoint;
 import primitives.Ray;
 import primitives.Vector;
@@ -59,5 +60,9 @@ public class RayTracerSS extends BasicRayTracer {
 		}
 		return ktFinal / rays.size();
 	}
-
+	@Override
+	public RayTracerBase setBVH() {
+		Intersectable.BVH = true;
+		return this;
+	}
 }

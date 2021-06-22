@@ -25,4 +25,10 @@ public abstract class RayTracerBase {
 	 * @return the color of the closet intersection point
 	 */
 	public abstract Color traceRay(Ray ray);
+	/**
+	 * setter for the BVH feature
+	 * @return it self
+	 */
+	public abstract RayTracerBase setBVH();
+
 }
