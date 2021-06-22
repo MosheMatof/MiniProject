@@ -91,8 +91,8 @@ public class BasicRayTracer extends RayTracerBase {
 	 */
 	private Color calcLocalEffects(GeoPoint intersection, Vector v, double k) {
 		Vector n = intersection.getNormal();
-		if (intersection.geometry.getMaterial().isSnow)
-			n = snowEffect(n);
+//		if (intersection.geometry.getMaterial().isSnow)
+//			n = snowEffect(n);
 		double nv = alignZero(n.dotProduct(v));
 		if (nv == 0)
 			return Color.BLACK;

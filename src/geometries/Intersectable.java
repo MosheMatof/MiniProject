@@ -19,7 +19,7 @@ import primitives.Vector;
  * the interface provide the function findIntersections for any object in space, used to find intersections between objects and rays  
  */
 public abstract class Intersectable {
-	public static boolean BVH = false;
+	public static boolean BVH = true;
 	
 	protected Boundary boundary;
 	/**

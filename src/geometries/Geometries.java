@@ -64,6 +64,7 @@ public class Geometries extends Intersectable{
 	 */
 	public Geometries(Intersectable... geometries) {
 		add(geometries);
+		initBoundary();
 	}
 
 	/**
@@ -356,7 +357,12 @@ public class Geometries extends Intersectable{
 	
 	@Override
 	public boolean isInfinite() {
-		return components.stream().anyMatch(x -> x.isInfinite());
+		//return components.stream().anyMatch(x -> x.isInfinite());
+		for (Intersectable i : components) {
+			if(i.isInfinite())
+				return true;
+		}
+		return false;
 	}
 	
 	@Override

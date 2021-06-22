@@ -59,7 +59,7 @@ public class Snow {
 				new Cylinder(new Ray(new Point3D(3.2, 18, 2.4), new Vector(2, 0, 1)), 0.5, 3)
 						.setEmission(new Color(200, 50, 0))));
 		
-		List<Intersectable> snow = produceSonw(4000, new Boundary(150, -100, 110, -10, 150, -100));
+		List<Intersectable> snow = produceSonw(4000, new Boundary(250, -20, 110, -10, 250, -20));
 		Geometries tree1 = produceTree(400, new Point3D(40, 0, -10), 10, 40);
 		Geometries tree2 = produceTree(400, new Point3D(-50, -35, -40), 10, 40);
 		Geometries tree3 = produceTree(400, new Point3D(-120, -30, -20), 10, 40);
@@ -67,14 +67,15 @@ public class Snow {
 		List<Intersectable> trees2 = produceRandomTreesOnSphere(200,100, (Sphere) planet2, 5, 20, 0.7f,3);
 		List<Intersectable> smallTrees = produceRandomSmallTreesOnSphere(150, (Sphere) planet4, 5, 20, 0.2f);
 		int k = 0;
-		double t = 1;
+		double t = 0, s = 1;
 		for (double i = 0, j = 0; t < 1500; k++) {
-			snow.forEach(g -> g = new Sphere(((Sphere) g).getCenter().add(new Vector(0, -0.05, 0)), 0.2));
-			if(i != 30) {
+			snow.forEach(g -> g = new Sphere(((Sphere) g).getCenter().add(new Vector(0, -0.4, 0)), 0.2));
+			if(i < 30) {
 				 i+= 0.1; j-= 0.1;
 			}
 			else {
-				t *= 1.05;
+				s += 0.30;
+				t = s*s;
 			}
 			scene.geometries.add(snow);
 			scene.geometries.add(planet1, planet2, planet3, planet4);
@@ -90,6 +91,7 @@ public class Snow {
 			scene.setAmbientLight(new AmbientLight(new Color(100, 100, 255), 0.1));
 
 			ImageWriter imageWriter = new ImageWriter("Snow" + k, 1024, 576);
+			//camera.setPositionAndTarget(new Point3D(350, 700, 350), new Point3D(0, 0, 0));
 			camera.setPositionAndTarget(new Point3D(380 + j + t, 20 + 2*i + t*0.5, 320 + i + t), new Point3D(0, 0, 0));
 	
 			Render render = new Render() //
@@ -103,8 +105,8 @@ public class Snow {
 		}
 	}
 
-	private LinkedList<Intersectable> produceSonw(int num, Boundary bound) {
-		LinkedList<Intersectable> snow = new LinkedList<Intersectable>();
+	private List<Intersectable> produceSonw(int num, Boundary bound) {
+		List<Intersectable> snow = new LinkedList<Intersectable>();
 		for (int i = 0; i < num; i++) {
 			double x = ThreadLocalRandom.current().nextDouble(bound.minX, bound.maxX);
 			double y = ThreadLocalRandom.current().nextDouble(bound.minY, bound.maxY);
@@ -168,6 +170,30 @@ public class Snow {
 		}
 		return trees;
 	}
+//	private Geometries produceRandomSmallTreesOnSphere(int num, Sphere sphere, double radius, double height, float range) {
+//		Geometries trees = new Geometries();
+//		double sRadius = sphere.getRadius(), delta = sRadius * range;
+//		double sqrRadius = sRadius * sRadius;
+//		double sX = sphere.getCenter().getX(), sY = sphere.getCenter().getY(), sZ = sphere.getCenter().getZ();
+//		double maxX = sX + delta, minX = sX - delta;
+//		double maxZ = sZ + delta, minZ = sZ - delta;
+//		for (int i = 0; i < num; i++) {
+//			double x = ThreadLocalRandom.current().nextDouble(minX, maxX);
+//			double z = ThreadLocalRandom.current().nextDouble(minZ, maxZ);
+//			double y = Math.sqrt(-(x * x + sX * sX + z * z + sZ * sZ) + 2 * (sX * x + sZ * z) + sqrRadius) + sY;
+//			
+//			Point3D mid = new Point3D(x, y, z);
+//			Point3D top = mid.add(Vector.Y.scale(height));
+//			trees.add(
+//					new Geometries( List.of(
+//							new Triangle(top, mid.add(Vector.X.scale(radius)), mid.add(Vector.X.scale(-radius)))
+//							.setEmission(new Color(5, 60, 10)).setMaterial(new Material().setKd(0.7).setKs(0.5)),
+//							new Triangle(top, mid.add(Vector.Z.scale(radius)), mid.add(Vector.Z.scale(-radius)))
+//							.setEmission(new Color(5, 60, 10)).setMaterial(new Material().setKd(0.7).setKs(0.5)))));
+//		}
+//		trees.initConstructHeirarchy();
+//		return trees;
+//	}
 	/**
 	 * 
 	 * @param numOfTrees
