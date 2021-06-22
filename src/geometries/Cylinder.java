@@ -147,26 +147,27 @@ public class Cylinder extends Tube {
 		Point3D origin = this.axis.getOrigin();
 		try {
 			Vector vAxis = (Vector) Vector.class.getField(axis.toUpperCase()).get(null);
-			if(dir == vAxis || dir == vAxis.scale(-1)) {
+			if(dir.equals(vAxis) || dir.equals(vAxis.scale(-1))) {
 				p1 = origin;
 				p2 = this.axis.getPoint(height);
 			}
-			double vd = Util.alignZero(vAxis.dotProduct(dir));
-			if (vd != 0) {
-				if(vd < 0)
-					vAxis = vAxis.scale(-1);
-				Vector temp = dir.crossProduct(vAxis);
-				Vector vDown = temp.crossProduct(dir).normalize();
-				if (vDown.dotProduct(vAxis) > 0)
-					vDown = vDown.scale(-1);
-				p1 = origin.add(vDown.scale(radius));
-				p2 = origin.add(vDown.scale(-radius).add(dir.scale(height)));
-			} 
 			else {
-				p1 = origin.add(vAxis.scale(radius));
-				p2 = origin.add(vAxis.scale(-radius));
+				double vd = Util.alignZero(vAxis.dotProduct(dir));
+				if (vd != 0) {
+					if(vd < 0)
+						vAxis = vAxis.scale(-1);
+					Vector temp = dir.crossProduct(vAxis);
+					Vector vDown = temp.crossProduct(dir).normalize();
+					if (vDown.dotProduct(vAxis) > 0)
+						vDown = vDown.scale(-1);
+					p1 = origin.add(vDown.scale(radius));
+					p2 = origin.add(vDown.scale(-radius).add(dir.scale(height)));
+				} 
+				else {
+					p1 = origin.add(vAxis.scale(radius));
+					p2 = origin.add(vAxis.scale(-radius));
+				}
 			}
-
 			a = (double) p1.getClass().getMethod("get" + axis.toUpperCase()).invoke(p1);
 			b = (double) p1.getClass().getMethod("get" + axis.toUpperCase()).invoke(p2);
 		} catch (Exception e) {

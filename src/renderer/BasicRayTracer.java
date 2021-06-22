@@ -130,7 +130,7 @@ public class BasicRayTracer extends RayTracerBase {
 	 */
 	private Color calcSpecular(double ks, Vector l, Vector n, Vector v, int nShininess, Color lightIntensity) {
 		double nl = alignZero(n.dotProduct(l));
-		Vector r = nl == 0? l.subtract(n) : l.subtract(n.scale(2 * n.dotProduct(l)));
+		Vector r = nl == 0 ? l.subtract(n) : l.subtract(n.scale(2 * n.dotProduct(l)));
 		double vr = alignZero(v.dotProduct(r));
 		if (vr >= 0)
 			return Color.BLACK;
@@ -181,7 +181,8 @@ public class BasicRayTracer extends RayTracerBase {
 	protected double transparency(LightSource ls, GeoPoint intersection, Vector l, Vector n, double nv) {
 		Ray ray = new Ray(intersection.point, l.scale(-1), n);
 		// search for intersections with the ray
-		List<GeoPoint> intersections = scene.geometries.findGeoIntersectionsMain(ray, ls.getDistance(intersection.point));
+		List<GeoPoint> intersections = scene.geometries.findGeoIntersectionsMain(ray,
+				ls.getDistance(intersection.point));
 		// return 1 if there wasn't any intersections with (gp to light)'s ray that
 		// aren't clear
 		double kTvalue = l.dotProduct(n) * nv > 0 ? 1 : 0; // : intersection.geometry.getMaterial().kT;
@@ -275,6 +276,7 @@ public class BasicRayTracer extends RayTracerBase {
 	private Ray getTransparencyRay(Vector v, Vector n, GeoPoint gp) {
 		return new Ray(gp.point, v, n);
 	}
+
 	/**
 	 * change the direction of the normal randomly, in the range of 180 degrees
 	 * @param n the old normal
@@ -282,12 +284,17 @@ public class BasicRayTracer extends RayTracerBase {
 	 */
 	public Vector snowEffect(Vector n) {
 		Vector temp;
-		do {
-			double x = ThreadLocalRandom.current().nextDouble(1);
-			double y = ThreadLocalRandom.current().nextDouble(1);
-			double z = ThreadLocalRandom.current().nextDouble(1);
-			temp = new Vector(x,y,z);
-		} while (n.dotProduct(temp) < 0);
-		return temp.add(n).normalize();
+		try {
+				for (int i = 0; i < 5; i++) {
+					double x = ThreadLocalRandom.current().nextDouble(0, 1);
+					double y = ThreadLocalRandom.current().nextDouble(0, 1);
+					double z = ThreadLocalRandom.current().nextDouble(0, 1);
+					temp = new Vector(x, y, z);
+					if(n.dotProduct(temp) > 0)
+						return temp.add(n).normalize();
+				}
+		} catch (Exception e) {
+		}
+		return n;
 	}
 }

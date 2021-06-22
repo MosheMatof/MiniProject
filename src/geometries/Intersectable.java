@@ -3,8 +3,11 @@
  */
 package geometries;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import org.hamcrest.core.IsInstanceOf;
 
 import geometries.Intersectable.Boundary;
 import primitives.Point3D;
@@ -108,7 +111,7 @@ public abstract class Intersectable {
 			double x = r.getOrigin().getX();
 			double y = r.getOrigin().getY();
 			double z = r.getOrigin().getZ();
-			
+
 			//find the interval that the ray is between minX and maxX
 			double t1x = dx != 0? (minX - x) / dx: Double.POSITIVE_INFINITY * (minX - x);
 			double t2x = dx != 0? (maxX - x) / dx: Double.POSITIVE_INFINITY * (maxX - x);
@@ -129,14 +132,16 @@ public abstract class Intersectable {
 			
 			//find the intersection between all the intervals
 			//max(t1x, t1y, t1z);
-			double tS = t1x > t1y? t1y > t1z? t1y : t1z : t1x > t1z? t1x: t1z; 
+			double tS = t1x > t1y? t1x > t1z? t1x : t1z : t1y > t1z? t1y: t1z; 
+			//double tS = t1x > t1y? t1y > t1z? t1y : t1z : t1x > t1z? t1x: t1z; 
+			//double tS = List.of(t1x,t1y,t1z).stream().max(Comparator.comparing(Double::doubleValue)).get();
 			//min(t2x, t2y, t2z)
 			double tE = t2x < t2y? t2x < t2z? t2x : t2z : t2y < t2z? t2y: t2z; 
-			
+			//double tE = List.of(t2x,t2y,t2z).stream().min(Comparator.comparing(Double::doubleValue)).get();
 			//tE < 0 means that the ray start after the boundary
 			if(Util.alignZero(tE) <= 0 || tS > maxDist) 
 				return false;
-			return  Util.alignZero(tE - tS) > 0;
+			return  Util.alignZero(tE - tS) >= 0;
 		}
 
 		/**
