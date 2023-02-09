@@ -6,5 +6,5 @@
 /doc/
 junit-platform-console-standalone-1.7.0-M1.jar
 .vscode/settings.json
-src/renderer/ImageWriter.java
 /oldImages/
+/lib/
